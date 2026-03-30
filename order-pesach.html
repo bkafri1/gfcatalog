@@ -300,9 +300,34 @@ function validateForm(){
   if(deliveryMode==='delivery'&&!document.getElementById('field-address').value.trim()){alert('אנא הכנס כתובת למשלוח.');document.getElementById('field-address').focus();return false;}
   return true;
 }
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybPap1dc7p6iDLn_1nftdzdWfpvNcZJ7vz2CqRUB4AxoNloTgOraEKMjgYnjHY3rsj/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCk_mB5s0CqGwOXVtFcBD5_8CuFRMhjWzlQdLFvUSazz5Znr4j-Qk6M63suRUNsLzs/exec';
 
 async function submitOrder(){
+  if(!validateForm())return;
+  const name=document.getElementById('field-name').value.trim();
+  const phone=document.getElementById('field-phone').value.trim();
+  const email=document.getElementById('field-email').value.trim();
+  const address=document.getElementById('field-address').value.trim();
+  const notes=document.getElementById('field-notes').value.trim();
+  const selected=PRODUCTS.filter(p=>quantities[p.id]>0);
+  const total=getTotal();
+  localStorage.setItem('lm_customer',JSON.stringify({name,phone,email}));
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true; btn.textContent='שולח...';
+  const params=new URLSearchParams({
+    name,phone,email,address,notes,total,lang:'he',
+    delivery:deliveryMode==='delivery'?'משלוח':'איסוף עצמי',
+    slicing:sliceMode==='sliced'?'פרוס':'שלם',
+    products:selected.map(p=>p.name+' × '+quantities[p.id]).join('; ')
+  });
+  try{ const img=new Image(); img.src=SCRIPT_URL+'?'+params.toString(); }catch(err){console.warn(err);}
+  setTimeout(()=>{
+    showSuccess(name,selected,total,email);
+    btn.disabled=false; btn.textContent='שלח הזמנה';
+  },1500);
+}
+
+function submitOrder(){
   if(!validateForm())return;
   const name=document.getElementById('field-name').value.trim();
   const phone=document.getElementById('field-phone').value.trim();
@@ -321,7 +346,7 @@ async function submitOrder(){
     products:selected.map(p=>p.name+' × '+quantities[p.id]).join('; ')
   };
   try {
-    if(SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbybPap1dc7p6iDLn_1nftdzdWfpvNcZJ7vz2CqRUB4AxoNloTgOraEKMjgYnjHY3rsj/exec'){
+    if(SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbwCk_mB5s0CqGwOXVtFcBD5_8CuFRMhjWzlQdLFvUSazz5Znr4j-Qk6M63suRUNsLzs/exec'){
       await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(orderData)});
     }
   } catch(err){console.warn('Sheet sync failed:',err);}
