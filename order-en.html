@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lechem Mikfari — Order Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FAF6EF;--brown:#5C3D2E;--accent:#C17D3C;--accent-l:#E8C99A;
+  --accent-h:#A66828;--txt:#2C1A0E;--txt2:#7A5C44;--border:#DDD0BF;
+  --bg:#FFF;--warm:#FDF5E8;--green:#2E7D32;--green-bg:#E8F5E9;
+  --red:#C0392B;--red-bg:#FDEDEC;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:'Lato', sans-serif;color:var(--txt);min-height:100vh;direction:ltr;}
+.header{background:var(--brown);color:#fff;text-align:center;padding:36px 20px 28px;}
+.header h1{font-size:30px;font-weight:700;margin-bottom:4px;}
+.tagline{font-size:13px;opacity:.85;font-weight:300;line-height:1.6;max-width:420px;margin:0 auto 12px;}
+.fresh-badge{display:inline-block;background:var(--accent);color:#fff;border-radius:20px;padding:5px 18px;font-size:13px;font-weight:500;margin-bottom:6px;}
+.lang-link{display:inline-block;margin-top:10px;font-size:12px;color:rgba(255,255,255,.7);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);}
+.lang-link:hover{color:#fff;}
+.main{max-width:680px;margin:0 auto;padding:24px 16px 60px;}
+.section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:22px;margin-bottom:18px;animation:fi .3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.stitle{font-size:16px;font-weight:700;color:var(--brown);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+/* PRODUCT */
+.pacc{border-bottom:1px solid var(--border);}
+.pacc:last-child{border-bottom:none;}
+.pmain{display:flex;align-items:center;padding:13px 0;gap:10px;}
+.pacc:first-child .pmain{padding-top:0;}
+.pinfo{flex:1;min-width:0;}
+.pname{font-size:15px;font-weight:600;color:var(--txt);margin-bottom:3px;line-height:1.3;}
+.pbadge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:9px;background:var(--warm);color:var(--accent);border:1px solid var(--accent-l);font-weight:600;}
+.pinfo-btn{background:none;border:none;cursor:pointer;color:var(--txt2);font-size:12px;font-family:inherit;display:flex;align-items:center;gap:3px;padding:3px 0;margin-top:3px;transition:color .2s;}
+.pinfo-btn:hover{color:var(--accent);}
+.pinfo-btn .arr{transition:transform .25s;font-style:normal;font-size:9px;}
+.pinfo-btn.open .arr{transform:rotate(180deg);}
+.pprice{font-size:14px;font-weight:700;color:var(--accent);white-space:nowrap;margin:0 6px;}
+.qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:22px;overflow:hidden;flex-shrink:0;}
+.qbtn{width:34px;height:34px;background:none;border:none;cursor:pointer;font-size:18px;color:var(--accent);display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.qbtn:hover{background:var(--warm);}
+.qbtn:disabled{opacity:.3;cursor:not-allowed;}
+.qnum{min-width:26px;text-align:center;font-size:15px;font-weight:700;color:var(--txt);}
+.pdet{display:none;padding:0 0 13px;animation:fi .2s ease;}
+.pdet.open{display:block;}
+.ppitch{font-size:13px;color:var(--txt2);line-height:1.65;margin-bottom:12px;font-style:italic;padding:9px 12px;background:var(--warm);border-radius:0 8px 8px 0;border-left:3px solid var(--accent-l);}
+.ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px;}
+@media(max-width:400px){.ngrid{grid-template-columns:repeat(2,1fr);}}
+.ncell{background:var(--warm);border:1px solid var(--accent-l);border-radius:8px;padding:7px 5px;text-align:center;}
+.nval{font-size:15px;font-weight:700;color:var(--brown);display:block;}
+.nlbl{font-size:10px;color:var(--txt2);display:block;margin-top:1px;}
+.ilbl{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.ilst{font-size:12px;color:var(--txt2);line-height:1.55;}
+/* FIELDS */
+.fg{display:flex;flex-direction:column;gap:12px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:460px){.fr{grid-template-columns:1fr;}}
+.fi2{display:flex;flex-direction:column;gap:4px;}
+.fi2 label{font-size:12px;font-weight:600;color:var(--txt2);}
+.fi2 input,.fi2 textarea{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:9px;font-size:15px;font-family:inherit;color:var(--txt);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+.fi2 input:focus,.fi2 textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,125,60,.12);}
+.fi2 textarea{resize:vertical;min-height:68px;line-height:1.5;}
+/* RADIO */
+.rg{display:flex;flex-direction:column;gap:9px;}
+.ro{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:11px 13px;border:1px solid var(--border);border-radius:9px;transition:border-color .2s,background .2s;}
+.ro:hover{border-color:var(--accent-l);background:var(--warm);}
+.ro.sel{border-color:var(--accent);background:var(--warm);}
+.ro input{width:17px;height:17px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);}
+.rl{font-size:14px;line-height:1.4;}
+.rl .sub{font-size:12px;color:var(--txt2);margin-top:2px;}
+/* TOGGLE */
+.tg{display:flex;gap:9px;flex-wrap:wrap;}
+.tb{flex:1;min-width:110px;padding:9px 14px;border:1px solid var(--border);border-radius:9px;background:#fff;cursor:pointer;font-size:13px;font-family:inherit;color:var(--txt2);text-align:center;transition:all .2s;}
+.tb:hover{border-color:var(--accent-l);}
+.tb.act{border-color:var(--accent);background:var(--warm);color:var(--accent);font-weight:700;}
+/* SUMMARY */
+.sumbox{background:var(--warm);border:1px solid var(--accent-l);border-radius:11px;padding:14px;margin-bottom:4px;}
+.sr{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:3px 0;}
+.sr.empty{color:var(--txt2);font-style:italic;font-size:13px;}
+.sdiv{border:none;border-top:1px solid var(--accent-l);margin:8px 0;}
+.stot{font-size:17px;font-weight:700;color:var(--brown);}
+/* SUBMIT */
+.subbtn{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:11px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s;margin-top:14px;}
+.subbtn:hover{background:var(--accent-h);}
+.subbtn:active{transform:scale(.99);}
+.subbtn:disabled{background:var(--border);cursor:not-allowed;color:var(--txt2);}
+/* SAVED BANNER */
+.sbanner{display:none;align-items:center;gap:9px;background:var(--green-bg);border:1px solid #A5D6A7;border-radius:9px;padding:9px 13px;margin-bottom:14px;font-size:13px;color:var(--green);}
+.sbanner.show{display:flex;}
+/* CLOSED SCREEN */
+.closed-screen{display:none;text-align:center;padding:60px 20px;max-width:480px;margin:0 auto;}
+.closed-screen.show{display:block;}
+/* THANK YOU SCREEN */
+.ty-screen{display:none;max-width:680px;margin:0 auto;padding:24px 16px 60px;}
+.ty-screen.show{display:block;}
+.ty-card{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:28px;margin-bottom:18px;text-align:center;}
+.ty-icon{font-size:56px;margin-bottom:12px;}
+.ty-title{font-size:24px;font-weight:700;color:var(--brown);margin-bottom:8px;}
+.ty-sub{font-size:14px;color:var(--txt2);line-height:1.6;}
+.pay-section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:22px;margin-bottom:18px;}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:420px){.pay-grid{grid-template-columns:1fr;}}
+.pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:11px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:15px;font-weight:700;color:var(--txt);text-decoration:none;transition:all .2s;}
+.pay-btn:hover{border-color:var(--accent);background:var(--warm);}
+.pay-icon{font-size:22px;}
+.pay-note{font-size:11px;color:var(--txt2);text-align:center;margin-top:8px;}
+.neworder-btn{width:100%;padding:13px;background:none;border:1px solid var(--border);border-radius:11px;font-size:14px;font-weight:700;font-family:inherit;color:var(--txt2);cursor:pointer;transition:all .2s;margin-top:8px;}
+.neworder-btn:hover{border-color:var(--accent);color:var(--accent);}
+.footer{text-align:center;font-size:12px;color:var(--txt2);padding:16px;opacity:.7;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Lechem Mikfari</h1>
+  <p class="tagline">Flour, water, natural sourdough & salt — handmade with love 🌾</p>
+  <div class="fresh-badge" id="fresh-badge">Baked fresh & delivered the same day 🌟</div>
+  <br>
+  <a class="lang-link" href="order-he.html">עברית →</a>
+</header>
+
+<!-- CLOSED SCREEN -->
+<div class="closed-screen" id="closed-screen">
+  <div style="font-size:52px;margin-bottom:14px;">🔒</div>
+  <h2 style="font-size:21px;font-weight:700;color:var(--brown);margin-bottom:10px;" id="closed-title">Orders are currently closed 🔒</h2>
+  <p style="font-size:14px;color:var(--txt2);line-height:1.6;" id="closed-msg">Orders for this week are closed. Check back soon!</p>
+</div>
+
+<!-- THANK YOU SCREEN -->
+<div class="ty-screen" id="ty-screen">
+  <div class="ty-card">
+    <div class="ty-icon">🎉</div>
+    <div class="ty-title" id="ty-title">Thank you for your order! 🎉</div>
+    <p class="ty-sub" id="ty-sub"></p>
+  </div>
+  <div class="section">
+    <div class="stitle">🧾 Order Summary</div>
+    <div id="ty-summary"></div>
+  </div>
+  <div class="pay-section">
+    <div class="stitle">💳 Payment</div>
+    <p style="font-size:13px;color:var(--txt2);margin-bottom:4px;">Please pay after we confirm your order:</p>
+    <div class="pay-grid">
+      <a class="pay-btn" href="https://venmo.com/code?user_id=4416788448151226881&created=1774894628" target="_blank">
+        <span class="pay-icon">💜</span> Venmo
+      </a>
+      <button class="pay-btn" onclick="showZelle()">
+        <span class="pay-icon">💙</span> Zelle
+      </button>
+    </div>
+    <p class="pay-note">* Pay only after receiving confirmation from us</p>
+  </div>
+  <button class="neworder-btn" onclick="resetForm()">Place a New Order</button>
+</div>
+
+<!-- FORM -->
+<div id="form-wrap">
+<div class="main">
+
+  <div class="sbanner" id="sbanner">
+    <span>👋</span>
+    <span id="sbanner-txt"></span>
+    <button onclick="clearSaved()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:12px;color:var(--txt2);text-decoration:underline;">Clear</button>
+  </div>
+
+  <div class="section">
+    <div class="stitle">🛒 Choose Your Bread</div>
+    <div id="products-list"></div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">🧾 Order Summary</div>
+    <div class="sumbox" id="order-summary">
+      <p class="sr empty">No products selected yet</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">👤 Your Details</div>
+    <div class="fg">
+      <div class="fr">
+        <div class="fi2"><label>Full Name</label><input type="text" id="f-name" autocomplete="name" oninput="autoSave()"></div>
+        <div class="fi2"><label>Phone</label><input type="tel" id="f-phone" autocomplete="tel" oninput="autoSave()"></div>
+      </div>
+      <div class="fi2"><label>Email (for order confirmation)</label><input type="email" id="f-email" autocomplete="email" oninput="autoSave()"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">🚗 Pickup or Delivery</div>
+    <div class="rg">
+      <label class="ro sel" onclick="selDelivery(this,'pickup')">
+        <input type="radio" name="delivery" value="pickup" checked>
+        <div class="rl">🏠 Self Pickup<div class="sub">68 Cortland Pl, Tenafly, NJ — please park on the street</div></div>
+      </label>
+      <label class="ro" onclick="selDelivery(this,'delivery')">
+        <input type="radio" name="delivery" value="delivery">
+        <div class="rl">🚗 Delivery (3+ loaves)<div class="sub">Within 10 minutes of Tenafly</div></div>
+      </label>
+    </div>
+    <div class="fi2" id="addr-field" style="margin-top:12px;display:none;">
+      <label>Delivery Address</label>
+      <input type="text" id="f-addr" autocomplete="street-address">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">🔪 Slicing</div>
+    <div class="tg" id="slice-group">
+      <button class="tb act" onclick="selSlice(this,'whole')">Whole — I'll slice at home</button>
+      <button class="tb" onclick="selSlice(this,'sliced')">Pre-sliced</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">💬 Notes</div>
+    <div class="fi2"><textarea id="f-notes" placeholder="Any special requests?"></textarea></div>
+  </div>
+
+  <button class="subbtn" id="sub-btn" onclick="submitOrder()" disabled>Place Order</button>
+
+</div>
+</div>
+
+<div class="footer">Lechem Mikfari — ✉️ Questions? WhatsApp us</div>
+
+<script>
+const PRODUCTS = [{"id": "spelt", "he": "לחם כוסמין מלא מחמצת", "en": "Whole Spelt Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 89, "carbs": 16, "protein": 3.5, "fat": 1.2, "ing_he": "קמח לחם, קמח כוסמין מלא, מים, מחמצת טבעית, מלח", "ing_en": "Bread flour, whole spelt flour, water, natural sourdough starter, salt", "pitch_he": "75% קמח כוסמין מלא עם מחמצת טבעית – עשיר בסיבים, מינרלים וחלבון. הכוסמין קל לעיכול והמחמצת מורידה את האינדקס הגליקמי.", "pitch_en": "75% whole spelt with natural sourdough — rich in fiber, minerals and protein. Spelt is easier to digest and the sourdough lowers the glycemic index."}, {"id": "nuts", "he": "לחם אגוזים", "en": "Walnut Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 104, "carbs": 15, "protein": 3.8, "fat": 4.2, "ing_he": "קמח מלא, קמח לחם, מים, מחמצת טבעית, אגוזי מלך, מלח", "ing_en": "Whole wheat flour, bread flour, water, natural sourdough starter, walnuts, salt", "pitch_he": "מחמצת קמח מלא עם אגוזי מלך – מקור מצוין לאומגה 3, נוגדי חמצון וסיבים. אגוזי המלך מוסיפים שומן בריא ושובע ממושך.", "pitch_en": "Whole wheat sourdough with walnuts — excellent source of omega-3, antioxidants and fiber. Walnuts add healthy fat and lasting satiety."}, {"id": "olives", "he": "לחם זיתים", "en": "Olive Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 85, "carbs": 15, "protein": 3.2, "fat": 1.8, "ing_he": "קמח מלא, קמח לחם, מים, מחמצת טבעית, זיתים, מלח", "ing_en": "Whole wheat flour, bread flour, water, natural sourdough starter, olives, salt", "pitch_he": "מחמצת קמח מלא עם זיתים – שומן חד-בלתי-רווי לבריאות הלב. הקל ביותר בסדרה, עשיר בטעם ים תיכוני.", "pitch_en": "Whole wheat sourdough with olives — heart-healthy monounsaturated fats. The lightest loaf in the range, full of Mediterranean flavor."}, {"id": "shiur", "he": "לחם שיאור", "en": "Pure Sourdough (Shiur)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 89, "carbs": 17, "protein": 3.4, "fat": 0.8, "ing_he": "קמח לחם, קמח מלא, מים, מחמצת טבעית, מלח", "ing_en": "Bread flour, whole wheat flour, water, natural sourdough starter, salt", "pitch_he": "ארבעה מרכיבים בלבד. המחמצת מפרקת פיטאטים, משפרת ספיגת מינרלים ומורידה את האינדקס הגליקמי. נקי, פשוט ומזין.", "pitch_en": "Four ingredients only. The sourdough breaks down phytates, improves mineral absorption and lowers the glycemic index. Clean and nourishing."}, {"id": "kasten", "he": "לחם קסטן בריאות", "en": "Kasten Health Loaf", "badge_he": "פרווה ⭐", "badge_en": "Parve ⭐", "price": 10, "cal": 94, "carbs": 17, "protein": 3.5, "fat": 1.5, "ing_he": "קמח לחם, מים, קמח מלא, פתיתי שיבולת שועל, מלח, סוכר, שמן, שמרים", "ing_en": "Bread flour, water, whole wheat flour, rolled oats, salt, sugar, oil, yeast", "pitch_he": "קמח לחם, קמח מלא ושיבולת שועל – הבטא-גלוקן שבשיבולת שועל מאזן סוכר וכולסטרול. נאפה בתבנית סגורה לפרוסות אחידות לסנדוויץ׳.", "pitch_en": "Bread flour, whole wheat and oats — oat beta-glucan helps balance blood sugar and cholesterol. Baked in closed tin for perfect sandwich slices."}, {"id": "bagel-white", "he": "בייגל ירושלמי לבן (3 במנה)", "en": "Jerusalem Bagels – White (3 pack)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 283, "carbs": 38, "protein": 7.2, "fat": 5.8, "ing_he": "קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום לבן", "ing_en": "Bread flour, water, olive oil, sugar, salt, dry yeast, white sesame", "pitch_he": "ישר מרחובות ירושלים. פריך מבחוץ, רך מבפנים. ציפוי שומשום עשיר בסידן, ברזל וויטמין E.", "pitch_en": "Straight from Jerusalem. Crispy outside, soft inside. Sesame coating rich in calcium, iron and vitamin E.", "cal_label_he": "קל׳ למקל", "cal_label_en": "cal/bagel"}, {"id": "bagel-black", "he": "בייגל ירושלמי שחור (3 במנה)", "en": "Jerusalem Bagels – Black (3 pack)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 283, "carbs": 38, "protein": 7.2, "fat": 5.8, "ing_he": "קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום שחור", "ing_en": "Bread flour, water, olive oil, sugar, salt, dry yeast, black sesame", "pitch_he": "בייגל ירושלמי עם שומשום שחור עשיר בנוגדי חמצון. טעם עמוק ואגוזי. שלושה במנה – לא תצליחו לאכול רק אחד.", "pitch_en": "Jerusalem bagel with antioxidant-rich black sesame. Deep nutty flavor. Three per pack — you won't stop at one.", "cal_label_he": "קל׳ למקל", "cal_label_en": "cal/bagel"}, {"id": "health", "he": "לחם בריאות", "en": "Health Loaf", "badge_he": "גלוטן נמוך", "badge_en": "Low Gluten", "price": 12, "cal": 96, "carbs": 15, "protein": 3.8, "fat": 2.1, "ing_he": "קמח כוסמין מלא, קמח לחם, מים, מחמצת טבעית, פתיתי שיבולת שועל, זרעי פשתן, מלח", "ing_en": "Whole spelt flour, bread flour, water, natural sourdough starter, rolled oats, flaxseed, salt", "pitch_he": "כוסמין מלא, שיבולת שועל וזרעי פשתן – שלושה מקורות סיבים בלחם אחד. פשתן עשיר באומגה 3 ולינגנים. מכיל מעט גלוטן בלבד.", "pitch_en": "Whole spelt, oats and flaxseed — three fiber sources in one loaf. Flaxseed rich in omega-3 and lignans. Low gluten only."}];
+
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ33WgrpZFL1htrD1sJh0D7OxjSBRFb1871L6UC7zHcM0T-OsKc0DFCzbs09-7U5r6wQ/exec';
+const VENMO_URL = 'https://venmo.com/code?user_id=4416788448151226881&created=1774894628';
+const FORM_KEY = 'lm_form_status_en';
+const IS_HE = false;
+
+let qtys = {};
+let deliveryMode = 'pickup';
+let sliceMode = 'whole';
+PRODUCTS.forEach(p => qtys[p.id] = 0);
+
+// ADMIN SETTINGS
+function loadAdminSettings() {
+  try {
+    const raw = localStorage.getItem('lm_admin_settings');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.bakingDate || s.deliveryDate) {
+      let badge = IS_HE ? 'נאפה טרי ומסופק באותו היום 🌟' : 'Baked fresh & delivered the same day 🌟';
+      if (s.bakingDate) {
+        const d = new Date(s.bakingDate + 'T12:00:00');
+        const locale = IS_HE ? 'he-IL' : 'en-US';
+        badge = (IS_HE ? 'נאפה טרי ' : 'Baked fresh ') + d.toLocaleDateString(locale, {weekday:'long',month:'long',day:'numeric'});
+      }
+      if (s.deliveryDate) {
+        const d = new Date(s.deliveryDate + 'T12:00:00');
+        const locale = IS_HE ? 'he-IL' : 'en-US';
+        badge += (IS_HE ? ' · משלוח/איסוף ' : ' · Delivery ') + d.toLocaleDateString(locale, {weekday:'long',month:'long',day:'numeric'});
+        if (s.deliveryTime) badge += ' ' + s.deliveryTime;
+      }
+      document.getElementById('fresh-badge').textContent = badge;
+    }
+    if (s.products) {
+      PRODUCTS.forEach(p => {
+        const ps = s.products[p.id];
+        if (!ps) return;
+        if (ps.price) p.price = ps.price;
+        p.soldOut = ps.soldOut || false;
+        p.hidden  = !ps.visible && ps.visible !== undefined;
+      });
+    }
+  } catch(e) {}
+}
+
+// CHECK FORM CLOSED
+function checkFormStatus() {
+  try {
+    const raw = localStorage.getItem(FORM_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (!s.closed) return;
+    document.getElementById('form-wrap').style.display = 'none';
+    const cs = document.getElementById('closed-screen');
+    cs.classList.add('show');
+    if (s.msgHe && IS_HE) document.getElementById('closed-msg').textContent = s.msgHe;
+    if (s.msgEn && !IS_HE) document.getElementById('closed-msg').textContent = s.msgEn;
+  } catch(e) {}
+}
+
+// RENDER PRODUCTS
+function renderProducts() {
+  const c = document.getElementById('products-list');
+  c.innerHTML = PRODUCTS.filter(p => !p.hidden).map(p => {
+    const calLbl = IS_HE
+      ? (p.cal_label_he || 'קל\u05f3 לפרוסה')
+      : (p.cal_label_en || 'cal/slice');
+    const badge = IS_HE ? p.badge_he : p.badge_en;
+    const name  = IS_HE ? p.he : p.en;
+    const pitch = IS_HE ? p.pitch_he : p.pitch_en;
+    const ing   = IS_HE ? p.ing_he : p.ing_en;
+    const soldOut = p.soldOut ? `<span style="font-size:11px;color:var(--red);font-weight:700;margin-right:4px;">${IS_HE?'אזל':'Sold Out'}</span>` : '';
+    return `<div class="pacc">
+      <div class="pmain">
+        <div class="pinfo">
+          <div class="pname">${p.soldOut?'<s style=\"opacity:.45\">' + name + '</s>':name}</div>
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:3px;">
+            <span class="pbadge">${badge}</span>
+            ${soldOut}
+            <button class="pinfo-btn" onclick="togDet('${p.id}',this)">${IS_HE?'פרטים תזונתיים':'Nutrition info'} <i class="arr">▾</i></button>
+          </div>
+        </div>
+        <div class="pprice">$${p.price}</div>
+        <div class="qty">
+          <button class="qbtn" onclick="chQty('${p.id}',-1)" ${p.soldOut?'disabled':''}>−</button>
+          <div class="qnum" id="q-${p.id}">0</div>
+          <button class="qbtn" onclick="chQty('${p.id}',1)" ${p.soldOut?'disabled':''}>+</button>
+        </div>
+      </div>
+      <div class="pdet" id="d-${p.id}">
+        <p class="ppitch">${pitch}</p>
+        <div class="ngrid">
+          <div class="ncell"><span class="nval">${p.cal}</span><span class="nlbl">${calLbl}</span></div>
+          <div class="ncell"><span class="nval">${p.carbs}g</span><span class="nlbl">${IS_HE?'פחמימות':'Carbs'}</span></div>
+          <div class="ncell"><span class="nval">${p.protein}g</span><span class="nlbl">${IS_HE?'חלבון':'Protein'}</span></div>
+          <div class="ncell"><span class="nval">${p.fat}g</span><span class="nlbl">${IS_HE?'שומן':'Fat'}</span></div>
+        </div>
+        <div class="ilbl">${IS_HE?'מרכיבים':'Ingredients'}</div>
+        <div class="ilst">${ing}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togDet(id, btn) {
+  const d = document.getElementById('d-' + id);
+  const o = d.classList.contains('open');
+  d.classList.toggle('open', !o);
+  btn.classList.toggle('open', !o);
+}
+
+function chQty(id, delta) {
+  const p = PRODUCTS.find(x => x.id === id);
+  // Check stock limit
+  try {
+    const raw = localStorage.getItem('lm_admin_settings');
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s.products && s.products[id] && s.products[id].stock) {
+        const max = parseInt(s.products[id].stock);
+        if (delta > 0 && qtys[id] >= max) return;
+      }
+    }
+  } catch(e) {}
+  qtys[id] = Math.max(0, qtys[id] + delta);
+  document.getElementById('q-' + id).textContent = qtys[id];
+  updateSummary();
+  updateSubmit();
+}
+
+function updateSummary() {
+  const box = document.getElementById('order-summary');
+  const sel = PRODUCTS.filter(p => qtys[p.id] > 0);
+  const total = sel.reduce((s, p) => s + p.price * qtys[p.id], 0);
+  if (!sel.length) {
+    box.innerHTML = `<p class="sr empty">${IS_HE ? 'לא נבחרו מוצרים עדיין' : 'No products selected yet'}</p>`;
+    return;
+  }
+  box.innerHTML = sel.map(p => `
+    <div class="sr">
+      <span>${IS_HE ? p.he.split('(')[0].trim() : p.en.split('(')[0].trim()} × ${qtys[p.id]}</span>
+      <span>$${p.price * qtys[p.id]}</span>
+    </div>`).join('') +
+    `<hr class="sdiv">
+    <div class="sr stot">
+      <span>${IS_HE ? 'סה\"כ' : 'Total'}</span>
+      <span>$${total}</span>
+    </div>`;
+}
+
+function getTotal() { return PRODUCTS.reduce((s, p) => s + p.price * qtys[p.id], 0); }
+function updateSubmit() { document.getElementById('sub-btn').disabled = !PRODUCTS.some(p => qtys[p.id] > 0); }
+
+function selDelivery(el, mode) {
+  deliveryMode = mode;
+  document.querySelectorAll('.ro').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('addr-field').style.display = mode === 'delivery' ? 'block' : 'none';
+  updateSubmit();
+}
+
+function selSlice(el, mode) {
+  sliceMode = mode;
+  document.querySelectorAll('#slice-group .tb').forEach(b => b.classList.remove('act'));
+  el.classList.add('act');
+}
+
+function validate() {
+  if (!PRODUCTS.some(p => qtys[p.id] > 0)) { alert(IS_HE ? 'אנא בחר לפחות מוצר אחד.' : 'Please select at least one product.'); return false; }
+  if (!document.getElementById('f-name').value.trim()) { alert(IS_HE ? 'אנא הכנס שם מלא.' : 'Please enter your name.'); document.getElementById('f-name').focus(); return false; }
+  if (!document.getElementById('f-phone').value.trim()) { alert(IS_HE ? 'אנא הכנס מספר טלפון.' : 'Please enter your phone number.'); document.getElementById('f-phone').focus(); return false; }
+  if (deliveryMode === 'delivery' && !document.getElementById('f-addr').value.trim()) { alert(IS_HE ? 'אנא הכנס כתובת למשלוח.' : 'Please enter delivery address.'); document.getElementById('f-addr').focus(); return false; }
+  return true;
+}
+
+async function submitOrder() {
+  if (!validate()) return;
+  const name  = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const addr  = document.getElementById('f-addr').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
+  const sel   = PRODUCTS.filter(p => qtys[p.id] > 0);
+  const total = getTotal();
+
+  localStorage.setItem('lm_customer', JSON.stringify({name, phone, email}));
+
+  const btn = document.getElementById('sub-btn');
+  btn.disabled = true;
+  btn.textContent = IS_HE ? 'שולח...' : 'Sending...';
+
+  const params = new URLSearchParams({
+    name, phone, email, addr, notes, total,
+    lang: IS_HE ? 'he' : 'en',
+    delivery: deliveryMode === 'delivery' ? (IS_HE ? 'משלוח' : 'Delivery') : (IS_HE ? 'איסוף עצמי' : 'Self Pickup'),
+    slicing: sliceMode === 'sliced' ? (IS_HE ? 'פרוס' : 'Pre-sliced') : (IS_HE ? 'שלם' : 'Whole'),
+    products: sel.map(p => (IS_HE ? p.he : p.en).split('(')[0].trim() + ' x ' + qtys[p.id]).join('|')
+  });
+  PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
+
+  try {
+    const img = new Image();
+    img.src = SCRIPT_URL + '?' + params.toString();
+  } catch(err) { console.warn(err); }
+
+  setTimeout(() => {
+    showThankYou(name, sel, total, email);
+    btn.disabled = false;
+    btn.textContent = IS_HE ? 'שלח הזמנה' : 'Place Order';
+  }, 1500);
+}
+
+function showThankYou(name, sel, total, email) {
+  document.getElementById('form-wrap').style.display = 'none';
+  const ty = document.getElementById('ty-screen');
+  ty.classList.add('show');
+  document.getElementById('ty-sub').textContent = IS_HE
+    ? `ההזמנה של ${name} התקבלה!${email ? ' אישור ישלח למייל שלך.' : ''}`
+    : `${name}'s order has been received!${email ? ' A confirmation will be sent to your email.' : ''}`;
+  document.getElementById('ty-summary').innerHTML =
+    sel.map(p => `<div class="sr"><span>${IS_HE ? p.he.split('(')[0].trim() : p.en.split('(')[0].trim()} × ${qtys[p.id]}</span><span>$${p.price * qtys[p.id]}</span></div>`).join('') +
+    `<hr class="sdiv"><div class="sr stot"><span>${IS_HE ? 'סה\"כ' : 'Total'}</span><span>$${total}</span></div>`;
+}
+
+function showZelle() {
+  alert(IS_HE
+    ? 'שלם דרך Zelle ל:\n[הכנס מספר טלפון או אימייל]\nסכום: $' + getTotal()
+    : 'Pay via Zelle to:\n[Enter phone or email]\nAmount: $' + getTotal());
+}
+
+function resetForm() {
+  PRODUCTS.forEach(p => qtys[p.id] = 0);
+  deliveryMode = 'pickup'; sliceMode = 'whole';
+  ['f-name','f-phone','f-email','f-addr','f-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ty-screen').classList.remove('show');
+  document.getElementById('form-wrap').style.display = 'block';
+  renderProducts(); updateSummary();
+  document.getElementById('sub-btn').disabled = true;
+  window.scrollTo(0, 0);
+}
+
+function autoSave() {
+  const name  = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (name || phone || email) localStorage.setItem('lm_customer', JSON.stringify({name, phone, email}));
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem('lm_customer');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (!s.name) return;
+    document.getElementById('f-name').value  = s.name;
+    document.getElementById('f-phone').value = s.phone || '';
+    document.getElementById('f-email').value = s.email || '';
+    const banner = document.getElementById('sbanner');
+    document.getElementById('sbanner-txt').textContent = IS_HE
+      ? `ברוך הבא חזרה, ${s.name}! הפרטים שלך כבר ממולאים.`
+      : `Welcome back, ${s.name}! Your details are pre-filled.`;
+    banner.classList.add('show');
+  } catch(e) {}
+}
+
+function clearSaved() {
+  localStorage.removeItem('lm_customer');
+  document.getElementById('sbanner').classList.remove('show');
+  ['f-name','f-phone','f-email'].forEach(id => document.getElementById(id).value = '');
+}
+
+// INIT
+loadAdminSettings();
+checkFormStatus();
+renderProducts();
+updateSummary();
+loadSaved();
+</script>
+</body>
+</html>
