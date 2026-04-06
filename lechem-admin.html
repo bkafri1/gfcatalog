@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Lechem Mikfari</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF6EF;
+    --warm-brown: #5C3D2E;
+    --accent: #C17D3C;
+    --accent-light: #E8C99A;
+    --accent-hover: #A66828;
+    --text-primary: #2C1A0E;
+    --text-secondary: #7A5C44;
+    --border: #DDD0BF;
+    --surface: #FFFFFF;
+    --surface-warm: #FDF5E8;
+    --success: #2E7D32;
+    --success-bg: #E8F5E9;
+    --success-border: #A5D6A7;
+    --error: #C0392B;
+    --error-bg: #FDEDEC;
+    --sold-out: #95a5a6;
+    --font: 'Lato', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: var(--font);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* LOGIN */
+  .login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+
+  .login-icon { font-size: 48px; margin-bottom: 12px; }
+  .login-title { font-size: 22px; font-weight: 900; color: var(--warm-brown); margin-bottom: 4px; }
+  .login-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+
+  .login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  .login-field label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .login-field input {
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: var(--font);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .login-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(193,125,60,0.12);
+  }
+
+  .login-error {
+    font-size: 13px;
+    color: var(--error);
+    margin-bottom: 12px;
+    min-height: 20px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:active { transform: scale(0.99); }
+
+  /* ADMIN APP */
+  .admin-app { display: none; }
+  .admin-app.show { display: block; }
+
+  /* HEADER */
+  .header {
+    background: var(--warm-brown);
+    color: white;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-icon { font-size: 28px; }
+  .header-title { font-size: 20px; font-weight: 900; }
+  .header-sub { font-size: 12px; opacity: 0.7; margin-top: 1px; }
+
+  .logout-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    border-radius: 20px;
+    padding: 6px 16px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--font);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+  }
+  .logout-btn:hover { background: rgba(255,255,255,0.25); }
+
+  /* MAIN */
+  .main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--warm-brown);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    z-index: 999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* SECTION */
+  .section {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--warm-brown);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* BAKING DATE */
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  @media (max-width: 480px) { .date-grid { grid-template-columns: 1fr; } }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .field input, .field select {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: var(--font);
+    color: var(--text-primary);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .field input:focus, .field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(193,125,60,0.12);
+  }
+
+  .fresh-badge-preview {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: var(--surface-warm);
+    border: 1px solid var(--accent-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--warm-brown);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* PRODUCT TABLE */
+  .product-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px 80px 80px 80px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .product-row:last-child { border-bottom: none; }
+
+  .product-row-header {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px 80px 80px 80px;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .col-header {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 600px) {
+    .product-row, .product-row-header {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .col-header { display: none; }
+    .product-row { padding: 16px 0; }
+  }
+
+  .product-name-cell { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
+  .product-name-cell .badge { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: var(--surface-warm); color: var(--accent); border: 1px solid var(--accent-light); margin-right: 4px; font-weight: 400; }
+
+  .cell-input {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: var(--font);
+    color: var(--text-primary);
+    background: white;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+    text-align: center;
+  }
+  .cell-input:focus { border-color: var(--accent); }
+  .cell-input:disabled { background: #f5f5f5; color: var(--sold-out); }
+
+  /* TOGGLE SWITCH */
+  .toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+  .toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle input:checked + .toggle-track { background: var(--success); }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    pointer-events: none;
+  }
+
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(16px); }
+
+  .sold-out-toggle { display: flex; align-items: center; justify-content: center; }
+
+  /* ROW STATES */
+  .product-row.hidden-row { opacity: 0.45; }
+  .product-row.soldout-row .product-name-cell { text-decoration: line-through; color: var(--sold-out); }
+
+  /* SAVE BAR */
+  .save-bar {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 -16px;
+  }
+
+  .save-status { font-size: 13px; color: var(--text-secondary); }
+  .save-status.saved { color: var(--success); font-weight: 700; }
+
+  .save-btn {
+    padding: 10px 28px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .save-btn:hover { background: var(--accent-hover); }
+
+  /* PREVIEW LINK */
+  .preview-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+    padding: 8px 14px;
+    border: 1px solid var(--accent-light);
+    border-radius: 8px;
+    background: var(--surface-warm);
+    transition: background 0.2s;
+  }
+  .preview-link:hover { background: var(--accent-light); }
+
+  /* STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
+
+  .stat-card {
+    background: var(--surface-warm);
+    border: 1px solid var(--accent-light);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .stat-value { font-size: 28px; font-weight: 900; color: var(--warm-brown); display: block; }
+  .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* FORM STATUS */
+  .form-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .form-status-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .form-status-row:first-child { padding-top: 0; }
+
+  .form-info { flex: 1; min-width: 0; }
+  .form-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+  .form-url  { font-size: 11px; color: var(--text-secondary); font-family: monospace; }
+
+  .form-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  .open-badge  { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: #E8F5E9; color: #2E7D32; }
+  .closed-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: #FDEDEC; color: #C0392B; }
+
+  .close-form-btn {
+    padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border);
+    background: white; cursor: pointer; font-size: 12px; font-weight: 700;
+    font-family: var(--font); color: var(--text-primary); transition: all 0.2s;
+  }
+  .close-form-btn:hover { border-color: #C0392B; color: #C0392B; background: #FDEDEC; }
+  .open-form-btn {
+    padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border);
+    background: white; cursor: pointer; font-size: 12px; font-weight: 700;
+    font-family: var(--font); color: var(--text-primary); transition: all 0.2s;
+  }
+  .open-form-btn:hover { border-color: #2E7D32; color: #2E7D32; background: #E8F5E9; }
+
+  .msg-fields { margin-top: 12px; display: none; padding: 14px; background: var(--surface-warm); border-radius: 10px; border: 1px solid var(--border); }
+  .msg-fields.show { display: block; }
+  .msg-fields label { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px; margin-top: 10px; }
+  .msg-fields label:first-child { margin-top: 0; }
+  .msg-fields textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: var(--font); resize: vertical; min-height: 60px; outline: none; }
+  .msg-fields textarea:focus { border-color: var(--accent); }
+  .msg-fields .apply-btn { margin-top: 10px; padding: 8px 18px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; }
+  .msg-fields .apply-btn:hover { background: var(--accent-hover); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">Bakery Admin</div>
+    <p class="login-sub">Lechem Mikfari — Staff only</p>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') login()">
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <button class="btn-primary" onclick="login()">Sign In</button>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div class="admin-app" id="admin-app">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="header-icon">🍞</div>
+      <div>
+        <div class="header-title">Lechem Mikfari — Admin</div>
+        <div class="header-sub">Manage your bakery menu & schedule</div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
+  </div>
+
+  <div class="main">
+
+    <!-- STATS -->
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-active">—</span>
+        <span class="stat-label">Active Products</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-soldout">—</span>
+        <span class="stat-label">Sold Out</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-hidden">—</span>
+        <span class="stat-label">Hidden</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-forms">—</span>
+        <span class="stat-label">Forms Open</span>
+      </div>
+    </div>
+
+    <!-- BAKING DATE & FRESHNESS -->
+    <div class="section">
+      <div class="section-title">📅 Baking & Delivery Schedule</div>
+
+      <div class="date-grid">
+        <div class="field">
+          <label>Baking Date</label>
+          <input type="date" id="baking-date" onchange="updatePreview()">
+        </div>
+        <div class="field">
+          <label>Delivery / Pickup Day</label>
+          <input type="date" id="delivery-date" onchange="updatePreview()">
+        </div>
+        <div class="field">
+          <label>Delivery Time Window</label>
+          <input type="text" id="delivery-time" placeholder="e.g. 3:00–6:00 PM" onchange="updatePreview()">
+        </div>
+        <div class="field">
+          <label>Cutoff for Orders</label>
+          <input type="text" id="order-cutoff" placeholder="e.g. Sunday midnight" onchange="updatePreview()">
+        </div>
+      </div>
+
+      <div class="fresh-badge-preview" id="fresh-preview">
+        🌟 Preview will appear here after you fill in the dates
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="section">
+      <div class="section-title">🛒 Product Management</div>
+
+      <div class="product-row-header">
+        <div class="col-header">Product</div>
+        <div class="col-header" style="text-align:center">Price ($)</div>
+        <div class="col-header" style="text-align:center">Max Stock</div>
+        <div class="col-header" style="text-align:center">Sold Out</div>
+        <div class="col-header" style="text-align:center">Visible</div>
+        <div class="col-header" style="text-align:center">Status</div>
+      </div>
+
+      <div id="product-rows"></div>
+    </div>
+
+    <!-- FORM STATUS -->
+    <div class="section">
+      <div class="section-title">🔒 Order Form Status</div>
+      <div id="form-status-rows">
+
+        <!-- טופס עברית -->
+        <div class="form-status-row">
+          <div class="form-info">
+            <div class="form-name">🇮🇱 טופס הזמנה – עברית</div>
+            <div class="form-url">order-he.html</div>
+          </div>
+          <div class="form-controls">
+            <span id="badge-he" class="open-badge">פתוח ✓</span>
+            <button id="btn-he" class="close-form-btn" onclick="toggleForm('he')">סגור טופס</button>
+          </div>
+        </div>
+        <div class="msg-fields" id="msg-he">
+          <label>הודעה בעברית ללקוח</label>
+          <textarea id="msg-he-text" placeholder="ההזמנות לשבוע זה סגורות. נפתח שוב ביום ראשון 🍞"></textarea>
+          <label>Message in English</label>
+          <textarea id="msg-he-en" placeholder="Orders for this week are closed. We'll reopen on Sunday 🍞"></textarea>
+          <button class="apply-btn" onclick="applyClose('he')">אשר סגירה</button>
+        </div>
+
+        <!-- טופס אנגלית -->
+        <div class="form-status-row">
+          <div class="form-info">
+            <div class="form-name">🇺🇸 Order Form – English</div>
+            <div class="form-url">order-en.html</div>
+          </div>
+          <div class="form-controls">
+            <span id="badge-en" class="open-badge">Open ✓</span>
+            <button id="btn-en" class="close-form-btn" onclick="toggleForm('en')">Close Form</button>
+          </div>
+        </div>
+        <div class="msg-fields" id="msg-en">
+          <label>Message in English</label>
+          <textarea id="msg-en-en" placeholder="Orders for this week are closed. We'll reopen on Sunday 🍞"></textarea>
+          <label>הודעה בעברית</label>
+          <textarea id="msg-en-he" placeholder="ההזמנות לשבוע זה סגורות. נפתח שוב ביום ראשון 🍞"></textarea>
+          <button class="apply-btn" onclick="applyClose('en')">Confirm Close</button>
+        </div>
+
+        <!-- טופס פסח -->
+        <div class="form-status-row">
+          <div class="form-info">
+            <div class="form-name">🍷 טופס פסח – ללא גלוטן</div>
+            <div class="form-url">order-pesach.html</div>
+          </div>
+          <div class="form-controls">
+            <span id="badge-pesach" class="open-badge">פתוח ✓</span>
+            <button id="btn-pesach" class="close-form-btn" onclick="toggleForm('pesach')">סגור טופס</button>
+          </div>
+        </div>
+        <div class="msg-fields" id="msg-pesach">
+          <label>הודעה בעברית ללקוח</label>
+          <textarea id="msg-pesach-text" placeholder="ההזמנות לפסח נסגרו. תודה רבה! חג פסח כשר ושמח 🍷"></textarea>
+          <label>Message in English</label>
+          <textarea id="msg-pesach-en" placeholder="Passover orders are now closed. Thank you! Chag Pesach Sameach 🍷"></textarea>
+          <button class="apply-btn" onclick="applyClose('pesach')">אשר סגירה</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="font-size:13px;color:var(--text-secondary);">
+        Changes are saved to this browser and reflected in the order forms.
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="preview-link" href="order-he.html" target="_blank">↗ טופס עברית</a>
+        <a class="preview-link" href="order-en.html" target="_blank">↗ English Form</a>
+        <a class="preview-link" href="order-pesach.html" target="_blank">↗ טופס פסח</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SAVE BAR -->
+  <div class="save-bar">
+    <span class="save-status" id="save-status">Unsaved changes</span>
+    <button class="save-btn" onclick="saveAll()">Save Changes</button>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Saved successfully</div>
+
+<script>
+const ADMIN_PASSWORD = 'lechem2024';
+const STORAGE_KEY = 'lm_admin_settings';
+
+const PRODUCTS = [
+  { id: 'spelt',       name: 'Whole Spelt Sourdough',             badge: 'Parve',      defaultPrice: 10 },
+  { id: 'nuts',        name: 'Walnut Sourdough',                  badge: 'Parve',      defaultPrice: 10 },
+  { id: 'olives',      name: 'Olive Sourdough',                   badge: 'Parve',      defaultPrice: 10 },
+  { id: 'shiur',       name: 'Pure Sourdough (Shiur)',            badge: 'Parve',      defaultPrice: 10 },
+  { id: 'kasten',      name: 'Kasten Health Loaf',                badge: 'Parve ⭐',   defaultPrice: 10 },
+  { id: 'bagel-white', name: 'Jerusalem Bagels – White (3 pack)', badge: 'Parve',      defaultPrice: 10 },
+  { id: 'bagel-black', name: 'Jerusalem Bagels – Black (3 pack)', badge: 'Parve',      defaultPrice: 10 },
+  { id: 'health',      name: 'Health Loaf',                       badge: 'Low Gluten', defaultPrice: 12 },
+];
+
+let settings = {};
+
+// AUTH
+function login() {
+  const val = document.getElementById('password-input').value;
+  if (val === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').classList.add('show');
+    loadSettings();
+    renderProducts();
+    updateStats();
+    loadFormStatuses();
+  } else {
+    document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-input').focus();
+  }
+}
+
+function logout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-app').classList.remove('show');
+  document.getElementById('password-input').value = '';
+  document.getElementById('login-error').textContent = '';
+}
+
+// SETTINGS
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    settings = raw ? JSON.parse(raw) : {};
+  } catch(e) { settings = {}; }
+
+  // Fill date fields
+  document.getElementById('baking-date').value    = settings.bakingDate    || '';
+  document.getElementById('delivery-date').value  = settings.deliveryDate  || '';
+  document.getElementById('delivery-time').value  = settings.deliveryTime  || '';
+  document.getElementById('order-cutoff').value   = settings.orderCutoff   || '';
+
+  if (!settings.products) settings.products = {};
+  PRODUCTS.forEach(p => {
+    if (!settings.products[p.id]) {
+      settings.products[p.id] = { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
+    }
+  });
+
+  updatePreview();
+  setSaveStatus(true);
+}
+
+function saveAll() {
+  // Read date fields
+  settings.bakingDate   = document.getElementById('baking-date').value;
+  settings.deliveryDate = document.getElementById('delivery-date').value;
+  settings.deliveryTime = document.getElementById('delivery-time').value;
+  settings.orderCutoff  = document.getElementById('order-cutoff').value;
+
+  // Read product rows
+  PRODUCTS.forEach(p => {
+    const price   = document.getElementById('price-' + p.id)?.value;
+    const stock   = document.getElementById('stock-' + p.id)?.value;
+    const soldOut = document.getElementById('soldout-' + p.id)?.checked;
+    const visible = document.getElementById('visible-' + p.id)?.checked;
+    settings.products[p.id] = { price: parseFloat(price) || p.defaultPrice, stock, soldOut, visible };
+  });
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  setSaveStatus(true);
+  showToast('✓ Saved! Order form updated.');
+  updateStats();
+}
+
+function setSaveStatus(saved) {
+  const el = document.getElementById('save-status');
+  el.textContent = saved ? 'All changes saved' : 'Unsaved changes';
+  el.className = 'save-status' + (saved ? ' saved' : '');
+}
+
+function markUnsaved() { setSaveStatus(false); }
+
+// PREVIEW
+function updatePreview() {
+  const delivery = document.getElementById('delivery-date').value;
+  const time     = document.getElementById('delivery-time').value;
+  const baking   = document.getElementById('baking-date').value;
+  const cutoff   = document.getElementById('order-cutoff').value;
+
+  let preview = '🌟 ';
+  if (baking) {
+    const d = new Date(baking + 'T12:00:00');
+    const bakeStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    preview += `Baked fresh on ${bakeStr}. `;
+  }
+  if (delivery) {
+    const d = new Date(delivery + 'T12:00:00');
+    const delStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    preview += `Delivery / pickup: ${delStr}`;
+    if (time) preview += ` · ${time}`;
+    preview += '.';
+  }
+  if (cutoff) preview += ` Order by: ${cutoff}.`;
+  if (!baking && !delivery) preview = '🌟 Preview will appear here after you fill in the dates';
+
+  document.getElementById('fresh-preview').textContent = preview;
+  markUnsaved();
+}
+
+// RENDER PRODUCTS
+function renderProducts() {
+  const container = document.getElementById('product-rows');
+  container.innerHTML = PRODUCTS.map(p => {
+    const s = settings.products?.[p.id] || { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
+    const rowClass = !s.visible ? 'hidden-row' : s.soldOut ? 'soldout-row' : '';
+    return `
+    <div class="product-row ${rowClass}" id="row-${p.id}">
+      <div class="product-name-cell">
+        <span class="badge">${p.badge}</span>${p.name}
+      </div>
+      <div>
+        <input class="cell-input" type="number" id="price-${p.id}" value="${s.price}" min="1" max="999" step="0.5"
+          onchange="markUnsaved(); updateRowStyle('${p.id}')" ${!s.visible || s.soldOut ? 'disabled' : ''}>
+      </div>
+      <div>
+        <input class="cell-input" type="number" id="stock-${p.id}" value="${s.stock}" min="0" max="999" placeholder="∞"
+          onchange="markUnsaved()" ${!s.visible || s.soldOut ? 'disabled' : ''}>
+      </div>
+      <div class="sold-out-toggle">
+        <label class="toggle">
+          <input type="checkbox" id="soldout-${p.id}" ${s.soldOut ? 'checked' : ''}
+            onchange="markUnsaved(); updateRowStyle('${p.id}')">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div class="toggle-wrap">
+        <label class="toggle">
+          <input type="checkbox" id="visible-${p.id}" ${s.visible ? 'checked' : ''}
+            onchange="markUnsaved(); updateRowStyle('${p.id}')">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div style="text-align:center">
+        <span id="status-${p.id}" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px;
+          background:${!s.visible ? '#f0f0f0' : s.soldOut ? '#fdecea' : '#e8f5e9'};
+          color:${!s.visible ? '#999' : s.soldOut ? '#c0392b' : '#2e7d32'}">
+          ${!s.visible ? 'Hidden' : s.soldOut ? 'Sold Out' : 'Active'}
+        </span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateRowStyle(id) {
+  const visible = document.getElementById('visible-' + id)?.checked;
+  const soldOut = document.getElementById('soldout-' + id)?.checked;
+  const row = document.getElementById('row-' + id);
+  const status = document.getElementById('status-' + id);
+  const priceInput = document.getElementById('price-' + id);
+  const stockInput = document.getElementById('stock-' + id);
+
+  row.className = 'product-row' + (!visible ? ' hidden-row' : soldOut ? ' soldout-row' : '');
+  const disabled = !visible || soldOut;
+  priceInput.disabled = disabled;
+  stockInput.disabled = disabled;
+
+  if (!visible) {
+    status.textContent = 'Hidden';
+    status.style.background = '#f0f0f0';
+    status.style.color = '#999';
+  } else if (soldOut) {
+    status.textContent = 'Sold Out';
+    status.style.background = '#fdecea';
+    status.style.color = '#c0392b';
+  } else {
+    status.textContent = 'Active';
+    status.style.background = '#e8f5e9';
+    status.style.color = '#2e7d32';
+  }
+}
+
+function updateStats() {
+  const prods = settings.products || {};
+  let active = 0, soldOut = 0, hidden = 0;
+  PRODUCTS.forEach(p => {
+    const s = prods[p.id];
+    if (!s) { active++; return; }
+    if (!s.visible) hidden++;
+    else if (s.soldOut) soldOut++;
+    else active++;
+  });
+  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-soldout').textContent = soldOut;
+  document.getElementById('stat-hidden').textContent = hidden;
+
+  // Count open forms
+  const formKeys = ['lm_form_status_he','lm_form_status_en','lm_form_status_pesach'];
+  const openCount = formKeys.filter(k => {
+    try { const s = JSON.parse(localStorage.getItem(k)||'{}'); return !s.closed; } catch(e) { return true; }
+  }).length;
+  document.getElementById('stat-forms').textContent = openCount + '/3';
+}
+
+// FORM STATUS
+const FORM_KEYS = {
+  he:     'lm_form_status_he',
+  en:     'lm_form_status_en',
+  pesach: 'lm_form_status_pesach'
+};
+
+function loadFormStatuses() {
+  ['he','en','pesach'].forEach(key => {
+    try {
+      const raw = localStorage.getItem(FORM_KEYS[key]);
+      const s = raw ? JSON.parse(raw) : { closed: false };
+      renderFormStatus(key, s);
+    } catch(e) {}
+  });
+}
+
+function renderFormStatus(key, s) {
+  const badge = document.getElementById('badge-' + key);
+  const btn   = document.getElementById('btn-' + key);
+  const msgs  = document.getElementById('msg-' + key);
+
+  if (s.closed) {
+    badge.textContent = key === 'en' ? 'Closed ✗' : 'סגור ✗';
+    badge.className = 'closed-badge';
+    btn.textContent = key === 'en' ? 'Reopen Form' : 'פתח טופס';
+    btn.className = 'open-form-btn';
+    msgs.classList.remove('show');
+    // Fill in existing messages if any
+    if (s.msgHe && document.getElementById('msg-' + key + '-text'))
+      document.getElementById('msg-' + key + '-text').value = s.msgHe;
+    if (s.msgEn && document.getElementById('msg-' + key + '-en'))
+      document.getElementById('msg-' + key + '-en').value = s.msgEn;
+  } else {
+    badge.textContent = key === 'en' ? 'Open ✓' : 'פתוח ✓';
+    badge.className = 'open-badge';
+    btn.textContent = key === 'en' ? 'Close Form' : 'סגור טופס';
+    btn.className = 'close-form-btn';
+    msgs.classList.remove('show');
+  }
+}
+
+function toggleForm(key) {
+  try {
+    const raw = localStorage.getItem(FORM_KEYS[key]);
+    const s = raw ? JSON.parse(raw) : { closed: false };
+
+    if (s.closed) {
+      // פתח מחדש
+      const newState = { closed: false };
+      localStorage.setItem(FORM_KEYS[key], JSON.stringify(newState));
+      renderFormStatus(key, newState);
+      showToast(key === 'en' ? '✓ Form reopened!' : '✓ הטופס נפתח מחדש!');
+    } else {
+      // הצג שדות הודעה לפני סגירה
+      const msgs = document.getElementById('msg-' + key);
+      msgs.classList.toggle('show');
+    }
+  } catch(e) {}
+}
+
+function applyClose(key) {
+  const msgHeEl = document.getElementById('msg-' + key + '-text') ||
+                  document.getElementById('msg-' + key + '-he');
+  const msgEnEl = document.getElementById('msg-' + key + '-en');
+
+  const msgHe = msgHeEl ? msgHeEl.value.trim() : '';
+  const msgEn = msgEnEl ? msgEnEl.value.trim() : '';
+
+  const state = {
+    closed: true,
+    msgHe: msgHe || 'ההזמנות לשבוע זה סגורות. נפתח שוב בקרוב 🍞',
+    msgEn: msgEn || 'Orders for this week are closed. We\'ll reopen soon 🍞'
+  };
+
+  localStorage.setItem(FORM_KEYS[key], JSON.stringify(state));
+  renderFormStatus(key, state);
+  showToast(key === 'en' ? '✓ Form closed!' : '✓ הטופס נסגר!');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// KEYBOARD SHORTCUT: Ctrl+S
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveAll(); }
+});
+</script>
+</body>
+</html>
