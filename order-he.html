@@ -528,8 +528,10 @@ function clearSaved() {
 // INIT
 loadAdminSettings();
 checkFormStatus();
-loadStock().then(() => { updateSummary(); });
+renderProducts();
+updateSummary();
 loadSaved();
+loadStock();
 </script>
 </body>
 </html>
