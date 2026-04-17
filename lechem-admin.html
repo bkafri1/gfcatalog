@@ -6,457 +6,133 @@
 <title>Admin — Lechem Mikfari</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #FAF6EF;
-    --warm-brown: #5C3D2E;
-    --accent: #C17D3C;
-    --accent-light: #E8C99A;
-    --accent-hover: #A66828;
-    --text-primary: #2C1A0E;
-    --text-secondary: #7A5C44;
-    --border: #DDD0BF;
-    --surface: #FFFFFF;
-    --surface-warm: #FDF5E8;
-    --success: #2E7D32;
-    --success-bg: #E8F5E9;
-    --success-border: #A5D6A7;
-    --error: #C0392B;
-    --error-bg: #FDEDEC;
-    --sold-out: #95a5a6;
-    --font: 'Lato', sans-serif;
-  }
+:root {
+  --cream:#FAF6EF; --brown:#5C3D2E; --accent:#C17D3C; --accent-l:#E8C99A;
+  --accent-h:#A66828; --txt:#2C1A0E; --txt2:#7A5C44; --border:#DDD0BF;
+  --bg:#FFFFFF; --warm:#FDF5E8; --green:#2E7D32; --green-bg:#E8F5E9;
+  --red:#C0392B; --red-bg:#FDEDEC; --font:'Lato',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:var(--font);color:var(--txt);min-height:100vh;}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-card{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:380px;text-align:center;}
+.login-icon{font-size:48px;margin-bottom:12px;}
+.login-title{font-size:22px;font-weight:900;color:var(--brown);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--txt2);margin-bottom:28px;}
+.login-field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;text-align:left;}
+.login-field label{font-size:12px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;}
+.login-field input{padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:15px;font-family:var(--font);color:var(--txt);outline:none;transition:border-color .2s,box-shadow .2s;}
+.login-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,125,60,.12);}
+.login-error{font-size:13px;color:var(--red);margin-bottom:12px;min-height:20px;}
+.btn-primary{width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:var(--accent-h);}
 
-  body {
-    background: var(--cream);
-    font-family: var(--font);
-    color: var(--text-primary);
-    min-height: 100vh;
-  }
+/* ADMIN */
+.admin-app{display:none;}
+.admin-app.show{display:block;}
+.header{background:var(--brown);color:#fff;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;}
+.header-left{display:flex;align-items:center;gap:12px;}
+.header-icon{font-size:28px;}
+.header-title{font-size:20px;font-weight:900;}
+.header-sub{font-size:12px;opacity:.7;margin-top:1px;}
+.logout-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;border-radius:20px;padding:6px 16px;cursor:pointer;font-size:12px;font-family:var(--font);font-weight:700;transition:background .2s;}
+.logout-btn:hover{background:rgba(255,255,255,.25);}
+.main{max-width:820px;margin:0 auto;padding:28px 16px 80px;}
 
-  /* LOGIN */
-  .login-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--brown);color:white;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:700;z-index:999;transition:transform .3s ease;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--red);}
 
-  .login-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 40px 36px;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
-  }
+/* SECTION */
+.section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:24px;margin-bottom:20px;}
+.section-title{font-size:14px;font-weight:900;color:var(--brown);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.5px;}
 
-  .login-icon { font-size: 48px; margin-bottom: 12px; }
-  .login-title { font-size: 22px; font-weight: 900; color: var(--warm-brown); margin-bottom: 4px; }
-  .login-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(3,1fr);}}
+.stat-card{background:var(--warm);border:1px solid var(--accent-l);border-radius:12px;padding:14px 12px;text-align:center;}
+.stat-value{font-size:26px;font-weight:900;color:var(--brown);display:block;}
+.stat-label{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
 
-  .login-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 16px;
-    text-align: left;
-  }
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--border);}
+.tab{padding:10px 20px;cursor:pointer;font-size:13px;font-weight:700;color:var(--txt2);border:none;background:none;font-family:var(--font);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.tab:hover{color:var(--brown);}
+.tab.active{color:var(--brown);border-bottom-color:var(--accent);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
 
-  .login-field label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+/* DATE GRID */
+.date-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:480px){.date-grid{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;}
+.field input,.field select{padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font);color:var(--txt);background:white;outline:none;transition:border-color .2s,box-shadow .2s;}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,125,60,.12);}
+.fresh-preview{margin-top:14px;padding:12px 16px;background:var(--warm);border:1px solid var(--accent-l);border-radius:10px;font-size:13px;color:var(--brown);font-weight:700;}
 
-  .login-field input {
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: var(--font);
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
+/* PRODUCT TABLE */
+.prod-header,.prod-row{display:grid;grid-template-columns:1fr 80px 80px 70px 70px 80px;gap:10px;align-items:center;}
+.prod-header{padding-bottom:10px;border-bottom:2px solid var(--border);margin-bottom:4px;}
+.prod-row{padding:11px 0;border-bottom:1px solid var(--border);}
+.prod-row:last-child{border-bottom:none;}
+.col-h{font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;}
+@media(max-width:560px){.prod-header,.prod-row{grid-template-columns:1fr;gap:8px;}.col-h{display:none;}.prod-row{padding:16px 0;}}
+.pname{font-size:14px;font-weight:700;color:var(--txt);line-height:1.4;}
+.pname .bdg{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--warm);color:var(--accent);border:1px solid var(--accent-l);margin-right:4px;font-weight:400;}
+.cell-input{padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--font);color:var(--txt);background:white;outline:none;width:100%;transition:border-color .2s;text-align:center;}
+.cell-input:focus{border-color:var(--accent);}
+.cell-input:disabled{background:#f5f5f5;color:#aaa;}
+.toggle-wrap{display:flex;align-items:center;justify-content:center;}
+.toggle{position:relative;width:36px;height:20px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:10px;cursor:pointer;transition:background .2s;}
+.toggle input:checked + .toggle-track{background:var(--green);}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;pointer-events:none;}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(16px);}
+.prod-row.hidden-row{opacity:.4;}
+.prod-row.soldout-row .pname{text-decoration:line-through;color:#999;}
+.status-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;display:inline-block;text-align:center;}
 
-  .login-field input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(193,125,60,0.12);
-  }
+/* FORM STATUS */
+.form-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap;}
+.form-row:last-child{border-bottom:none;padding-bottom:0;}
+.form-row:first-child{padding-top:0;}
+.form-info{flex:1;min-width:0;}
+.form-name{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.form-url{font-size:11px;color:var(--txt2);font-family:monospace;}
+.form-controls{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.open-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:var(--green-bg);color:var(--green);}
+.closed-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:var(--red-bg);color:var(--red);}
+.loading-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:#f0f0f0;color:#999;}
+.close-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-weight:700;font-family:var(--font);color:var(--txt);transition:all .2s;}
+.close-btn:hover{border-color:var(--red);color:var(--red);background:var(--red-bg);}
+.open-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-weight:700;font-family:var(--font);color:var(--txt);transition:all .2s;}
+.open-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-bg);}
+.msg-panel{display:none;margin-top:12px;padding:14px;background:var(--warm);border-radius:10px;border:1px solid var(--border);}
+.msg-panel.show{display:block;}
+.msg-panel label{font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;margin-top:10px;}
+.msg-panel label:first-child{margin-top:0;}
+.msg-panel textarea{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--font);resize:vertical;min-height:58px;outline:none;}
+.msg-panel textarea:focus{border-color:var(--accent);}
+.msg-panel .apply-btn{margin-top:10px;padding:8px 18px;background:var(--red);color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;}
+.msg-panel .apply-btn:hover{background:#a93226;}
+.server-note{font-size:12px;color:var(--green);font-weight:700;margin-bottom:14px;padding:8px 12px;background:var(--green-bg);border-radius:8px;border:1px solid #A5D6A7;}
 
-  .login-error {
-    font-size: 13px;
-    color: var(--error);
-    margin-bottom: 12px;
-    min-height: 20px;
-  }
+/* SAVE BAR */
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.save-status{font-size:13px;color:var(--txt2);}
+.save-status.saved{color:var(--green);font-weight:700;}
+.save-btn{padding:10px 28px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .2s;}
+.save-btn:hover{background:var(--accent-h);}
 
-  .btn-primary {
-    width: 100%;
-    padding: 13px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: var(--font);
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-  }
-  .btn-primary:hover { background: var(--accent-hover); }
-  .btn-primary:active { transform: scale(0.99); }
-
-  /* ADMIN APP */
-  .admin-app { display: none; }
-  .admin-app.show { display: block; }
-
-  /* HEADER */
-  .header {
-    background: var(--warm-brown);
-    color: white;
-    padding: 20px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .header-icon { font-size: 28px; }
-  .header-title { font-size: 20px; font-weight: 900; }
-  .header-sub { font-size: 12px; opacity: 0.7; margin-top: 1px; }
-
-  .logout-btn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    border-radius: 20px;
-    padding: 6px 16px;
-    cursor: pointer;
-    font-size: 12px;
-    font-family: var(--font);
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    transition: background 0.2s;
-  }
-  .logout-btn:hover { background: rgba(255,255,255,0.25); }
-
-  /* MAIN */
-  .main {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 28px 16px 60px;
-  }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--warm-brown);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 24px;
-    font-size: 14px;
-    font-weight: 700;
-    z-index: 999;
-    transition: transform 0.3s ease;
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  /* SECTION */
-  .section {
-    background: var(--surface);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-size: 16px;
-    font-weight: 900;
-    color: var(--warm-brown);
-    margin-bottom: 18px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* BAKING DATE */
-  .date-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  @media (max-width: 480px) { .date-grid { grid-template-columns: 1fr; } }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .field label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .field input, .field select {
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 14px;
-    font-family: var(--font);
-    color: var(--text-primary);
-    background: white;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .field input:focus, .field select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(193,125,60,0.12);
-  }
-
-  .fresh-badge-preview {
-    margin-top: 14px;
-    padding: 12px 16px;
-    background: var(--surface-warm);
-    border: 1px solid var(--accent-light);
-    border-radius: 10px;
-    font-size: 13px;
-    color: var(--warm-brown);
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* PRODUCT TABLE */
-  .product-row {
-    display: grid;
-    grid-template-columns: 1fr 90px 90px 80px 80px 80px;
-    gap: 10px;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .product-row:last-child { border-bottom: none; }
-
-  .product-row-header {
-    display: grid;
-    grid-template-columns: 1fr 90px 90px 80px 80px 80px;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 4px;
-  }
-
-  .col-header {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  @media (max-width: 600px) {
-    .product-row, .product-row-header {
-      grid-template-columns: 1fr;
-      gap: 8px;
-    }
-    .col-header { display: none; }
-    .product-row { padding: 16px 0; }
-  }
-
-  .product-name-cell { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
-  .product-name-cell .badge { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: var(--surface-warm); color: var(--accent); border: 1px solid var(--accent-light); margin-right: 4px; font-weight: 400; }
-
-  .cell-input {
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: var(--font);
-    color: var(--text-primary);
-    background: white;
-    outline: none;
-    width: 100%;
-    transition: border-color 0.2s;
-    text-align: center;
-  }
-  .cell-input:focus { border-color: var(--accent); }
-  .cell-input:disabled { background: #f5f5f5; color: var(--sold-out); }
-
-  /* TOGGLE SWITCH */
-  .toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; }
-
-  .toggle {
-    position: relative;
-    width: 36px;
-    height: 20px;
-    flex-shrink: 0;
-  }
-
-  .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
-
-  .toggle-track {
-    position: absolute;
-    inset: 0;
-    background: var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .toggle input:checked + .toggle-track { background: var(--success); }
-
-  .toggle-thumb {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    pointer-events: none;
-  }
-
-  .toggle input:checked ~ .toggle-thumb { transform: translateX(16px); }
-
-  .sold-out-toggle { display: flex; align-items: center; justify-content: center; }
-
-  /* ROW STATES */
-  .product-row.hidden-row { opacity: 0.45; }
-  .product-row.soldout-row .product-name-cell { text-decoration: line-through; color: var(--sold-out); }
-
-  /* SAVE BAR */
-  .save-bar {
-    position: sticky;
-    bottom: 0;
-    background: white;
-    border-top: 1px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin: 0 -16px;
-  }
-
-  .save-status { font-size: 13px; color: var(--text-secondary); }
-  .save-status.saved { color: var(--success); font-weight: 700; }
-
-  .save-btn {
-    padding: 10px 28px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    font-family: var(--font);
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .save-btn:hover { background: var(--accent-hover); }
-
-  /* PREVIEW LINK */
-  .preview-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 700;
-    padding: 8px 14px;
-    border: 1px solid var(--accent-light);
-    border-radius: 8px;
-    background: var(--surface-warm);
-    transition: background 0.2s;
-  }
-  .preview-link:hover { background: var(--accent-light); }
-
-  /* STATS */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
-
-  .stat-card {
-    background: var(--surface-warm);
-    border: 1px solid var(--accent-light);
-    border-radius: 12px;
-    padding: 14px 16px;
-    text-align: center;
-  }
-
-  .stat-value { font-size: 28px; font-weight: 900; color: var(--warm-brown); display: block; }
-  .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-
-  /* FORM STATUS */
-  .form-status-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .form-status-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .form-status-row:first-child { padding-top: 0; }
-
-  .form-info { flex: 1; min-width: 0; }
-  .form-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
-  .form-url  { font-size: 11px; color: var(--text-secondary); font-family: monospace; }
-
-  .form-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-
-  .open-badge  { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: #E8F5E9; color: #2E7D32; }
-  .closed-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: #FDEDEC; color: #C0392B; }
-
-  .close-form-btn {
-    padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border);
-    background: white; cursor: pointer; font-size: 12px; font-weight: 700;
-    font-family: var(--font); color: var(--text-primary); transition: all 0.2s;
-  }
-  .close-form-btn:hover { border-color: #C0392B; color: #C0392B; background: #FDEDEC; }
-  .open-form-btn {
-    padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border);
-    background: white; cursor: pointer; font-size: 12px; font-weight: 700;
-    font-family: var(--font); color: var(--text-primary); transition: all 0.2s;
-  }
-  .open-form-btn:hover { border-color: #2E7D32; color: #2E7D32; background: #E8F5E9; }
-
-  .msg-fields { margin-top: 12px; display: none; padding: 14px; background: var(--surface-warm); border-radius: 10px; border: 1px solid var(--border); }
-  .msg-fields.show { display: block; }
-  .msg-fields label { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px; margin-top: 10px; }
-  .msg-fields label:first-child { margin-top: 0; }
-  .msg-fields textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: var(--font); resize: vertical; min-height: 60px; outline: none; }
-  .msg-fields textarea:focus { border-color: var(--accent); }
-  .msg-fields .apply-btn { margin-top: 10px; padding: 8px 18px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; }
-  .msg-fields .apply-btn:hover { background: var(--accent-hover); }
+/* LINKS */
+.links-row{display:flex;gap:8px;flex-wrap:wrap;}
+.preview-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);text-decoration:none;font-weight:700;padding:7px 12px;border:1px solid var(--accent-l);border-radius:8px;background:var(--warm);transition:background .2s;}
+.preview-link:hover{background:var(--accent-l);}
 </style>
 </head>
 <body>
@@ -484,7 +160,7 @@
       <div class="header-icon">🍞</div>
       <div>
         <div class="header-title">Lechem Mikfari — Admin</div>
-        <div class="header-sub">Manage your bakery menu & schedule</div>
+        <div class="header-sub">Manage your bakery</div>
       </div>
     </div>
     <button class="logout-btn" onclick="logout()">Sign Out</button>
@@ -493,143 +169,100 @@
   <div class="main">
 
     <!-- STATS -->
-    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
-      <div class="stat-card">
-        <span class="stat-value" id="stat-active">—</span>
-        <span class="stat-label">Active Products</span>
+    <div class="stats-grid">
+      <div class="stat-card"><span class="stat-value" id="stat-active">—</span><span class="stat-label">Active</span></div>
+      <div class="stat-card"><span class="stat-value" id="stat-soldout">—</span><span class="stat-label">Sold Out</span></div>
+      <div class="stat-card"><span class="stat-value" id="stat-hidden">—</span><span class="stat-label">Hidden</span></div>
+      <div class="stat-card"><span class="stat-value" id="stat-open">—</span><span class="stat-label">Forms Open</span></div>
+      <div class="stat-card"><span class="stat-value" id="stat-closed">—</span><span class="stat-label">Forms Closed</span></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('bread')">🍞 לחמים</button>
+      <button class="tab" onclick="switchTab('hala')">🕯️ חלות שישי</button>
+      <button class="tab" onclick="switchTab('forms')">🔒 Form Status</button>
+    </div>
+
+    <!-- TAB: BREAD -->
+    <div class="tab-panel active" id="tab-bread">
+      <div class="section">
+        <div class="section-title">📅 Baking & Delivery Schedule</div>
+        <div class="date-grid">
+          <div class="field"><label>Baking Date</label><input type="date" id="baking-date" onchange="updatePreview()"></div>
+          <div class="field"><label>Delivery / Pickup Day</label><input type="date" id="delivery-date" onchange="updatePreview()"></div>
+          <div class="field"><label>Delivery Time Window</label><input type="text" id="delivery-time" placeholder="e.g. 3:00–6:00 PM" onchange="updatePreview()"></div>
+          <div class="field"><label>Order Cutoff</label><input type="text" id="order-cutoff" placeholder="e.g. Thursday midnight" onchange="updatePreview()"></div>
+        </div>
+        <div class="fresh-preview" id="fresh-preview">🌟 Preview will appear here after you fill in the dates</div>
       </div>
-      <div class="stat-card">
-        <span class="stat-value" id="stat-soldout">—</span>
-        <span class="stat-label">Sold Out</span>
+
+      <div class="section">
+        <div class="section-title">🛒 Bread Products</div>
+        <div class="prod-header">
+          <div class="col-h">Product</div>
+          <div class="col-h" style="text-align:center">Price ($)</div>
+          <div class="col-h" style="text-align:center">Max Stock</div>
+          <div class="col-h" style="text-align:center">Sold Out</div>
+          <div class="col-h" style="text-align:center">Visible</div>
+          <div class="col-h" style="text-align:center">Status</div>
+        </div>
+        <div id="bread-product-rows"></div>
       </div>
-      <div class="stat-card">
-        <span class="stat-value" id="stat-hidden">—</span>
-        <span class="stat-label">Hidden</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value" id="stat-forms">—</span>
-        <span class="stat-label">Forms Open</span>
+
+      <div class="section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <span style="font-size:13px;color:var(--txt2);">Changes saved to this browser & reflected in order forms.</span>
+        <div class="links-row">
+          <a class="preview-link" href="order-he.html" target="_blank">↗ טופס עברית</a>
+          <a class="preview-link" href="order-en.html" target="_blank">↗ English Form</a>
+          <a class="preview-link" href="order-pesach.html" target="_blank">↗ טופס פסח</a>
+        </div>
       </div>
     </div>
 
-    <!-- BAKING DATE & FRESHNESS -->
-    <div class="section">
-      <div class="section-title">📅 Baking & Delivery Schedule</div>
-
-      <div class="date-grid">
-        <div class="field">
-          <label>Baking Date</label>
-          <input type="date" id="baking-date" onchange="updatePreview()">
+    <!-- TAB: HALA -->
+    <div class="tab-panel" id="tab-hala">
+      <div class="section">
+        <div class="section-title">📅 Friday Baking Schedule</div>
+        <div class="date-grid">
+          <div class="field"><label>Baking Date (Friday)</label><input type="date" id="hala-baking-date" onchange="updateHalaPreview()"></div>
+          <div class="field"><label>Pickup / Delivery</label><input type="date" id="hala-delivery-date" onchange="updateHalaPreview()"></div>
+          <div class="field"><label>Delivery Time</label><input type="text" id="hala-delivery-time" placeholder="e.g. 2:00–5:00 PM" onchange="updateHalaPreview()"></div>
+          <div class="field"><label>Order Cutoff</label><input type="text" id="hala-order-cutoff" placeholder="e.g. Thursday midnight" onchange="updateHalaPreview()"></div>
         </div>
-        <div class="field">
-          <label>Delivery / Pickup Day</label>
-          <input type="date" id="delivery-date" onchange="updatePreview()">
-        </div>
-        <div class="field">
-          <label>Delivery Time Window</label>
-          <input type="text" id="delivery-time" placeholder="e.g. 3:00–6:00 PM" onchange="updatePreview()">
-        </div>
-        <div class="field">
-          <label>Cutoff for Orders</label>
-          <input type="text" id="order-cutoff" placeholder="e.g. Sunday midnight" onchange="updatePreview()">
-        </div>
+        <div class="fresh-preview" id="hala-fresh-preview">🕯️ Preview will appear here after you fill in the dates</div>
       </div>
 
-      <div class="fresh-badge-preview" id="fresh-preview">
-        🌟 Preview will appear here after you fill in the dates
-      </div>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div class="section">
-      <div class="section-title">🛒 Product Management</div>
-
-      <div class="product-row-header">
-        <div class="col-header">Product</div>
-        <div class="col-header" style="text-align:center">Price ($)</div>
-        <div class="col-header" style="text-align:center">Max Stock</div>
-        <div class="col-header" style="text-align:center">Sold Out</div>
-        <div class="col-header" style="text-align:center">Visible</div>
-        <div class="col-header" style="text-align:center">Status</div>
+      <div class="section">
+        <div class="section-title">🛒 Hala & Babka Products</div>
+        <div class="prod-header">
+          <div class="col-h">Product</div>
+          <div class="col-h" style="text-align:center">Price ($)</div>
+          <div class="col-h" style="text-align:center">Max Stock</div>
+          <div class="col-h" style="text-align:center">Sold Out</div>
+          <div class="col-h" style="text-align:center">Visible</div>
+          <div class="col-h" style="text-align:center">Status</div>
+        </div>
+        <div id="hala-product-rows"></div>
       </div>
 
-      <div id="product-rows"></div>
-    </div>
-
-    <!-- FORM STATUS -->
-    <div class="section">
-      <div class="section-title">🔒 Order Form Status</div>
-      <div id="form-status-rows">
-
-        <!-- טופס עברית -->
-        <div class="form-status-row">
-          <div class="form-info">
-            <div class="form-name">🇮🇱 טופס הזמנה – עברית</div>
-            <div class="form-url">order-he.html</div>
-          </div>
-          <div class="form-controls">
-            <span id="badge-he" class="open-badge">פתוח ✓</span>
-            <button id="btn-he" class="close-form-btn" onclick="toggleForm('he')">סגור טופס</button>
-          </div>
+      <div class="section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <span style="font-size:13px;color:var(--txt2);">Changes saved to this browser & reflected in order forms.</span>
+        <div class="links-row">
+          <a class="preview-link" href="order-hala-he.html" target="_blank">↗ טופס חלות עברית</a>
+          <a class="preview-link" href="order-hala-en.html" target="_blank">↗ Hala Form English</a>
         </div>
-        <div class="msg-fields" id="msg-he">
-          <label>הודעה בעברית ללקוח</label>
-          <textarea id="msg-he-text" placeholder="ההזמנות לשבוע זה סגורות. נפתח שוב ביום ראשון 🍞"></textarea>
-          <label>Message in English</label>
-          <textarea id="msg-he-en" placeholder="Orders for this week are closed. We'll reopen on Sunday 🍞"></textarea>
-          <button class="apply-btn" onclick="applyClose('he')">אשר סגירה</button>
-        </div>
-
-        <!-- טופס אנגלית -->
-        <div class="form-status-row">
-          <div class="form-info">
-            <div class="form-name">🇺🇸 Order Form – English</div>
-            <div class="form-url">order-en.html</div>
-          </div>
-          <div class="form-controls">
-            <span id="badge-en" class="open-badge">Open ✓</span>
-            <button id="btn-en" class="close-form-btn" onclick="toggleForm('en')">Close Form</button>
-          </div>
-        </div>
-        <div class="msg-fields" id="msg-en">
-          <label>Message in English</label>
-          <textarea id="msg-en-en" placeholder="Orders for this week are closed. We'll reopen on Sunday 🍞"></textarea>
-          <label>הודעה בעברית</label>
-          <textarea id="msg-en-he" placeholder="ההזמנות לשבוע זה סגורות. נפתח שוב ביום ראשון 🍞"></textarea>
-          <button class="apply-btn" onclick="applyClose('en')">Confirm Close</button>
-        </div>
-
-        <!-- טופס פסח -->
-        <div class="form-status-row">
-          <div class="form-info">
-            <div class="form-name">🍷 טופס פסח – ללא גלוטן</div>
-            <div class="form-url">order-pesach.html</div>
-          </div>
-          <div class="form-controls">
-            <span id="badge-pesach" class="open-badge">פתוח ✓</span>
-            <button id="btn-pesach" class="close-form-btn" onclick="toggleForm('pesach')">סגור טופס</button>
-          </div>
-        </div>
-        <div class="msg-fields" id="msg-pesach">
-          <label>הודעה בעברית ללקוח</label>
-          <textarea id="msg-pesach-text" placeholder="ההזמנות לפסח נסגרו. תודה רבה! חג פסח כשר ושמח 🍷"></textarea>
-          <label>Message in English</label>
-          <textarea id="msg-pesach-en" placeholder="Passover orders are now closed. Thank you! Chag Pesach Sameach 🍷"></textarea>
-          <button class="apply-btn" onclick="applyClose('pesach')">אשר סגירה</button>
-        </div>
-
       </div>
     </div>
 
-    <!-- ACTIONS -->
-    <div class="section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div style="font-size:13px;color:var(--text-secondary);">
-        Changes are saved to this browser and reflected in the order forms.
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a class="preview-link" href="order-he.html" target="_blank">↗ טופס עברית</a>
-        <a class="preview-link" href="order-en.html" target="_blank">↗ English Form</a>
-        <a class="preview-link" href="order-pesach.html" target="_blank">↗ טופס פסח</a>
+    <!-- TAB: FORMS -->
+    <div class="tab-panel" id="tab-forms">
+      <div class="section">
+        <div class="section-title">🔒 Order Form Status</div>
+        <div class="server-note">✓ סגירה/פתיחה שמורה בשרת — עובדת על כל המכשירים של כל הלקוחות</div>
+        <div id="form-rows-container">
+          <div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px;">טוען סטטוסים מהשרת...</div>
+        </div>
       </div>
     </div>
 
@@ -643,38 +276,59 @@
 
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">✓ Saved successfully</div>
+<div class="toast" id="toast">✓ Saved</div>
 
 <script>
 const ADMIN_PASSWORD = 'lechem2024';
-const STORAGE_KEY = 'lm_admin_settings';
+const SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbzzdF03GIEPXnSFvwKc5II8BhyXX4QUGljF9IRlkOvewwQh6X70_gsh7iogZbrBhB4vUg/exec';
+const STORAGE_KEY    = 'lm_admin_settings';
 
-const PRODUCTS = [
-  { id: 'spelt',       name: 'Whole Spelt Sourdough',             badge: 'Parve',      defaultPrice: 10 },
-  { id: 'nuts',        name: 'Walnut Sourdough',                  badge: 'Parve',      defaultPrice: 10 },
-  { id: 'olives',      name: 'Olive Sourdough',                   badge: 'Parve',      defaultPrice: 10 },
-  { id: 'shiur',       name: 'Pure Sourdough (Shiur)',            badge: 'Parve',      defaultPrice: 10 },
-  { id: 'kasten',      name: 'Kasten Health Loaf',                badge: 'Parve ⭐',   defaultPrice: 10 },
-  { id: 'bagel-white', name: 'Jerusalem Bagels – White (3 pack)', badge: 'Parve',      defaultPrice: 10 },
-  { id: 'bagel-black', name: 'Jerusalem Bagels – Black (3 pack)', badge: 'Parve',      defaultPrice: 10 },
-  { id: 'health',      name: 'Health Loaf',                       badge: 'Low Gluten', defaultPrice: 12 },
+const BREAD_PRODUCTS = [
+  { id:'spelt',       name:'Whole Spelt Sourdough',             badge:'Parve',      defaultPrice:10 },
+  { id:'nuts',        name:'Walnut Sourdough',                  badge:'Parve',      defaultPrice:10 },
+  { id:'olives',      name:'Olive Sourdough',                   badge:'Parve',      defaultPrice:10 },
+  { id:'shiur',       name:'Pure Sourdough (Shiur)',            badge:'Parve',      defaultPrice:10 },
+  { id:'kasten',      name:'Kasten Health Loaf',                badge:'Parve ⭐',   defaultPrice:10 },
+  { id:'bagel-white', name:'Jerusalem Bagels – White (3 pack)', badge:'Parve',      defaultPrice:10 },
+  { id:'bagel-black', name:'Jerusalem Bagels – Black (3 pack)', badge:'Parve',      defaultPrice:10 },
+  { id:'health',      name:'Health Loaf',                       badge:'Low Gluten', defaultPrice:12 },
+];
+
+const HALA_PRODUCTS = [
+  { id:'challah-spelt',        name:'Spelt Challah',             badge:'Spelt',        defaultPrice:12 },
+  { id:'challah-whole',        name:'Whole Wheat Challah',       badge:'Whole W. · Parve', defaultPrice:12 },
+  { id:'rolls-spelt',          name:'Spelt Rolls (5-pack)',       badge:'5-pack',       defaultPrice:10 },
+  { id:'rolls-whole',          name:'Whole Wheat Rolls (5-pack)', badge:'5-pack · Parve', defaultPrice:10 },
+  { id:'babka-choco',          name:'Chocolate Babka – Single',  badge:'Single',       defaultPrice:5  },
+  { id:'babka-choco-whole',    name:'Chocolate Babka – Whole',   badge:'Whole cake',   defaultPrice:15 },
+  { id:'babka-cinnamon',       name:'Cinnamon Babka – Single',   badge:'Single',       defaultPrice:5  },
+  { id:'babka-cinnamon-whole', name:'Cinnamon Babka – Whole',    badge:'Whole cake',   defaultPrice:15 },
+];
+
+const FORM_DEFS = [
+  { key:'bread-he', name:'🇮🇱 טופס לחמים – עברית',   url:'order-he.html'      },
+  { key:'bread-en', name:'🇺🇸 Bread Form – English',  url:'order-en.html'      },
+  { key:'pesach',   name:'🍷 טופס פסח – ללא גלוטן',   url:'order-pesach.html'  },
+  { key:'hala-he',  name:'🕯️ טופס חלות – עברית',     url:'order-hala-he.html' },
+  { key:'hala-en',  name:'🕯️ Hala Form – English',   url:'order-hala-en.html' },
 ];
 
 let settings = {};
+let formStatuses = {};   // loaded from server
+let activeTab = 'bread';
 
-// AUTH
+// ── AUTH ──
 function login() {
   const val = document.getElementById('password-input').value;
   if (val === ADMIN_PASSWORD) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-app').classList.add('show');
     loadSettings();
-    renderProducts();
-    updateStats();
+    renderBreadProducts();
+    renderHalaProducts();
     loadFormStatuses();
   } else {
-    document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('login-error').textContent = 'Incorrect password.';
     document.getElementById('password-input').value = '';
     document.getElementById('password-input').focus();
   }
@@ -687,273 +341,299 @@ function logout() {
   document.getElementById('login-error').textContent = '';
 }
 
-// SETTINGS
-function loadSettings() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    settings = raw ? JSON.parse(raw) : {};
-  } catch(e) { settings = {}; }
+// ── TABS ──
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['bread','hala','forms'][i] === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+}
 
-  // Fill date fields
+// ── SETTINGS ──
+function loadSettings() {
+  try { settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { settings = {}; }
+
   document.getElementById('baking-date').value    = settings.bakingDate    || '';
   document.getElementById('delivery-date').value  = settings.deliveryDate  || '';
   document.getElementById('delivery-time').value  = settings.deliveryTime  || '';
   document.getElementById('order-cutoff').value   = settings.orderCutoff   || '';
+  document.getElementById('hala-baking-date').value   = settings.halaBakingDate   || '';
+  document.getElementById('hala-delivery-date').value = settings.halaDeliveryDate || '';
+  document.getElementById('hala-delivery-time').value = settings.halaDeliveryTime || '';
+  document.getElementById('hala-order-cutoff').value  = settings.halaOrderCutoff  || '';
 
-  if (!settings.products) settings.products = {};
-  PRODUCTS.forEach(p => {
-    if (!settings.products[p.id]) {
+  if (!settings.products)     settings.products = {};
+  if (!settings.halaProducts) settings.halaProducts = {};
+
+  BREAD_PRODUCTS.forEach(p => {
+    if (!settings.products[p.id])
       settings.products[p.id] = { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
-    }
+  });
+  HALA_PRODUCTS.forEach(p => {
+    if (!settings.halaProducts[p.id])
+      settings.halaProducts[p.id] = { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
   });
 
-  updatePreview();
-  setSaveStatus(true);
+  updatePreview(); updateHalaPreview(); setSaveStatus(true);
 }
 
 function saveAll() {
-  // Read date fields
   settings.bakingDate   = document.getElementById('baking-date').value;
   settings.deliveryDate = document.getElementById('delivery-date').value;
   settings.deliveryTime = document.getElementById('delivery-time').value;
   settings.orderCutoff  = document.getElementById('order-cutoff').value;
+  settings.halaBakingDate   = document.getElementById('hala-baking-date').value;
+  settings.halaDeliveryDate = document.getElementById('hala-delivery-date').value;
+  settings.halaDeliveryTime = document.getElementById('hala-delivery-time').value;
+  settings.halaOrderCutoff  = document.getElementById('hala-order-cutoff').value;
 
-  // Read product rows
-  PRODUCTS.forEach(p => {
-    const price   = document.getElementById('price-' + p.id)?.value;
-    const stock   = document.getElementById('stock-' + p.id)?.value;
-    const soldOut = document.getElementById('soldout-' + p.id)?.checked;
-    const visible = document.getElementById('visible-' + p.id)?.checked;
-    settings.products[p.id] = { price: parseFloat(price) || p.defaultPrice, stock, soldOut, visible };
+  BREAD_PRODUCTS.forEach(p => {
+    settings.products[p.id] = {
+      price:   parseFloat(document.getElementById('price-' + p.id)?.value) || p.defaultPrice,
+      stock:   document.getElementById('stock-' + p.id)?.value || '',
+      soldOut: document.getElementById('soldout-' + p.id)?.checked || false,
+      visible: document.getElementById('visible-' + p.id)?.checked !== false,
+    };
+  });
+  HALA_PRODUCTS.forEach(p => {
+    settings.halaProducts[p.id] = {
+      price:   parseFloat(document.getElementById('hprice-' + p.id)?.value) || p.defaultPrice,
+      stock:   document.getElementById('hstock-' + p.id)?.value || '',
+      soldOut: document.getElementById('hsoldout-' + p.id)?.checked || false,
+      visible: document.getElementById('hvisible-' + p.id)?.checked !== false,
+    };
   });
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   setSaveStatus(true);
-  showToast('✓ Saved! Order form updated.');
   updateStats();
+  showToast('✓ Saved! Order forms updated.');
 }
 
 function setSaveStatus(saved) {
   const el = document.getElementById('save-status');
-  el.textContent = saved ? 'All changes saved' : 'Unsaved changes';
+  el.textContent = saved ? 'All changes saved ✓' : 'Unsaved changes';
   el.className = 'save-status' + (saved ? ' saved' : '');
 }
-
 function markUnsaved() { setSaveStatus(false); }
 
-// PREVIEW
+// ── PREVIEW ──
 function updatePreview() {
+  const baking   = document.getElementById('baking-date').value;
   const delivery = document.getElementById('delivery-date').value;
   const time     = document.getElementById('delivery-time').value;
-  const baking   = document.getElementById('baking-date').value;
   const cutoff   = document.getElementById('order-cutoff').value;
-
-  let preview = '🌟 ';
-  if (baking) {
-    const d = new Date(baking + 'T12:00:00');
-    const bakeStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-    preview += `Baked fresh on ${bakeStr}. `;
-  }
-  if (delivery) {
-    const d = new Date(delivery + 'T12:00:00');
-    const delStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-    preview += `Delivery / pickup: ${delStr}`;
-    if (time) preview += ` · ${time}`;
-    preview += '.';
-  }
-  if (cutoff) preview += ` Order by: ${cutoff}.`;
-  if (!baking && !delivery) preview = '🌟 Preview will appear here after you fill in the dates';
-
-  document.getElementById('fresh-preview').textContent = preview;
+  let p = '🌟 ';
+  if (baking)   p += `Baked: ${fmt(baking)}. `;
+  if (delivery) p += `Pickup/Delivery: ${fmt(delivery)}${time ? ' · ' + time : ''}. `;
+  if (cutoff)   p += `Order by: ${cutoff}.`;
+  if (!baking && !delivery) p = '🌟 Preview will appear here after you fill in the dates';
+  document.getElementById('fresh-preview').textContent = p;
   markUnsaved();
 }
+function updateHalaPreview() {
+  const baking   = document.getElementById('hala-baking-date').value;
+  const delivery = document.getElementById('hala-delivery-date').value;
+  const time     = document.getElementById('hala-delivery-time').value;
+  const cutoff   = document.getElementById('hala-order-cutoff').value;
+  let p = '🕯️ ';
+  if (baking)   p += `נאפה: ${fmt(baking)}. `;
+  if (delivery) p += `איסוף/משלוח: ${fmt(delivery)}${time ? ' · ' + time : ''}. `;
+  if (cutoff)   p += `הזמנות עד: ${cutoff}.`;
+  if (!baking && !delivery) p = '🕯️ Preview will appear here after you fill in the dates';
+  document.getElementById('hala-fresh-preview').textContent = p;
+  markUnsaved();
+}
+function fmt(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+}
 
-// RENDER PRODUCTS
-function renderProducts() {
-  const container = document.getElementById('product-rows');
-  container.innerHTML = PRODUCTS.map(p => {
-    const s = settings.products?.[p.id] || { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
+// ── RENDER PRODUCTS ──
+function renderProductRows(container, products, settingsKey, prefix) {
+  container.innerHTML = products.map(p => {
+    const s = settings[settingsKey]?.[p.id] || { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
     const rowClass = !s.visible ? 'hidden-row' : s.soldOut ? 'soldout-row' : '';
+    const statusBg  = !s.visible ? '#f0f0f0' : s.soldOut ? '#fdecea' : '#e8f5e9';
+    const statusCol = !s.visible ? '#999'     : s.soldOut ? '#c0392b' : '#2e7d32';
+    const statusTxt = !s.visible ? 'Hidden'   : s.soldOut ? 'Sold Out' : 'Active';
+    const dis       = !s.visible || s.soldOut;
     return `
-    <div class="product-row ${rowClass}" id="row-${p.id}">
-      <div class="product-name-cell">
-        <span class="badge">${p.badge}</span>${p.name}
-      </div>
-      <div>
-        <input class="cell-input" type="number" id="price-${p.id}" value="${s.price}" min="1" max="999" step="0.5"
-          onchange="markUnsaved(); updateRowStyle('${p.id}')" ${!s.visible || s.soldOut ? 'disabled' : ''}>
-      </div>
-      <div>
-        <input class="cell-input" type="number" id="stock-${p.id}" value="${s.stock}" min="0" max="999" placeholder="∞"
-          onchange="markUnsaved()" ${!s.visible || s.soldOut ? 'disabled' : ''}>
-      </div>
-      <div class="sold-out-toggle">
-        <label class="toggle">
-          <input type="checkbox" id="soldout-${p.id}" ${s.soldOut ? 'checked' : ''}
-            onchange="markUnsaved(); updateRowStyle('${p.id}')">
-          <div class="toggle-track"></div>
-          <div class="toggle-thumb"></div>
-        </label>
-      </div>
-      <div class="toggle-wrap">
-        <label class="toggle">
-          <input type="checkbox" id="visible-${p.id}" ${s.visible ? 'checked' : ''}
-            onchange="markUnsaved(); updateRowStyle('${p.id}')">
-          <div class="toggle-track"></div>
-          <div class="toggle-thumb"></div>
-        </label>
-      </div>
+    <div class="prod-row ${rowClass}" id="${prefix}row-${p.id}">
+      <div class="pname"><span class="bdg">${p.badge}</span>${p.name}</div>
+      <div><input class="cell-input" type="number" id="${prefix}price-${p.id}" value="${s.price}" min="1" max="999" step="0.5"
+        onchange="markUnsaved();updateRowStyle('${p.id}','${prefix}')" ${dis?'disabled':''}></div>
+      <div><input class="cell-input" type="number" id="${prefix}stock-${p.id}" value="${s.stock}" min="0" max="999" placeholder="∞"
+        onchange="markUnsaved()" ${dis?'disabled':''}></div>
+      <div class="toggle-wrap"><label class="toggle">
+        <input type="checkbox" id="${prefix}soldout-${p.id}" ${s.soldOut?'checked':''}
+          onchange="markUnsaved();updateRowStyle('${p.id}','${prefix}')">
+        <div class="toggle-track"></div><div class="toggle-thumb"></div>
+      </label></div>
+      <div class="toggle-wrap"><label class="toggle">
+        <input type="checkbox" id="${prefix}visible-${p.id}" ${s.visible?'checked':''}
+          onchange="markUnsaved();updateRowStyle('${p.id}','${prefix}')">
+        <div class="toggle-track"></div><div class="toggle-thumb"></div>
+      </label></div>
       <div style="text-align:center">
-        <span id="status-${p.id}" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px;
-          background:${!s.visible ? '#f0f0f0' : s.soldOut ? '#fdecea' : '#e8f5e9'};
-          color:${!s.visible ? '#999' : s.soldOut ? '#c0392b' : '#2e7d32'}">
-          ${!s.visible ? 'Hidden' : s.soldOut ? 'Sold Out' : 'Active'}
-        </span>
+        <span id="${prefix}status-${p.id}" class="status-badge"
+          style="background:${statusBg};color:${statusCol}">${statusTxt}</span>
       </div>
     </div>`;
   }).join('');
 }
 
-function updateRowStyle(id) {
-  const visible = document.getElementById('visible-' + id)?.checked;
-  const soldOut = document.getElementById('soldout-' + id)?.checked;
-  const row = document.getElementById('row-' + id);
-  const status = document.getElementById('status-' + id);
-  const priceInput = document.getElementById('price-' + id);
-  const stockInput = document.getElementById('stock-' + id);
-
-  row.className = 'product-row' + (!visible ? ' hidden-row' : soldOut ? ' soldout-row' : '');
-  const disabled = !visible || soldOut;
-  priceInput.disabled = disabled;
-  stockInput.disabled = disabled;
-
-  if (!visible) {
-    status.textContent = 'Hidden';
-    status.style.background = '#f0f0f0';
-    status.style.color = '#999';
-  } else if (soldOut) {
-    status.textContent = 'Sold Out';
-    status.style.background = '#fdecea';
-    status.style.color = '#c0392b';
-  } else {
-    status.textContent = 'Active';
-    status.style.background = '#e8f5e9';
-    status.style.color = '#2e7d32';
-  }
+function renderBreadProducts() {
+  renderProductRows(document.getElementById('bread-product-rows'), BREAD_PRODUCTS, 'products', '');
+}
+function renderHalaProducts() {
+  renderProductRows(document.getElementById('hala-product-rows'), HALA_PRODUCTS, 'halaProducts', 'h');
 }
 
+function updateRowStyle(id, prefix) {
+  const visible = document.getElementById(prefix + 'visible-' + id)?.checked;
+  const soldOut = document.getElementById(prefix + 'soldout-' + id)?.checked;
+  const row     = document.getElementById(prefix + 'row-' + id);
+  const status  = document.getElementById(prefix + 'status-' + id);
+  const priceI  = document.getElementById(prefix + 'price-' + id);
+  const stockI  = document.getElementById(prefix + 'stock-' + id);
+  if (!row) return;
+  row.className = 'prod-row' + (!visible ? ' hidden-row' : soldOut ? ' soldout-row' : '');
+  const dis = !visible || soldOut;
+  priceI.disabled = dis; stockI.disabled = dis;
+  if (!visible)      { status.textContent='Hidden';   status.style.background='#f0f0f0'; status.style.color='#999'; }
+  else if (soldOut)  { status.textContent='Sold Out'; status.style.background='#fdecea'; status.style.color='#c0392b'; }
+  else               { status.textContent='Active';   status.style.background='#e8f5e9'; status.style.color='#2e7d32'; }
+}
+
+// ── STATS ──
 function updateStats() {
-  const prods = settings.products || {};
-  let active = 0, soldOut = 0, hidden = 0;
-  PRODUCTS.forEach(p => {
-    const s = prods[p.id];
-    if (!s) { active++; return; }
+  let active=0, soldOut=0, hidden=0;
+  [...BREAD_PRODUCTS, ...HALA_PRODUCTS].forEach(p => {
+    const key  = BREAD_PRODUCTS.includes(p) ? 'products' : 'halaProducts';
+    const s    = settings[key]?.[p.id];
+    if (!s || s.visible === undefined) { active++; return; }
     if (!s.visible) hidden++;
     else if (s.soldOut) soldOut++;
     else active++;
   });
-  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-active').textContent  = active;
   document.getElementById('stat-soldout').textContent = soldOut;
-  document.getElementById('stat-hidden').textContent = hidden;
+  document.getElementById('stat-hidden').textContent  = hidden;
 
-  // Count open forms
-  const formKeys = ['lm_form_status_he','lm_form_status_en','lm_form_status_pesach'];
-  const openCount = formKeys.filter(k => {
-    try { const s = JSON.parse(localStorage.getItem(k)||'{}'); return !s.closed; } catch(e) { return true; }
-  }).length;
-  document.getElementById('stat-forms').textContent = openCount + '/3';
+  const open   = Object.values(formStatuses).filter(s => !s.closed).length;
+  const closed = Object.values(formStatuses).filter(s => s.closed).length;
+  document.getElementById('stat-open').textContent   = open   + '/' + FORM_DEFS.length;
+  document.getElementById('stat-closed').textContent = closed + '/' + FORM_DEFS.length;
 }
 
-// FORM STATUS
-const FORM_KEYS = {
-  he:     'lm_form_status_he',
-  en:     'lm_form_status_en',
-  pesach: 'lm_form_status_pesach'
-};
+// ── FORM STATUS — SERVER SIDE ──
+async function loadFormStatuses() {
+  const container = document.getElementById('form-rows-container');
+  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px;">טוען מהשרת...</div>';
 
-function loadFormStatuses() {
-  ['he','en','pesach'].forEach(key => {
-    try {
-      const raw = localStorage.getItem(FORM_KEYS[key]);
-      const s = raw ? JSON.parse(raw) : { closed: false };
-      renderFormStatus(key, s);
-    } catch(e) {}
-  });
-}
-
-function renderFormStatus(key, s) {
-  const badge = document.getElementById('badge-' + key);
-  const btn   = document.getElementById('btn-' + key);
-  const msgs  = document.getElementById('msg-' + key);
-
-  if (s.closed) {
-    badge.textContent = key === 'en' ? 'Closed ✗' : 'סגור ✗';
-    badge.className = 'closed-badge';
-    btn.textContent = key === 'en' ? 'Reopen Form' : 'פתח טופס';
-    btn.className = 'open-form-btn';
-    msgs.classList.remove('show');
-    // Fill in existing messages if any
-    if (s.msgHe && document.getElementById('msg-' + key + '-text'))
-      document.getElementById('msg-' + key + '-text').value = s.msgHe;
-    if (s.msgEn && document.getElementById('msg-' + key + '-en'))
-      document.getElementById('msg-' + key + '-en').value = s.msgEn;
-  } else {
-    badge.textContent = key === 'en' ? 'Open ✓' : 'פתוח ✓';
-    badge.className = 'open-badge';
-    btn.textContent = key === 'en' ? 'Close Form' : 'סגור טופס';
-    btn.className = 'close-form-btn';
-    msgs.classList.remove('show');
+  try {
+    const results = await Promise.all(
+      FORM_DEFS.map(f =>
+        fetch(SCRIPT_URL + '?action=status&form=' + f.key)
+          .then(r => r.json())
+          .then(data => ({ key: f.key, ...data }))
+          .catch(() => ({ key: f.key, closed: false, msgHe: '', msgEn: '' }))
+      )
+    );
+    results.forEach(r => { formStatuses[r.key] = r; });
+    renderFormRows();
+    updateStats();
+  } catch(e) {
+    container.innerHTML = '<div style="color:var(--red);padding:16px;">שגיאה בטעינת סטטוסים. בדוק את ה-Script URL.</div>';
   }
 }
 
-function toggleForm(key) {
-  try {
-    const raw = localStorage.getItem(FORM_KEYS[key]);
-    const s = raw ? JSON.parse(raw) : { closed: false };
+function renderFormRows() {
+  const container = document.getElementById('form-rows-container');
+  container.innerHTML = FORM_DEFS.map(f => {
+    const s = formStatuses[f.key] || { closed: false };
+    const badgeHtml  = s.closed
+      ? `<span class="closed-badge">סגור ✗</span>`
+      : `<span class="open-badge">פתוח ✓</span>`;
+    const btnHtml = s.closed
+      ? `<button class="open-btn" onclick="toggleForm('${f.key}')">פתח טופס</button>`
+      : `<button class="close-btn" onclick="toggleForm('${f.key}')">סגור טופס</button>`;
+    return `
+    <div class="form-row" id="frow-${f.key}">
+      <div class="form-info">
+        <div class="form-name">${f.name}</div>
+        <div class="form-url">${f.url}</div>
+      </div>
+      <div class="form-controls" id="fctrl-${f.key}">
+        ${badgeHtml} ${btnHtml}
+      </div>
+    </div>
+    <div class="msg-panel" id="fmsg-${f.key}">
+      <label>הודעה בעברית ללקוח</label>
+      <textarea id="ftxt-he-${f.key}" placeholder="ההזמנות לשבוע זה סגורות. נפתח שוב בקרוב 🍞">${s.msgHe||''}</textarea>
+      <label>Message in English</label>
+      <textarea id="ftxt-en-${f.key}" placeholder="Orders are closed. We'll reopen soon 🍞">${s.msgEn||''}</textarea>
+      <button class="apply-btn" onclick="applyClose('${f.key}')">אשר סגירה</button>
+    </div>`;
+  }).join('');
+}
 
-    if (s.closed) {
-      // פתח מחדש
-      const newState = { closed: false };
-      localStorage.setItem(FORM_KEYS[key], JSON.stringify(newState));
-      renderFormStatus(key, newState);
-      showToast(key === 'en' ? '✓ Form reopened!' : '✓ הטופס נפתח מחדש!');
-    } else {
-      // הצג שדות הודעה לפני סגירה
-      const msgs = document.getElementById('msg-' + key);
-      msgs.classList.toggle('show');
-    }
-  } catch(e) {}
+function toggleForm(key) {
+  const s = formStatuses[key] || { closed: false };
+  if (s.closed) {
+    // פתח מחדש — מיד
+    serverSetStatus(key, false, '', '');
+  } else {
+    // הצג שדות הודעה
+    const panel = document.getElementById('fmsg-' + key);
+    panel.classList.toggle('show');
+  }
 }
 
 function applyClose(key) {
-  const msgHeEl = document.getElementById('msg-' + key + '-text') ||
-                  document.getElementById('msg-' + key + '-he');
-  const msgEnEl = document.getElementById('msg-' + key + '-en');
-
-  const msgHe = msgHeEl ? msgHeEl.value.trim() : '';
-  const msgEn = msgEnEl ? msgEnEl.value.trim() : '';
-
-  const state = {
-    closed: true,
-    msgHe: msgHe || 'ההזמנות לשבוע זה סגורות. נפתח שוב בקרוב 🍞',
-    msgEn: msgEn || 'Orders for this week are closed. We\'ll reopen soon 🍞'
-  };
-
-  localStorage.setItem(FORM_KEYS[key], JSON.stringify(state));
-  renderFormStatus(key, state);
-  showToast(key === 'en' ? '✓ Form closed!' : '✓ הטופס נסגר!');
+  const msgHe = document.getElementById('ftxt-he-' + key)?.value.trim() || '';
+  const msgEn = document.getElementById('ftxt-en-' + key)?.value.trim() || '';
+  serverSetStatus(key, true, msgHe, msgEn);
 }
 
-function showToast(msg) {
+async function serverSetStatus(key, closed, msgHe, msgEn) {
+  // Optimistic UI
+  formStatuses[key] = { closed, msgHe, msgEn };
+  renderFormRows();
+  updateStats();
+
+  const ctrl = document.getElementById('fctrl-' + key);
+  if (ctrl) ctrl.innerHTML = `<span class="loading-badge">שומר...</span>`;
+
+  try {
+    const params = new URLSearchParams({ action:'setStatus', form: key, closed: String(closed), msgHe, msgEn });
+    const res  = await fetch(SCRIPT_URL + '?' + params.toString());
+    const data = await res.json();
+    if (data.success) {
+      showToast(closed ? '🔒 הטופס נסגר לכולם!' : '✓ הטופס נפתח מחדש!');
+    } else {
+      showToast('שגיאה: ' + (data.error||'unknown'), true);
+    }
+  } catch(e) {
+    showToast('שגיאת רשת — בדוק חיבור', true);
+  }
+  renderFormRows();
+  updateStats();
+}
+
+// ── TOAST ──
+function showToast(msg, isError) {
   const t = document.getElementById('toast');
   t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '');
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// KEYBOARD SHORTCUT: Ctrl+S
+// ── KEYBOARD ──
 document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveAll(); }
+  if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); saveAll(); }
 });
 </script>
 </body>
