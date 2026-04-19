@@ -272,17 +272,15 @@ function loadAdminSettings() {
 }
 
 // CHECK FORM CLOSED
-function checkFormStatus() {
+async function checkFormStatus() {
   try {
-    const raw = localStorage.getItem(FORM_KEY);
-    if (!raw) return;
-    const s = JSON.parse(raw);
+    const res = await fetch(SCRIPT_URL + '?action=status&form=bread-en');
+    const s   = await res.json();
     if (!s.closed) return;
     document.getElementById('form-wrap').style.display = 'none';
     const cs = document.getElementById('closed-screen');
     cs.classList.add('show');
-    if (s.msgHe && IS_HE) document.getElementById('closed-msg').textContent = s.msgHe;
-    if (s.msgEn && !IS_HE) document.getElementById('closed-msg').textContent = s.msgEn;
+    if (s.msgEn) document.getElementById('closed-msg').textContent = s.msgEn;
   } catch(e) {}
 }
 
