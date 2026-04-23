@@ -420,7 +420,7 @@ async function submitOrder() {
   btn.disabled = true; btn.textContent = 'Sending...';
   const params = new URLSearchParams({
     name, phone, email, addr, notes, total,
-    form: 'hala', lang: 'en',
+    form: 'hala-en', lang: 'en',
     delivery: deliveryMode === 'delivery' ? 'Delivery' : 'Self Pickup',
     slicing:  sliceMode === 'sliced' ? 'Pre-sliced' : 'Whole',
   });
