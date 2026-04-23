@@ -431,7 +431,7 @@ async function submitOrder() {
   btn.disabled = true; btn.textContent = 'שולח...';
   const params = new URLSearchParams({
     name, phone, email, addr, notes, total,
-    form: 'hala', lang: 'he',
+    form: 'hala-he', lang: 'he',
     delivery: deliveryMode === 'delivery' ? 'משלוח' : 'איסוף עצמי',
     slicing:  sliceMode === 'sliced' ? 'פרוס' : 'שלם',
   });
