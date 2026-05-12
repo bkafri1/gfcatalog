@@ -226,7 +226,7 @@ body{background:var(--cream);font-family:'Frank Ruhl Libre', serif;color:var(--t
 <div class="footer">לחמים מכפרי — ✉️ עם שאלות פנה בוואטסאפ</div>
 
 <script>
-const PRODUCTS = [{"id": "spelt", "he": "לחם כוסמין מלא מחמצת", "en": "Whole Spelt Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 89, "carbs": 16, "protein": 3.5, "fat": 1.2, "ing_he": "קמח לחם, קמח כוסמין מלא, מים, מחמצת טבעית, מלח", "ing_en": "Bread flour, whole spelt flour, water, natural sourdough starter, salt", "pitch_he": "75% קמח כוסמין מלא עם מחמצת טבעית – עשיר בסיבים, מינרלים וחלבון. הכוסמין קל לעיכול והמחמצת מורידה את האינדקס הגליקמי.", "pitch_en": "75% whole spelt with natural sourdough — rich in fiber, minerals and protein. Spelt is easier to digest and the sourdough lowers the glycemic index."}, {"id": "nuts", "he": "לחם אגוזים", "en": "Walnut Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 104, "carbs": 15, "protein": 3.8, "fat": 4.2, "ing_he": "קמח מלא, קמח לחם, מים, מחמצת טבעית, אגוזי מלך, מלח", "ing_en": "Whole wheat flour, bread flour, water, natural sourdough starter, walnuts, salt", "pitch_he": "מחמצת קמח מלא עם אגוזי מלך – מקור מצוין לאומגה 3, נוגדי חמצון וסיבים. אגוזי המלך מוסיפים שומן בריא ושובע ממושך.", "pitch_en": "Whole wheat sourdough with walnuts — excellent source of omega-3, antioxidants and fiber. Walnuts add healthy fat and lasting satiety."}, {"id": "olives", "he": "לחם זיתים", "en": "Olive Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 85, "carbs": 15, "protein": 3.2, "fat": 1.8, "ing_he": "קמח מלא, קמח לחם, מים, מחמצת טבעית, זיתים, מלח", "ing_en": "Whole wheat flour, bread flour, water, natural sourdough starter, olives, salt", "pitch_he": "מחמצת קמח מלא עם זיתים – שומן חד-בלתי-רווי לבריאות הלב. הקל ביותר בסדרה, עשיר בטעם ים תיכוני.", "pitch_en": "Whole wheat sourdough with olives — heart-healthy monounsaturated fats. The lightest loaf in the range, full of Mediterranean flavor."}, {"id": "shiur", "he": "לחם שיאור", "en": "Pure Sourdough (Shiur)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 89, "carbs": 17, "protein": 3.4, "fat": 0.8, "ing_he": "קמח לחם, קמח מלא, מים, מחמצת טבעית, מלח", "ing_en": "Bread flour, whole wheat flour, water, natural sourdough starter, salt", "pitch_he": "ארבעה מרכיבים בלבד. המחמצת מפרקת פיטאטים, משפרת ספיגת מינרלים ומורידה את האינדקס הגליקמי. נקי, פשוט ומזין.", "pitch_en": "Four ingredients only. The sourdough breaks down phytates, improves mineral absorption and lowers the glycemic index. Clean and nourishing."}, {"id": "kasten", "he": "לחם קסטן בריאות", "en": "Kasten Health Loaf", "badge_he": "פרווה ⭐", "badge_en": "Parve ⭐", "price": 10, "cal": 94, "carbs": 17, "protein": 3.5, "fat": 1.5, "ing_he": "קמח לחם, מים, קמח מלא, פתיתי שיבולת שועל, מלח, סוכר, שמן, שמרים", "ing_en": "Bread flour, water, whole wheat flour, rolled oats, salt, sugar, oil, yeast", "pitch_he": "קמח לחם, קמח מלא ושיבולת שועל – הבטא-גלוקן שבשיבולת שועל מאזן סוכר וכולסטרול. נאפה בתבנית סגורה לפרוסות אחידות לסנדוויץ׳.", "pitch_en": "Bread flour, whole wheat and oats — oat beta-glucan helps balance blood sugar and cholesterol. Baked in closed tin for perfect sandwich slices."}, {"id": "bagel-white", "he": "בייגל ירושלמי לבן (3 במנה)", "en": "Jerusalem Bagels – White (3 pack)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 283, "carbs": 38, "protein": 7.2, "fat": 5.8, "ing_he": "קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום לבן", "ing_en": "Bread flour, water, olive oil, sugar, salt, dry yeast, white sesame", "pitch_he": "ישר מרחובות ירושלים. פריך מבחוץ, רך מבפנים. ציפוי שומשום עשיר בסידן, ברזל וויטמין E.", "pitch_en": "Straight from Jerusalem. Crispy outside, soft inside. Sesame coating rich in calcium, iron and vitamin E.", "cal_label_he": "קל׳ למקל", "cal_label_en": "cal/bagel"}, {"id": "bagel-black", "he": "בייגל ירושלמי שחור (3 במנה)", "en": "Jerusalem Bagels – Black (3 pack)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 283, "carbs": 38, "protein": 7.2, "fat": 5.8, "ing_he": "קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום שחור", "ing_en": "Bread flour, water, olive oil, sugar, salt, dry yeast, black sesame", "pitch_he": "בייגל ירושלמי עם שומשום שחור עשיר בנוגדי חמצון. טעם עמוק ואגוזי. שלושה במנה – לא תצליחו לאכול רק אחד.", "pitch_en": "Jerusalem bagel with antioxidant-rich black sesame. Deep nutty flavor. Three per pack — you won't stop at one.", "cal_label_he": "קל׳ למקל", "cal_label_en": "cal/bagel"}, {"id": "health", "he": "לחם בריאות", "en": "Health Loaf", "badge_he": "גלוטן נמוך", "badge_en": "Low Gluten", "price": 12, "cal": 96, "carbs": 15, "protein": 3.8, "fat": 2.1, "ing_he": "קמח כוסמין מלא, קמח לחם, מים, מחמצת טבעית, פתיתי שיבולת שועל, זרעי פשתן, מלח", "ing_en": "Whole spelt flour, bread flour, water, natural sourdough starter, rolled oats, flaxseed, salt", "pitch_he": "כוסמין מלא, שיבולת שועל וזרעי פשתן – שלושה מקורות סיבים בלחם אחד. פשתן עשיר באומגה 3 ולינגנים. מכיל מעט גלוטן בלבד.", "pitch_en": "Whole spelt, oats and flaxseed — three fiber sources in one loaf. Flaxseed rich in omega-3 and lignans. Low gluten only."}];
+const PRODUCTS = [{"id": "spelt", "he": "לחם כוסמין מלא מחמצת", "en": "Whole Spelt Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 12, "cal": 89, "carbs": 16, "protein": 3.5, "fat": 1.2, "ing_he": "קמח לחם, קמח כוסמין מלא, מים, מחמצת טבעית, מלח", "ing_en": "Bread flour, whole spelt flour, water, natural sourdough starter, salt", "pitch_he": "75% קמח כוסמין מלא עם מחמצת טבעית – עשיר בסיבים, מינרלים וחלבון. הכוסמין קל לעיכול והמחמצת מורידה את האינדקס הגליקמי.", "pitch_en": "75% whole spelt with natural sourdough — rich in fiber, minerals and protein. Spelt is easier to digest and the sourdough lowers the glycemic index."}, {"id": "nuts", "he": "לחם אגוזים", "en": "Walnut Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 12, "cal": 104, "carbs": 15, "protein": 3.8, "fat": 4.2, "ing_he": "קמח מלא, קמח לחם, מים, מחמצת טבעית, אגוזי מלך, מלח", "ing_en": "Whole wheat flour, bread flour, water, natural sourdough starter, walnuts, salt", "pitch_he": "מחמצת קמח מלא עם אגוזי מלך – מקור מצוין לאומגה 3, נוגדי חמצון וסיבים. אגוזי המלך מוסיפים שומן בריא ושובע ממושך.", "pitch_en": "Whole wheat sourdough with walnuts — excellent source of omega-3, antioxidants and fiber. Walnuts add healthy fat and lasting satiety."}, {"id": "olives", "he": "לחם זיתים", "en": "Olive Sourdough", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 85, "carbs": 15, "protein": 3.2, "fat": 1.8, "ing_he": "קמח מלא, קמח לחם, מים, מחמצת טבעית, זיתים, מלח", "ing_en": "Whole wheat flour, bread flour, water, natural sourdough starter, olives, salt", "pitch_he": "מחמצת קמח מלא עם זיתים – שומן חד-בלתי-רווי לבריאות הלב. הקל ביותר בסדרה, עשיר בטעם ים תיכוני.", "pitch_en": "Whole wheat sourdough with olives — heart-healthy monounsaturated fats. The lightest loaf in the range, full of Mediterranean flavor."}, {"id": "shiur", "he": "לחם שיאור", "en": "Pure Sourdough (Shiur)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 89, "carbs": 17, "protein": 3.4, "fat": 0.8, "ing_he": "קמח לחם, קמח מלא, מים, מחמצת טבעית, מלח", "ing_en": "Bread flour, whole wheat flour, water, natural sourdough starter, salt", "pitch_he": "ארבעה מרכיבים בלבד. המחמצת מפרקת פיטאטים, משפרת ספיגת מינרלים ומורידה את האינדקס הגליקמי. נקי, פשוט ומזין.", "pitch_en": "Four ingredients only. The sourdough breaks down phytates, improves mineral absorption and lowers the glycemic index. Clean and nourishing."}, {"id": "kasten", "he": "לחם קסטן בריאות", "en": "Kasten Health Loaf", "badge_he": "פרווה ⭐", "badge_en": "Parve ⭐", "price": 12, "cal": 94, "carbs": 17, "protein": 3.5, "fat": 1.5, "ing_he": "קמח לחם, מים, קמח מלא, פתיתי שיבולת שועל, מלח, סוכר, שמן, שמרים", "ing_en": "Bread flour, water, whole wheat flour, rolled oats, salt, sugar, oil, yeast", "pitch_he": "קמח לחם, קמח מלא ושיבולת שועל – הבטא-גלוקן שבשיבולת שועל מאזן סוכר וכולסטרול. נאפה בתבנית סגורה לפרוסות אחידות לסנדוויץ׳.", "pitch_en": "Bread flour, whole wheat and oats — oat beta-glucan helps balance blood sugar and cholesterol. Baked in closed tin for perfect sandwich slices."}, {"id": "bagel-white", "he": "בייגל ירושלמי לבן (3 במנה)", "en": "Jerusalem Bagels – White (3 pack)", "badge_he": "פרווה", "badge_en": "Parve", "price": 12, "cal": 283, "carbs": 38, "protein": 7.2, "fat": 5.8, "ing_he": "קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום לבן", "ing_en": "Bread flour, water, olive oil, sugar, salt, dry yeast, white sesame", "pitch_he": "ישר מרחובות ירושלים. פריך מבחוץ, רך מבפנים. ציפוי שומשום עשיר בסידן, ברזל וויטמין E.", "pitch_en": "Straight from Jerusalem. Crispy outside, soft inside. Sesame coating rich in calcium, iron and vitamin E.", "cal_label_he": "קל׳ למקל", "cal_label_en": "cal/bagel"}, {"id": "bagel-black", "he": "בייגל ירושלמי שחור (3 במנה)", "en": "Jerusalem Bagels – Black (3 pack)", "badge_he": "פרווה", "badge_en": "Parve", "price": 10, "cal": 283, "carbs": 38, "protein": 7.2, "fat": 5.8, "ing_he": "קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום שחור", "ing_en": "Bread flour, water, olive oil, sugar, salt, dry yeast, black sesame", "pitch_he": "בייגל ירושלמי עם שומשום שחור עשיר בנוגדי חמצון. טעם עמוק ואגוזי. שלושה במנה – לא תצליחו לאכול רק אחד.", "pitch_en": "Jerusalem bagel with antioxidant-rich black sesame. Deep nutty flavor. Three per pack — you won't stop at one.", "cal_label_he": "קל׳ למקל", "cal_label_en": "cal/bagel"}, {"id": "health", "he": "לחם בריאות", "en": "Health Loaf", "badge_he": "גלוטן נמוך", "badge_en": "Low Gluten", "price": 12, "cal": 96, "carbs": 15, "protein": 3.8, "fat": 2.1, "ing_he": "קמח כוסמין מלא, קמח לחם, מים, מחמצת טבעית, פתיתי שיבולת שועל, זרעי פשתן, מלח", "ing_en": "Whole spelt flour, bread flour, water, natural sourdough starter, rolled oats, flaxseed, salt", "pitch_he": "כוסמין מלא, שיבולת שועל וזרעי פשתן – שלושה מקורות סיבים בלחם אחד. פשתן עשיר באומגה 3 ולינגנים. מכיל מעט גלוטן בלבד.", "pitch_en": "Whole spelt, oats and flaxseed — three fiber sources in one loaf. Flaxseed rich in omega-3 and lignans. Low gluten only."}];
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzdF03GIEPXnSFvwKc5II8BhyXX4QUGljF9IRlkOvewwQh6X70_gsh7iogZbrBhB4vUg/exec';
 const VENMO_URL = 'https://venmo.com/code?user_id=4416788448151226881&created=1774894628';
@@ -272,15 +272,17 @@ function loadAdminSettings() {
 }
 
 // CHECK FORM CLOSED
-async function checkFormStatus() {
+function checkFormStatus() {
   try {
-    const res = await fetch(SCRIPT_URL + '?action=status&form=bread-he');
-    const s   = await res.json();
+    const raw = localStorage.getItem(FORM_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
     if (!s.closed) return;
     document.getElementById('form-wrap').style.display = 'none';
     const cs = document.getElementById('closed-screen');
     cs.classList.add('show');
-    if (s.msgHe) document.getElementById('closed-msg').textContent = s.msgHe;
+    if (s.msgHe && IS_HE) document.getElementById('closed-msg').textContent = s.msgHe;
+    if (s.msgEn && !IS_HE) document.getElementById('closed-msg').textContent = s.msgEn;
   } catch(e) {}
 }
 
@@ -288,14 +290,38 @@ async function checkFormStatus() {
 function renderProducts() {
   const c = document.getElementById('products-list');
   c.innerHTML = PRODUCTS.filter(p => !p.hidden).map(p => {
-    const calLbl = IS_HE
-      ? (p.cal_label_he || 'קל\u05f3 לפרוסה')
-      : (p.cal_label_en || 'cal/slice');
-    const badge = IS_HE ? p.badge_he : p.badge_en;
-    const name  = IS_HE ? p.he : p.en;
-    const pitch = IS_HE ? p.pitch_he : p.pitch_en;
-    const ing   = IS_HE ? p.ing_he : p.ing_en;
+    const calLbl  = IS_HE ? (p.cal_label_he || 'קל׳ לפרוסה') : (p.cal_label_en || 'cal/slice');
+    const badge   = IS_HE ? p.badge_he : p.badge_en;
+    const name    = IS_HE ? p.he : p.en;
+    const pitch   = IS_HE ? p.pitch_he : p.pitch_en;
+    const ing     = IS_HE ? p.ing_he : p.ing_en;
     const soldOut = p.soldOut ? `<span style="font-size:11px;color:var(--red);font-weight:700;margin-right:4px;">${IS_HE?'אזל':'Sold Out'}</span>` : '';
+
+    // ── לחם האופה — עיצוב מיוחד ──
+    if (p.isBakerSpecial) {
+      return `<div class="pacc" style="border:2px solid var(--accent);border-radius:12px;margin-bottom:8px;background:var(--warm);">
+        <div class="pmain">
+          <div class="pinfo">
+            <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;margin-bottom:4px;">⭐ ${IS_HE ? 'לחם האופה השבוע' : "BAKER'S SPECIAL THIS WEEK"}</div>
+            <div class="pname" style="${p.soldOut?'opacity:.45;text-decoration:line-through':''}">${name}</div>
+            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:3px;">
+              <span class="pbadge" style="background:var(--accent);color:white;border-color:var(--accent);">${badge}</span>
+              ${soldOut}
+            </div>
+            ${pitch ? `<div style="font-size:12px;color:var(--txt2);line-height:1.5;margin-top:6px;font-style:italic;">${pitch}</div>` : ''}
+            <div style="font-size:11px;color:var(--txt2);margin-top:4px;">${IS_HE ? `נותרו: ${p.remaining}` : `Remaining: ${p.remaining}`}</div>
+          </div>
+          <div class="pprice">$${p.price}</div>
+          <div class="qty">
+            <button class="qbtn" onclick="chQty('${p.id}',-1)" ${p.soldOut?'disabled':''}>−</button>
+            <div class="qnum" id="q-${p.id}">0</div>
+            <button class="qbtn" onclick="chQty('${p.id}',1)" ${p.soldOut?'disabled':''}>+</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    // ── מוצר רגיל ──
     return `<div class="pacc">
       <div class="pmain">
         <div class="pinfo">
@@ -337,7 +363,6 @@ function togDet(id, btn) {
 }
 
 
-// LOAD STOCK FROM SCRIPT
 async function loadStock() {
   try {
     const res = await fetch(SCRIPT_URL + '?action=stock');
@@ -350,6 +375,29 @@ async function loadStock() {
       p.maxStock  = s.max;
       if (s.remaining <= 0) p.soldOut = true;
     });
+
+    // לחם האופה — דינמי מהגיליון
+    const existingIdx = PRODUCTS.findIndex(p => p.id === 'baker-special');
+    if (existingIdx >= 0) PRODUCTS.splice(existingIdx, 1);
+    const special = data.stock['baker-special'];
+    if (special && special.remaining > 0 && special.nameHe) {
+      PRODUCTS.unshift({
+        id: 'baker-special',
+        he: special.nameHe,
+        en: special.nameEn || special.nameHe,
+        badge_he: '⭐ לחם האופה',
+        badge_en: "⭐ Baker's Special",
+        price:    special.price || 10,
+        pitch_he: special.descHe || '',
+        pitch_en: special.descEn || '',
+        ing_he: '', ing_en: '',
+        cal: null,
+        remaining: special.remaining,
+        isBakerSpecial: true,
+      });
+      qtys['baker-special'] = 0;
+    }
+
     renderProducts();
   } catch(e) {
     console.warn('Stock load failed:', e);
