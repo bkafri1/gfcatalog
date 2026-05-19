@@ -346,7 +346,7 @@ function renderProducts() {
 
 async function loadStock() {
   try {
-    const res = await fetch(SCRIPT_URL + '?action=stock&form=hala');
+    const res = await fetch(SCRIPT_URL + '?action=stock&form=hala-en');
     const data = await res.json();
     if (!data.success || !data.stock) return;
     PRODUCTS.forEach(p => {
