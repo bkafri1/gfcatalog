@@ -245,19 +245,29 @@ function loadAdminSettings() {
     if (!raw) return;
     const s = JSON.parse(raw);
     if (s.bakingDate || s.deliveryDate) {
-      let badge = IS_HE ? 'נאפה טרי ומסופק באותו היום 🌟' : 'Baked fresh & delivered the same day 🌟';
-      if (s.bakingDate) {
-        const d = new Date(s.bakingDate + 'T12:00:00');
-        const locale = IS_HE ? 'he-IL' : 'en-US';
-        badge = (IS_HE ? 'נאפה טרי ' : 'Baked fresh ') + d.toLocaleDateString(locale, {weekday:'long',month:'long',day:'numeric'});
+      // Check that date is not in the past
+      const refDate = s.bakingDate || s.deliveryDate;
+      const ref = new Date(refDate + 'T12:00:00');
+      const today = new Date(); today.setHours(0,0,0,0);
+      if (ref < today) {
+        document.getElementById('fresh-badge').style.display = 'none';
+      } else {
+        let badge = IS_HE ? 'נאפה טרי ומסופק באותו היום 🌟' : 'Baked fresh & delivered the same day 🌟';
+        if (s.bakingDate) {
+          const d = new Date(s.bakingDate + 'T12:00:00');
+          const locale = IS_HE ? 'he-IL' : 'en-US';
+          badge = (IS_HE ? '🔥 אפייה: ' : '🔥 Baking: ') + d.toLocaleDateString(locale, {weekday:'long', day:'numeric', month:'long'});
+        }
+        if (s.deliveryDate) {
+          const d = new Date(s.deliveryDate + 'T12:00:00');
+          const locale = IS_HE ? 'he-IL' : 'en-US';
+          badge += (IS_HE ? ' · משלוח/איסוף: ' : ' · Pickup/Delivery: ') + d.toLocaleDateString(locale, {weekday:'long', day:'numeric', month:'long'});
+          if (s.deliveryTime) badge += ' ' + s.deliveryTime;
+        }
+        document.getElementById('fresh-badge').textContent = badge;
       }
-      if (s.deliveryDate) {
-        const d = new Date(s.deliveryDate + 'T12:00:00');
-        const locale = IS_HE ? 'he-IL' : 'en-US';
-        badge += (IS_HE ? ' · משלוח/איסוף ' : ' · Delivery ') + d.toLocaleDateString(locale, {weekday:'long',month:'long',day:'numeric'});
-        if (s.deliveryTime) badge += ' ' + s.deliveryTime;
-      }
-      document.getElementById('fresh-badge').textContent = badge;
+    } else {
+      document.getElementById('fresh-badge').style.display = 'none';
     }
     if (s.products) {
       PRODUCTS.forEach(p => {
@@ -272,15 +282,17 @@ function loadAdminSettings() {
 }
 
 // CHECK FORM CLOSED
-async function checkFormStatus() {
+function checkFormStatus() {
   try {
-    const res = await fetch(SCRIPT_URL + '?action=status&form=bread-en');
-    const s   = await res.json();
+    const raw = localStorage.getItem(FORM_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
     if (!s.closed) return;
     document.getElementById('form-wrap').style.display = 'none';
     const cs = document.getElementById('closed-screen');
     cs.classList.add('show');
-    if (s.msgEn) document.getElementById('closed-msg').textContent = s.msgEn;
+    if (s.msgHe && IS_HE) document.getElementById('closed-msg').textContent = s.msgHe;
+    if (s.msgEn && !IS_HE) document.getElementById('closed-msg').textContent = s.msgEn;
   } catch(e) {}
 }
 
