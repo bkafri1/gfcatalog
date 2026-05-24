@@ -386,7 +386,21 @@ async function loadStock() {
       p.maxStock  = s.max;
       if (s.remaining <= 0) p.soldOut = true;
     });
-
+    // BAKING DATE FROM SERVER — מוצאים את התאריך הקרוב ביותר מבין הפריטים הזמינים
+    const dates = Object.values(data.stock)
+      .map(s => s.date)
+      .filter(Boolean)
+      .map(d => new Date(d))
+      .filter(d => !isNaN(d.getTime()));
+    if (dates.length) {
+      const earliest = new Date(Math.min.apply(null, dates));
+      const badgeEl = document.getElementById('fresh-badge');
+      if (badgeEl) {
+        const dateStr = earliest.toLocaleDateString('he-IL', {weekday:'long', day:'numeric', month:'long'});
+        badgeEl.textContent = '🔥 אפייה ומסירה: ' + dateStr;
+        badgeEl.style.display = 'inline-block';
+      }
+    }
     // Baker's Special — dynamic from sheet
     const existingIdx = PRODUCTS.findIndex(p => p.id === 'baker-special');
     if (existingIdx >= 0) PRODUCTS.splice(existingIdx, 1);
