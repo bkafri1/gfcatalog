@@ -511,11 +511,6 @@ async function submitOrder() {
   });
   PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
 
-  try {
-    const img = new Image();
-    img.src = SCRIPT_URL + '?' + params.toString();
-  } catch(err) { console.warn(err); }
-
   // המתן לתגובת הסקריפט
   let done = false;
   const img = new Image();
