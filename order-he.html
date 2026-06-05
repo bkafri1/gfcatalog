@@ -509,28 +509,44 @@ async function submitOrder() {
     slicing: sliceMode === 'sliced' ? (IS_HE ? 'פרוס' : 'Pre-sliced') : (IS_HE ? 'שלם' : 'Whole'),
     products: sel.map(p => (IS_HE ? p.he : p.en).split('(')[0].trim() + ' x ' + qtys[p.id]).join('|')
   });
-  PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
 
-  // המתן לתגובת הסקריפט
-  let done = false;
-  const img = new Image();
-  img.onload = img.onerror = () => {
-    if (done) return;
-    done = true;
-    showThankYou(name, sel, total, email);
+PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
+
+  // שולחים בקשה לסקריפט וקוראים את התשובה
+  try {
+    const res = await fetch(SCRIPT_URL + '?' + params.toString(), {
+      method: 'GET',
+      redirect: 'follow'
+    });
+    const data = await res.json();
+
+    if (data.success === true) {
+      // הזמנה התקבלה בהצלחה — מסך תודה
+      showThankYou(name, sel, total, email);
+    } else if (data.error === 'form_closed') {
+      // השרת סירב כי הטופס סגור — מציג מסך סגירה
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('closed-screen').classList.add('show');
+      window.scrollTo(0, 0);
+    } else {
+      // שגיאה אחרת — מודיעים ללקוח
+      alert(IS_HE
+        ? 'אופס, משהו השתבש בשליחת ההזמנה. נסה שוב בעוד רגע או פנה בוואטסאפ.\n\n' + (data.error || '')
+        : 'Oops, something went wrong sending your order. Please try again in a moment or contact us on WhatsApp.\n\n' + (data.error || ''));
+      btn.disabled = false;
+      btn.textContent = IS_HE ? 'שלח הזמנה' : 'Place Order';
+    }
+  } catch(err) {
+    // השרת לא נגיש (אינטרנט נפל, וכו') — לא מציגים מסך תודה כוזב
+    console.error('Order submit failed:', err);
+    alert(IS_HE
+      ? 'לא הצלחנו להגיע לשרת. בדוק חיבור אינטרנט ונסה שוב, או פנה בוואטסאפ.'
+      : 'We couldn\'t reach the server. Check your internet and try again, or contact us on WhatsApp.');
     btn.disabled = false;
     btn.textContent = IS_HE ? 'שלח הזמנה' : 'Place Order';
-  };
-  img.src = SCRIPT_URL + '?' + params.toString();
-  // timeout גיבוי אחרי 5 שניות
-  setTimeout(() => {
-    if (done) return;
-    done = true;
-    showThankYou(name, sel, total, email);
-    btn.disabled = false;
-    btn.textContent = IS_HE ? 'שלח הזמנה' : 'Place Order';
-  }, 5000);
+  }
 }
+  
 
 function showThankYou(name, sel, total, email) {
   document.getElementById('form-wrap').style.display = 'none';
