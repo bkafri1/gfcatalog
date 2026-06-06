@@ -281,19 +281,53 @@ function loadAdminSettings() {
   } catch(e) {}
 }
 
-// CHECK FORM CLOSED
-function checkFormStatus() {
+// CHECK FORM CLOSED — בודק את השרת (מקור האמת), עם localStorage כגיבוי
+async function checkFormStatus() {
+  let displayedClosed = false;
+
+  // שלב 1: בדיקה מקומית מהירה (גיבוי) — אם localStorage יודע שסגור, נציג מיד
   try {
     const raw = localStorage.getItem(FORM_KEY);
-    if (!raw) return;
-    const s = JSON.parse(raw);
-    if (!s.closed) return;
-    document.getElementById('form-wrap').style.display = 'none';
-    const cs = document.getElementById('closed-screen');
-    cs.classList.add('show');
-    if (s.msgHe && IS_HE) document.getElementById('closed-msg').textContent = s.msgHe;
-    if (s.msgEn && !IS_HE) document.getElementById('closed-msg').textContent = s.msgEn;
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s.closed) {
+        showClosedScreen(s.msgHe, s.msgEn);
+        displayedClosed = true;
+      }
+    }
   } catch(e) {}
+
+  // שלב 2: בדיקה מהשרת — מקור האמת
+  try {
+    const formName = IS_HE ? 'bread-he' : 'bread-en';
+    const res = await fetch(SCRIPT_URL + '?action=status&form=' + formName);
+    const data = await res.json();
+
+    if (data.closed) {
+      // השרת אומר סגור
+      if (!displayedClosed) showClosedScreen(data.msgHe, data.msgEn);
+      try { localStorage.setItem(FORM_KEY, JSON.stringify({closed: true, msgHe: data.msgHe, msgEn: data.msgEn})); } catch(e) {}
+    } else {
+      // השרת אומר פתוח
+      if (displayedClosed) {
+        // הראינו בטעות מסך סגור מ-localStorage ישן — נתקן
+        document.getElementById('closed-screen').classList.remove('show');
+        document.getElementById('form-wrap').style.display = 'block';
+      }
+      try { localStorage.setItem(FORM_KEY, JSON.stringify({closed: false})); } catch(e) {}
+    }
+  } catch(err) {
+    // השרת לא נגיש — נשארים עם מה שהראינו מ-localStorage
+    console.warn('Form status check from server failed:', err);
+  }
+}
+
+function showClosedScreen(msgHe, msgEn) {
+  document.getElementById('form-wrap').style.display = 'none';
+  const cs = document.getElementById('closed-screen');
+  cs.classList.add('show');
+  if (msgHe && IS_HE) document.getElementById('closed-msg').textContent = msgHe;
+  if (msgEn && !IS_HE) document.getElementById('closed-msg').textContent = msgEn;
 }
 
 // RENDER PRODUCTS
@@ -386,21 +420,7 @@ async function loadStock() {
       p.maxStock  = s.max;
       if (s.remaining <= 0) p.soldOut = true;
     });
-    // BAKING DATE FROM SERVER — מוצאים את התאריך הקרוב ביותר מבין הפריטים הזמינים
-    const dates = Object.values(data.stock)
-      .map(s => s.date)
-      .filter(Boolean)
-      .map(d => new Date(d))
-      .filter(d => !isNaN(d.getTime()));
-    if (dates.length) {
-      const earliest = new Date(Math.min.apply(null, dates));
-      const badgeEl = document.getElementById('fresh-badge');
-      if (badgeEl) {
-        const dateStr = earliest.toLocaleDateString('he-IL', {weekday:'long', day:'numeric', month:'long'});
-        badgeEl.textContent = '🔥 אפייה ומסירה: ' + dateStr;
-        badgeEl.style.display = 'inline-block';
-      }
-    }
+
     // Baker's Special — dynamic from sheet
     const existingIdx = PRODUCTS.findIndex(p => p.id === 'baker-special');
     if (existingIdx >= 0) PRODUCTS.splice(existingIdx, 1);
@@ -510,7 +530,7 @@ async function submitOrder() {
     slicing: sliceMode === 'sliced' ? (IS_HE ? 'פרוס' : 'Pre-sliced') : (IS_HE ? 'שלם' : 'Whole'),
     products: sel.map(p => (IS_HE ? p.he : p.en).split('(')[0].trim() + ' x ' + qtys[p.id]).join('|')
   });
-PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
+  PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
 
   // שולחים בקשה לסקריפט וקוראים את התשובה
   try {
