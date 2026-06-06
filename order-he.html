@@ -281,19 +281,53 @@ function loadAdminSettings() {
   } catch(e) {}
 }
 
-// CHECK FORM CLOSED
-function checkFormStatus() {
+// CHECK FORM CLOSED — בודק את השרת (מקור האמת), עם localStorage כגיבוי
+async function checkFormStatus() {
+  let displayedClosed = false;
+
+  // שלב 1: בדיקה מקומית מהירה (גיבוי) — אם localStorage יודע שסגור, נציג מיד
   try {
     const raw = localStorage.getItem(FORM_KEY);
-    if (!raw) return;
-    const s = JSON.parse(raw);
-    if (!s.closed) return;
-    document.getElementById('form-wrap').style.display = 'none';
-    const cs = document.getElementById('closed-screen');
-    cs.classList.add('show');
-    if (s.msgHe && IS_HE) document.getElementById('closed-msg').textContent = s.msgHe;
-    if (s.msgEn && !IS_HE) document.getElementById('closed-msg').textContent = s.msgEn;
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s.closed) {
+        showClosedScreen(s.msgHe, s.msgEn);
+        displayedClosed = true;
+      }
+    }
   } catch(e) {}
+
+  // שלב 2: בדיקה מהשרת — מקור האמת
+  try {
+    const formName = IS_HE ? 'bread-he' : 'bread-en';
+    const res = await fetch(SCRIPT_URL + '?action=status&form=' + formName);
+    const data = await res.json();
+
+    if (data.closed) {
+      // השרת אומר סגור
+      if (!displayedClosed) showClosedScreen(data.msgHe, data.msgEn);
+      try { localStorage.setItem(FORM_KEY, JSON.stringify({closed: true, msgHe: data.msgHe, msgEn: data.msgEn})); } catch(e) {}
+    } else {
+      // השרת אומר פתוח
+      if (displayedClosed) {
+        // הראינו בטעות מסך סגור מ-localStorage ישן — נתקן
+        document.getElementById('closed-screen').classList.remove('show');
+        document.getElementById('form-wrap').style.display = 'block';
+      }
+      try { localStorage.setItem(FORM_KEY, JSON.stringify({closed: false})); } catch(e) {}
+    }
+  } catch(err) {
+    // השרת לא נגיש — נשארים עם מה שהראינו מ-localStorage
+    console.warn('Form status check from server failed:', err);
+  }
+}
+
+function showClosedScreen(msgHe, msgEn) {
+  document.getElementById('form-wrap').style.display = 'none';
+  const cs = document.getElementById('closed-screen');
+  cs.classList.add('show');
+  if (msgHe && IS_HE) document.getElementById('closed-msg').textContent = msgHe;
+  if (msgEn && !IS_HE) document.getElementById('closed-msg').textContent = msgEn;
 }
 
 // RENDER PRODUCTS
