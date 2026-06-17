@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kafri Artisan Breads - מסלול חלוקה</title>
+<style>
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f7f6f3;
+    --bg-tertiary: #efeee9;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b6a64;
+    --text-tertiary: #9c9b94;
+    --border-color: #e3e1da;
+    --accent: #1B3A5B;
+    --accent-light: #e6f1fb;
+    --accent-dark: #0c447c;
+    --gray-light: #f1efe8;
+    --gray-dark: #5f5e5a;
+    --danger-bg: #fcebeb;
+    --danger-text: #791f1f;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    direction: rtl;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+  .card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .brand-logo {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px; flex-shrink: 0;
+  }
+  h1 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+  .sub { font-size: 13px; color: var(--text-secondary); margin: 4px 0 1.5rem; }
+  textarea {
+    width: 100%; height: 200px; font-family: "SF Mono", Consolas, monospace;
+    font-size: 12px; padding: 12px 14px; border-radius: var(--radius-md);
+    border: 1px solid var(--border-color); background: var(--bg-secondary);
+    color: var(--text-primary); resize: vertical; direction: ltr; line-height: 1.5;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  .hint { font-size: 11px; color: var(--text-tertiary); margin: 6px 0 1.25rem; line-height: 1.5; }
+  .btn-primary {
+    background: var(--accent); color: white; border: none;
+    border-radius: var(--radius-md); padding: 12px 24px; font-size: 14px;
+    font-weight: 600; cursor: pointer; width: 100%; transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary {
+    background: var(--bg-secondary); color: var(--text-primary);
+    border: 1px solid var(--border-color); border-radius: var(--radius-md);
+    padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer;
+  }
+  .btn-secondary:hover { background: var(--bg-tertiary); }
+  .section { margin-top: 2rem; }
+  .section-title {
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color); padding-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .route-link {
+    display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+    background: var(--accent-light); border-radius: var(--radius-md);
+    text-decoration: none; font-size: 12px; color: var(--accent-dark);
+    border: 1px solid #b5d4f4; margin-bottom: 1.5rem; word-break: break-all;
+  }
+  .route-link .icon { font-size: 18px; flex-shrink: 0; }
+  .labels-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .label-card {
+    background: var(--bg-primary); border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg); padding: 1rem 1.25rem; position: relative;
+  }
+  .label-card.delivery { border-right: 4px solid var(--accent); }
+  .label-card.pickup   { border-right: 4px solid var(--gray-dark); }
+  .stop-badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 2px 10px; border-radius: 99px; margin-bottom: 6px;
+  }
+  .stop-badge.delivery { background: var(--accent-light); color: var(--accent-dark); }
+  .stop-badge.pickup   { background: var(--gray-light); color: var(--gray-dark); }
+  .customer-name { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .bread-item {
+    font-size: 13px; color: var(--text-secondary); display: flex;
+    align-items: center; gap: 6px; margin-bottom: 3px;
+  }
+  .qty-badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    background: var(--bg-tertiary); color: var(--text-secondary);
+    border-radius: 4px; padding: 1px 6px; min-width: 18px; text-align: center;
+  }
+  .total-line {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-color);
+    font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between;
+  }
+  .total-line span:last-child { font-weight: 600; color: var(--text-primary); }
+  .error {
+    color: var(--danger-text); font-size: 13px; margin-top: 8px;
+    background: var(--danger-bg); padding: 10px 14px; border-radius: var(--radius-md);
+  }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .stat-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 700; }
+  .route-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 1.5rem; }
+  .route-table th {
+    text-align: right; padding: 8px 10px; background: var(--bg-secondary);
+    color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--border-color);
+  }
+  .route-table td { padding: 10px 10px; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+  .route-table tr:last-child td { border-bottom: none; }
+  .print-actions { display: flex; gap: 10px; margin-top: 1rem; }
+  footer { text-align: center; font-size: 11px; color: var(--text-tertiary); margin-top: 1.5rem; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .card { border: none; padding: 0; }
+    textarea, .btn-primary, .print-actions, .section:has(textarea), #input-section { display: none !important; }
+    .route-link { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .label-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <div class="brand">
+      <div class="brand-logo">K</div>
+      <h1>Kafri Artisan Breads</h1>
+    </div>
+    <p class="sub">מסלול חלוקה ומדבקות הזמנות</p>
+
+    <div id="input-section">
+      <textarea id="data-input" placeholder="הדבק כאן את נתוני ההזמנות (tab-separated)
+תאריך	שם	טלפון	אימייל	9 עמודות לחמים	סה&quot;כ $	משלוח/איסוף עצמי	כתובת"></textarea>
+      <p class="hint">
+        מיפוי עמודות קבוע: תאריך ושעה · שם · טלפון · אימייל · כוסמין מלא מחמצת · אגוזים · זיתים · שיאור · קסטן בריאות · בייגל לבן · בייגל שחור · בריאות · האופה · סה"כ $ · משלוח/איסוף עצמי · כתובת
+      </p>
+      <div id="error-msg" style="display:none" class="error"></div>
+      <button class="btn-primary" id="submit-btn" onclick="processOrders()">צור מסלול ומדבקות</button>
+    </div>
+
+    <div id="results" style="display:none">
+
+      <div class="section">
+        <div class="section-title">סיכום</div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">הזמנות סה"כ</div><div class="stat-value" id="stat-total">0</div></div>
+          <div class="stat-card"><div class="stat-label">משלוחים</div><div class="stat-value" id="stat-delivery">0</div></div>
+          <div class="stat-card"><div class="stat-label">איסוף עצמי</div><div class="stat-value" id="stat-pickup">0</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">מסלול חלוקה</div>
+        <a id="maps-link" class="route-link" href="#" target="_blank">
+          <span class="icon">📍</span>
+          <span id="maps-url-text"></span>
+        </a>
+        <table class="route-table">
+          <thead><tr><th>#</th><th>לקוח</th><th>כתובת</th></tr></thead>
+          <tbody id="route-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>מדבקות</span>
+        </div>
+        <div class="print-actions">
+          <button class="btn-secondary" onclick="window.print()">🖨️ הדפס מדבקות</button>
+          <button class="btn-secondary" onclick="resetForm()">↺ התחל מהתחלה</button>
+        </div>
+        <div class="labels-grid" id="labels-grid" style="margin-top:1rem"></div>
+      </div>
+
+    </div>
+
+    <footer>Kafri Artisan Breads &middot; 68 Cortlandt Pl, Tenafly NJ</footer>
+  </div>
+</div>
+
+<script>
+const BREAD_NAMES = [
+  "כוסמין מלא מחמצת","לחם אגוזים","לחם זיתים","לחם שיאור",
+  "לחם קסטן בריאות","בייגל ירושלמי לבן","בייגל ירושלמי שחור",
+  "לחם בריאות","לחם האופה"
+];
+const HOME = "68+Cortlandt+Pl,+Tenafly,+NJ+07670";
+const HOME_LAT = 40.9198, HOME_LON = -73.9617;
+
+function parseInput(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  const orders = [];
+  for (const line of lines) {
+    const cols = line.split('\t');
+    if (cols.length < 13) continue;
+    const qty = [];
+    for (let i = 4; i <= 12; i++) qty.push(parseInt(cols[i]) || 0);
+    if (qty.reduce((a,b)=>a+b,0) === 0) continue;
+    orders.push({
+      name:    (cols[1]||'').trim(),
+      qty,
+      total:   parseInt(cols[13]) || 0,
+      type:    (cols[14]||'').trim(),
+      address: (cols[15]||'').trim()
+    });
+  }
+  if (!orders.length) throw new Error("לא נמצאו הזמנות תקינות. בדוק שהפורמט תקין (מופרד בטאבים, 16 עמודות)");
+  return orders;
+}
+
+function haversine(lat1,lon1,lat2,lon2) {
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+async function geocode(addr) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr+', NJ, USA')}&format=json&limit=1&countrycodes=us`;
+    const r = await fetch(url, {headers:{'Accept-Language':'en'}});
+    const d = await r.json();
+    if (d && d[0]) return {lat: parseFloat(d[0].lat), lon: parseFloat(d[0].lon), found: true};
+  } catch(e){}
+  return {lat: HOME_LAT, lon: HOME_LON, found: false};
+}
+
+function nearestNeighbor(points) {
+  const rem = [...points];
+  const route = [];
+  let lat=HOME_LAT, lon=HOME_LON;
+  while (rem.length) {
+    let best=-1, bestD=Infinity;
+    rem.forEach((p,i)=>{ const d=haversine(lat,lon,p.lat,p.lon); if(d<bestD){bestD=d;best=i;} });
+    route.push(rem[best]);
+    lat=rem[best].lat; lon=rem[best].lon;
+    rem.splice(best,1);
+  }
+  return route;
+}
+
+async function processOrders() {
+  const btn = document.getElementById('submit-btn');
+  const errEl = document.getElementById('error-msg');
+  errEl.style.display = 'none';
+
+  const text = document.getElementById('data-input').value;
+  if (!text.trim()) { showError("אנא הדבק נתוני הזמנות"); return; }
+
+  let orders;
+  try { orders = parseInput(text); }
+  catch(e) { showError(e.message); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'מאתר כתובות...';
+
+  const deliveries = orders.filter(o => o.type === 'משלוח' && o.address);
+  const pickups    = orders.filter(o => o.type !== 'משלוח' || !o.address);
+
+  let route = deliveries;
+  let notFound = [];
+
+  if (deliveries.length > 1) {
+    const geocoded = [];
+    for (const o of deliveries) {
+      const g = await geocode(o.address);
+      if (!g.found) notFound.push(o.address);
+      geocoded.push({order: o, lat: g.lat, lon: g.lon});
+      await new Promise(r => setTimeout(r, 1100)); // respect Nominatim rate limit
+    }
+    route = nearestNeighbor(geocoded).map(p => p.order);
+  } else if (deliveries.length === 1) {
+    route = deliveries;
+  }
+
+  const waypointStr = route.map(o => encodeURIComponent(o.address).replace(/%20/g,'+')).join('/');
+  const mapsUrl = `https://www.google.com/maps/dir/${HOME}/${waypointStr}/${HOME}`;
+
+  document.getElementById('stat-total').textContent    = orders.length;
+  document.getElementById('stat-delivery').textContent = deliveries.length;
+  document.getElementById('stat-pickup').textContent   = pickups.length;
+
+  const linkEl = document.getElementById('maps-link');
+  linkEl.href = mapsUrl;
+  document.getElementById('maps-url-text').textContent = mapsUrl;
+
+  const tbody = document.getElementById('route-tbody');
+  tbody.innerHTML = '';
+  route.forEach((o,i) => {
+    const tr = document.createElement('tr');
+    const flag = notFound.includes(o.address) ? ' ⚠️ לא אומת' : '';
+    tr.innerHTML = `<td style="font-weight:600;color:var(--text-secondary)">${i+1}</td><td>${escapeHtml(o.name)}</td><td style="color:var(--text-secondary)">${escapeHtml(o.address)}${flag}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  if (notFound.length) {
+    showError(`לא הצלחתי לאתר במדויק את הכתובות: ${notFound.join(', ')}. בדוק אותן ידנית לפני שיצא לדרך.`);
+  }
+
+  const grid = document.getElementById('labels-grid');
+  grid.innerHTML = '';
+  route.forEach((o,i) => grid.appendChild(makeCard(o, i+1, 'delivery')));
+  pickups.forEach(o => grid.appendChild(makeCard(o, null, 'pickup')));
+
+  document.getElementById('results').style.display = 'block';
+  btn.textContent = 'צור מסלול ומדבקות';
+  btn.disabled = false;
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function makeCard(order, stopNum, type) {
+  const card = document.createElement('div');
+  card.className = `label-card ${type}`;
+
+  const badge = document.createElement('div');
+  badge.className = `stop-badge ${type}`;
+  badge.textContent = stopNum ? `תחנה ${stopNum}` : 'איסוף עצמי';
+  card.appendChild(badge);
+
+  const name = document.createElement('div');
+  name.className = 'customer-name';
+  name.textContent = order.name;
+  card.appendChild(name);
+
+  order.qty.forEach((q,j) => {
+    if (q > 0) {
+      const row = document.createElement('div');
+      row.className = 'bread-item';
+      row.innerHTML = `<span class="qty-badge">${q}</span><span>${BREAD_NAMES[j]}</span>`;
+      card.appendChild(row);
+    }
+  });
+
+  const totalLine = document.createElement('div');
+  totalLine.className = 'total-line';
+  totalLine.innerHTML = `<span>סה"כ</span><span>$${order.total}</span>`;
+  card.appendChild(totalLine);
+
+  return card;
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function resetForm() {
+  document.getElementById('data-input').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('error-msg').style.display = 'none';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
