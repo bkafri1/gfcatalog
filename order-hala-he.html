@@ -70,6 +70,8 @@ body{background:var(--cream);font-family:'Frank Ruhl Libre',serif;color:var(--tx
 .ro{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:11px 13px;border:1px solid var(--border);border-radius:9px;transition:border-color .2s,background .2s;}
 .ro:hover{border-color:var(--accent-l);background:var(--warm);}
 .ro.sel{border-color:var(--accent);background:var(--warm);}
+.ro.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+.ro.disabled .rl{color:var(--txt2);}
 .ro input{width:17px;height:17px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);}
 .rl{font-size:14px;line-height:1.4;}
 .rl .sub{font-size:12px;color:var(--txt2);margin-top:2px;}
@@ -176,9 +178,9 @@ body{background:var(--cream);font-family:'Frank Ruhl Libre',serif;color:var(--tx
         <input type="radio" name="delivery" value="pickup" checked>
         <div class="rl">🏠 נבוא לקחת<div class="sub">68 Cortland Pl, Tenafly, NJ — נא להחנות ברחוב</div></div>
       </label>
-      <label class="ro" onclick="selDelivery(this,'delivery')">
+      <label class="ro" id="delivery-option" onclick="selDelivery(this,'delivery')">
         <input type="radio" name="delivery" value="delivery">
-        <div class="rl">🚗 משלוח<div class="sub">עד 10 דקות מטנפליי</div></div>
+        <div class="rl">🚗 משלוח<div class="sub">עד 10 דקות מטנפליי · מינימום הזמנה $32</div></div>
       </label>
     </div>
     <div class="fi2" id="addr-field" style="margin-top:12px;display:none;">
@@ -291,6 +293,7 @@ const FORM_KEY   = 'lm_hala_form_status_he';
 
 let qtys = {};
 let deliveryMode = 'pickup';
+const DELIVERY_MIN = 32;
 let sliceMode    = 'whole';
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
@@ -383,6 +386,7 @@ function updateSummary() {
   const box = document.getElementById('order-summary');
   const sel = PRODUCTS.filter(p => qtys[p.id] > 0);
   const total = sel.reduce((s, p) => s + p.price * qtys[p.id], 0);
+  updateDeliveryOption(total);
   if (!sel.length) {
     box.innerHTML = '<p class="sr empty">לא נבחרו מוצרים עדיין</p>';
     document.getElementById('sub-btn').disabled = true;
@@ -397,7 +401,32 @@ function updateSummary() {
 
 function getTotal() { return PRODUCTS.reduce((s,p) => s + p.price * (qtys[p.id]||0), 0); }
 
+function updateDeliveryOption(total) {
+  if (total === undefined) total = getTotal();
+  const opt = document.getElementById('delivery-option');
+  if (!opt) return;
+  const radio = opt.querySelector('input[type="radio"]');
+  if (total < DELIVERY_MIN) {
+    opt.classList.add('disabled');
+    if (radio) radio.disabled = true;
+    if (deliveryMode === 'delivery') {
+      deliveryMode = 'pickup';
+      const pickupInput = document.querySelector('input[name="delivery"][value="pickup"]');
+      const pickupLabel = pickupInput ? pickupInput.closest('label') : null;
+      document.querySelectorAll('.ro').forEach(r => r.classList.remove('sel'));
+      if (pickupLabel) pickupLabel.classList.add('sel');
+      if (pickupInput) pickupInput.checked = true;
+      const addr = document.getElementById('addr-field');
+      if (addr) addr.style.display = 'none';
+    }
+  } else {
+    opt.classList.remove('disabled');
+    if (radio) radio.disabled = false;
+  }
+}
+
 function selDelivery(el, mode) {
+  if (mode === 'delivery' && getTotal() < DELIVERY_MIN) return;
   deliveryMode = mode;
   document.querySelectorAll('.ro').forEach(r => r.classList.remove('sel'));
   el.classList.add('sel');
@@ -414,6 +443,7 @@ function validate() {
   if (!document.getElementById('f-name').value.trim()) { alert('אנא הכנס שם מלא.'); return false; }
   if (!document.getElementById('f-phone').value.trim()) { alert('אנא הכנס מספר טלפון.'); return false; }
   if (!PRODUCTS.some(p => qtys[p.id] > 0)) { alert('אנא בחר לפחות מוצר אחד.'); return false; }
+  if (deliveryMode === 'delivery' && getTotal() < DELIVERY_MIN) { alert('משלוח זמין רק להזמנות מעל $32. נא לבחור באיסוף עצמי או להוסיף מוצרים.'); return false; }
   if (deliveryMode === 'delivery' && !document.getElementById('f-addr').value.trim()) { alert('אנא הכנס כתובת למשלוח.'); return false; }
   return true;
 }
