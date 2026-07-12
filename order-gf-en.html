@@ -335,7 +335,7 @@ function togDet(id, btn) {
 
 async function loadStock() {
   try {
-    const res = await fetch(SCRIPT_URL + '?action=stock&form=gf');
+    const res = await fetch(SCRIPT_URL + '?action=stock&form=' + (IS_HE ? 'gf-he' : 'gf-en'));
     const data = await res.json();
     if (!data.success || !data.stock) return;
     PRODUCTS.forEach(p => {
