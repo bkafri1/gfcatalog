@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kafri Artisan Breads — One Year Together 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFFBF2;--brown:#5C3D2E;--accent:#C17D3C;--accent-l:#E8C99A;
+  --accent-h:#A66828;--txt:#2C1A0E;--txt2:#7A5C44;--border:#E7D9BE;
+  --bg:#FFF;--warm:#FDF5E8;--green:#2E7D32;--green-bg:#E8F5E9;
+  --red:#C0392B;--red-bg:#FDEDEC;--gold:#C9971E;--gold-l:#F3E3B8;--plum:#4A2E3D;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:'Frank Ruhl Libre', serif;color:var(--txt);min-height:100vh;direction:ltr;}
+
+/* HEADER — festive */
+.header{
+  background:linear-gradient(135deg,#5C3D2E 0%,#4A2E3D 55%,#3A2230 100%);
+  color:#fff;text-align:center;padding:44px 20px 34px;position:relative;overflow:hidden;
+}
+.header::before{
+  content:'🎉 ✨ 🥖 🎊 ✨ 🎉 🥐 ✨';
+  position:absolute;top:8px;left:0;right:0;font-size:15px;opacity:.35;letter-spacing:14px;white-space:nowrap;
+}
+.ribbon{
+  display:inline-block;background:linear-gradient(135deg,var(--gold),#E8C860);color:#3A2A0A;
+  border-radius:20px;padding:6px 18px;font-size:13px;font-weight:700;margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(201,151,30,.4);
+}
+.header h1{font-size:26px;font-weight:900;margin-bottom:6px;}
+.header .sub{font-size:14px;opacity:.9;font-weight:300;line-height:1.6;max-width:440px;margin:0 auto;}
+.lang-link{display:inline-block;margin-top:14px;font-size:12px;color:rgba(255,255,255,.7);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);}
+.lang-link:hover{color:#fff;}
+
+.main{max-width:680px;margin:0 auto;padding:24px 16px 60px;}
+
+/* INTRO CARD */
+.intro-card{
+  background:var(--bg);border-radius:18px;border:2px solid var(--gold-l);padding:24px;margin-bottom:20px;
+  box-shadow:0 3px 14px rgba(201,151,30,.12);
+}
+.intro-card h2{font-size:18px;font-weight:900;color:var(--plum);margin-bottom:12px;}
+.intro-card p{font-size:14px;color:var(--txt2);line-height:1.75;margin-bottom:12px;}
+.intro-card p:last-child{margin-bottom:0;}
+.intro-sig{font-size:13px;color:var(--accent);font-weight:700;}
+
+.section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:22px;margin-bottom:18px;}
+.stitle{font-size:16px;font-weight:900;color:var(--plum);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gold-l);display:flex;align-items:center;gap:8px;}
+
+/* DAY PICKER */
+.day-grid{display:flex;flex-direction:column;gap:12px;}
+.day-card{
+  border:2px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.day-card:hover{border-color:var(--gold);background:var(--warm);}
+.day-card.sel{border-color:var(--gold);background:linear-gradient(135deg,var(--gold-l),#FBF0D4);box-shadow:0 2px 10px rgba(201,151,30,.25);}
+.day-card.disabled{opacity:.4;cursor:not-allowed;}
+.day-info .dlabel{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.day-info .dsub{font-size:12px;color:var(--txt2);}
+.day-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent;transition:all .2s;}
+.day-card.sel .day-check{background:var(--gold);border-color:var(--gold);color:#fff;}
+
+/* PRODUCT CARDS */
+.limit-note{font-size:12px;color:var(--accent-h);background:var(--warm);border:1px solid var(--accent-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;}
+.pcard{
+  border:2px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;transition:all .2s;
+}
+.pcard:last-child{margin-bottom:0;}
+.pcard.sel{border-color:var(--green);background:var(--green-bg);}
+.pcard.soldout{opacity:.45;}
+.pmain{display:flex;align-items:center;gap:10px;}
+.pinfo{flex:1;min-width:0;}
+.pname{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.pbadge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:9px;background:var(--warm);color:var(--accent);border:1px solid var(--accent-l);font-weight:600;margin-right:5px;}
+.soldout-tag{font-size:11px;color:var(--red);font-weight:700;}
+.pprice{font-size:13px;color:var(--txt2);margin-top:4px;}
+.pprice .now{font-size:16px;font-weight:900;color:var(--gold-l-txt,#B8860B);}
+.pprice .was{text-decoration:line-through;color:#B0A090;margin-right:5px;font-size:12px;}
+.psub{font-size:12px;color:var(--txt2);margin-top:4px;line-height:1.5;}
+.select-btn{
+  flex-shrink:0;padding:9px 18px;border-radius:22px;border:2px solid var(--gold);background:#fff;
+  color:var(--gold-h,#A67C1E);font-weight:700;font-size:13px;font-family:inherit;cursor:pointer;transition:all .2s;
+}
+.select-btn.act{background:var(--green);border-color:var(--green);color:#fff;}
+.select-btn:disabled{opacity:.4;cursor:not-allowed;}
+.pdet{font-size:12px;color:var(--txt2);line-height:1.5;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
+.ilbl{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+
+/* FIELDS */
+.fg{display:flex;flex-direction:column;gap:12px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:460px){.fr{grid-template-columns:1fr;}}
+.fi2{display:flex;flex-direction:column;gap:4px;}
+.fi2 label{font-size:12px;font-weight:600;color:var(--txt2);}
+.fi2 input,.fi2 textarea{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:9px;font-size:15px;font-family:inherit;color:var(--txt);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+.fi2 input:focus,.fi2 textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,151,30,.15);}
+.fi2 textarea{resize:vertical;min-height:60px;line-height:1.5;}
+
+.pickup-note{background:var(--warm);border:1px solid var(--accent-l);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--txt2);line-height:1.6;}
+.pickup-note b{color:var(--brown);}
+
+/* SUMMARY */
+.sumbox{background:var(--warm);border:1px solid var(--gold-l);border-radius:11px;padding:14px;margin-bottom:4px;}
+.sr{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:3px 0;}
+.sr.empty{color:var(--txt2);font-style:italic;font-size:13px;}
+.sdiv{border:none;border-top:1px solid var(--gold-l);margin:8px 0;}
+.stot{font-size:17px;font-weight:900;color:var(--plum);}
+
+/* SUBMIT */
+.subbtn{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#DDA82A);color:#3A2A0A;border:none;border-radius:12px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer;transition:all .2s;margin-top:6px;box-shadow:0 3px 12px rgba(201,151,30,.35);}
+.subbtn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(201,151,30,.45);}
+.subbtn:disabled{background:var(--border);cursor:not-allowed;color:var(--txt2);box-shadow:none;transform:none;}
+
+.err-box{display:none;background:var(--red-bg);border:1px solid #E6B0AA;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--red);margin-bottom:14px;line-height:1.5;}
+.err-box.show{display:block;}
+
+/* CLOSED / THANK YOU */
+.closed-screen{display:none;text-align:center;padding:60px 20px;max-width:480px;margin:0 auto;}
+.closed-screen.show{display:block;}
+.ty-screen{display:none;max-width:680px;margin:0 auto;padding:24px 16px 60px;}
+.ty-screen.show{display:block;}
+.ty-card{background:var(--bg);border-radius:18px;border:2px solid var(--gold-l);padding:30px;margin-bottom:18px;text-align:center;}
+.ty-icon{font-size:56px;margin-bottom:12px;}
+.ty-title{font-size:24px;font-weight:900;color:var(--plum);margin-bottom:8px;}
+.ty-sub{font-size:14px;color:var(--txt2);line-height:1.6;}
+.pay-section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:22px;margin-bottom:18px;}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:420px){.pay-grid{grid-template-columns:1fr;}}
+.pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:11px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:15px;font-weight:700;color:var(--txt);text-decoration:none;transition:all .2s;}
+.pay-btn:hover{border-color:var(--gold);background:var(--warm);}
+.pay-icon{font-size:22px;}
+.pay-note{font-size:11px;color:var(--txt2);text-align:center;margin-top:8px;}
+.footer{text-align:center;font-size:12px;color:var(--txt2);padding:16px;opacity:.7;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="ribbon">🎉 One Year of Kafri Artisan Breads</div>
+  <h1>Birthday Promo — Come Taste</h1>
+  <p class="sub">Three special baking days, at prices meant for everyone to come and taste</p>
+  <br>
+  <a class="lang-link" href="order-promo-he.html">עברית →</a>
+</header>
+
+<!-- CLOSED SCREEN -->
+<div class="closed-screen" id="closed-screen">
+  <div style="font-size:52px;margin-bottom:14px;">🔒</div>
+  <h2 style="font-size:21px;font-weight:700;color:var(--brown);margin-bottom:10px;" id="closed-title">The promo has ended or orders are currently closed 🔒</h2>
+  <p style="font-size:14px;color:var(--txt2);line-height:1.6;" id="closed-msg">Thanks for your interest! Follow us for updates on future promos.</p>
+</div>
+
+<!-- THANK YOU SCREEN -->
+<div class="ty-screen" id="ty-screen">
+  <div class="ty-card">
+    <div class="ty-icon">🎉</div>
+    <div class="ty-title" id="ty-title">Thanks for celebrating with us!</div>
+    <p class="ty-sub" id="ty-sub"></p>
+  </div>
+  <div class="section">
+    <div class="stitle">🧾 Order Summary</div>
+    <div id="ty-summary"></div>
+  </div>
+  <div class="pay-section">
+    <div class="stitle">💳 Payment</div>
+    <p style="font-size:13px;color:var(--txt2);margin-bottom:4px;">Please pay after we confirm your order:</p>
+    <div class="pay-grid">
+      <a class="pay-btn" href="https://venmo.com/code?user_id=4416788448151226881&created=1774894628" target="_blank">
+        <span class="pay-icon">💜</span> Venmo
+      </a>
+      <button class="pay-btn" onclick="showZelle()">
+        <span class="pay-icon">💙</span> Zelle
+      </button>
+    </div>
+    <p class="pay-note">* Pay only after receiving confirmation from us</p>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="form-wrap">
+<div class="main">
+
+  <div class="intro-card">
+    <h2>One Year of Kafri Artisan Breads 🎉</h2>
+    <p>Hi, I'm Barak — the hands behind every loaf at Kafri Artisan Breads. My bread journey started over two decades ago, inspired by the home bakers I met in New Zealand, and deepened into a real craft over the last ten years as I focused almost entirely on naturally leavened sourdough. I learned my craft hands-on, working in professional bakeries, and rounded it out with an advanced baking course at the San Francisco Baking Institute. Along the way I've baked for family, friends, and neighbors — through good times and hard ones — and for the past year, for this wonderful community here in Bergen County.</p>
+    <p>Every loaf I bake starts with natural levain and organic flour, stone-milled in a way that keeps the wheat's full nutrition and flavor intact — because I believe bread should be as good for you as it is delicious. Bread is a simple thing, and there's nothing I love more than knowing a loaf I baked made someone's table a little better today.</p>
+    <p>To celebrate our first year together, I wanted to say thank you the best way I know how — with fresh bread, challah, and babka at prices that let everyone come taste what we've built. Welcome to the celebration!</p>
+    <p class="intro-sig">— Barak, Kafri Artisan Breads</p>
+  </div>
+
+  <div class="section">
+    <div class="stitle">📅 Choose a Day</div>
+    <div class="day-grid" id="day-grid"></div>
+  </div>
+
+  <div class="section" id="products-section" style="display:none;">
+    <div class="stitle">🛒 Choose Your Products</div>
+    <div class="limit-note">✦ Up to 1 unit of each product, and up to 2 different products per order</div>
+    <div id="products-list"></div>
+  </div>
+
+  <div class="section" id="summary-section" style="display:none;">
+    <div class="stitle">🧾 Order Summary</div>
+    <div class="sumbox" id="order-summary">
+      <p class="sr empty">No products selected yet</p>
+    </div>
+  </div>
+
+  <div class="section" id="details-section" style="display:none;">
+    <div class="stitle">👤 Your Details</div>
+    <div class="fg">
+      <div class="fr">
+        <div class="fi2"><label>Full Name</label><input type="text" id="f-name" autocomplete="name"></div>
+        <div class="fi2"><label>Phone</label><input type="tel" id="f-phone" autocomplete="tel"></div>
+      </div>
+      <div class="fi2"><label>Email (for order confirmation)</label><input type="email" id="f-email" autocomplete="email"></div>
+    </div>
+  </div>
+
+  <div class="section" id="pickup-section" style="display:none;">
+    <div class="stitle">🏠 Pickup</div>
+    <div class="pickup-note">
+      This promo is available <b>for self pickup only</b> · 68 Cortlandt Pl, Tenafly, NJ · 4:00–6:00 PM on the chosen baking day.<br>
+      Please park on the street.
+    </div>
+  </div>
+
+  <div class="section" id="notes-section" style="display:none;">
+    <div class="stitle">💬 Notes</div>
+    <div class="fi2"><textarea id="f-notes" placeholder="Questions? Special requests?"></textarea></div>
+  </div>
+
+  <div class="err-box" id="err-box"></div>
+  <button class="subbtn" id="sub-btn" onclick="submitOrder()" disabled style="display:none;">Place Order 🎉</button>
+
+</div>
+</div>
+
+<div class="footer">Kafri Artisan Breads — ✉️ Questions? WhatsApp us</div>
+
+<script>
+const IS_HE = false;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzdF03GIEPXnSFvwKc5II8BhyXX4QUGljF9IRlkOvewwQh6X70_gsh7iogZbrBhB4vUg/exec';
+const FORM_KEY = 'lm_form_status_promo_en';
+
+const PROMO_DAYS = [
+  { date: '2026-09-14', label: 'Monday, September 14', sub: 'Bread baking day', menu: 'bread' },
+  { date: '2026-09-16', label: 'Wednesday, September 16', sub: 'Bread baking day', menu: 'bread' },
+  // Friday (challah & babka day) is intentionally hidden for now — not deleted, just not
+  // shown to customers. To bring it back: remove the two // markers from the line below.
+  // { date: '2026-09-18', label: 'Friday, September 18', sub: 'Special challah & babka day', menu: 'friday' },
+];
+
+const PROMO_PRODUCTS = [
+  { id: 'spelt', menu: 'bread', en: 'Spelt Sourdough', badge: 'Parve', price: 6, was: 12,
+    ing: 'Bread flour, whole spelt flour, water, natural sourdough starter, salt',
+    pitch: '75% whole spelt with natural sourdough — rich in fiber, minerals and protein.' },
+  { id: 'olives', menu: 'bread', en: 'Olive Sourdough', badge: 'Parve', price: 6, was: 10,
+    ing: 'Whole wheat flour, bread flour, water, natural sourdough starter, olives, salt',
+    pitch: 'Whole wheat sourdough with olives — heart-healthy monounsaturated fats, full of Mediterranean flavor.' },
+  { id: 'nuts', menu: 'bread', en: 'Walnut Sourdough', badge: 'Parve', price: 6, was: 10,
+    ing: 'Whole wheat flour, bread flour, water, natural sourdough starter, walnuts, salt',
+    pitch: 'Whole wheat sourdough with walnuts — excellent source of omega-3, antioxidants and fiber.' },
+  { id: 'shiur', menu: 'bread', en: 'Pure Sourdough (Shiur)', badge: 'Parve', price: 6, was: 10,
+    ing: 'Bread flour, whole wheat flour, water, natural sourdough starter, salt',
+    pitch: 'Four ingredients only. Clean and nourishing.' },
+  { id: 'bagel-white', menu: 'bread', en: 'Jerusalem Bagels – White (3 pack)', badge: 'Parve', price: 6, was: 10,
+    ing: 'Bread flour, water, olive oil, sugar, salt, dry yeast, white sesame',
+    pitch: 'Straight from Jerusalem. Crispy outside, soft inside.' },
+  { id: 'challah-spelt', menu: 'friday', en: 'Spelt Challah', badge: 'Dairy', price: 7, was: 12,
+    ing: 'White spelt flour, water, eggs, milk powder, dry yeast, sugar, butter, salt',
+    pitch: 'A round braided challah made with white spelt flour — soft, golden, and full of flavor.' },
+  { id: 'challah-shabbat', menu: 'friday', en: 'Shabbat Challah – Pareve', badge: 'Parve', price: 7, was: 12,
+    ing: 'Flour, water, eggs, egg yolk, honey, sunflower oil, dry yeast, vanilla extract, cinnamon, salt',
+    pitch: 'A pareve challah made with the tangzhong method — soft, pillowy texture, gently sweetened with quality honey.' },
+  { id: 'babka-cinnamon-whole', menu: 'friday', en: 'Cinnamon Babka (whole)', badge: 'Whole cake', price: 10, was: 17,
+    ing: 'Butter, whole milk, eggs, bread flour, fresh yeast, sugar, salt + cinnamon filling',
+    pitch: 'An impressive braid with layers of cinnamon and brown sugar. The real scent of home baking.' },
+  { id: 'babka-choco-whole', menu: 'friday', en: 'Chocolate Babka (whole)', badge: 'Whole cake', price: 10, was: 17,
+    ing: 'Butter, whole milk, eggs, bread flour, fresh yeast, sugar, salt + chocolate filling',
+    pitch: 'An impressive braid with layers of rich chocolate. Perfect for celebrating.' },
+];
+
+let selectedDay = null;
+let qtys = {};
+let stockData = {};
+let promoSource = '';
+
+// ── order source (?src=) ──
+(function initSource() {
+  const urlSrc = new URLSearchParams(window.location.search).get('src');
+  if (urlSrc) {
+    try { sessionStorage.setItem('lm_promo_src', urlSrc); } catch(e) {}
+  }
+  try { promoSource = sessionStorage.getItem('lm_promo_src') || urlSrc || ''; } catch(e) { promoSource = urlSrc || ''; }
+})();
+
+// ── form status ──
+async function checkFormStatus() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=status&form=promo-en');
+    const data = await res.json();
+    if (data.closed) {
+      document.getElementById('form-wrap').style.display = 'none';
+      const cs = document.getElementById('closed-screen');
+      cs.classList.add('show');
+      if (data.msgEn) document.getElementById('closed-msg').textContent = data.msgEn;
+    }
+  } catch(e) { console.warn('Form status check failed:', e); }
+}
+
+// ── stock ──
+async function loadStock() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=stock&form=promo-en');
+    const data = await res.json();
+    if (data.success && data.stock) stockData = data.stock;
+  } catch(e) { console.warn('Stock load failed:', e); }
+  renderDays();
+}
+
+function stockFor(date, id) {
+  return stockData[date + '|' + id];
+}
+
+// ── day selection ──
+function renderDays() {
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = PROMO_DAYS.map(d => {
+    const sel = selectedDay === d.date;
+    return `<div class="day-card ${sel?'sel':''}" onclick="selectDay('${d.date}')">
+      <div class="day-info">
+        <div class="dlabel">${d.label}</div>
+        <div class="dsub">${d.sub}</div>
+      </div>
+      <div class="day-check">✓</div>
+    </div>`;
+  }).join('');
+}
+
+function selectDay(date) {
+  if (selectedDay === date) return;
+  selectedDay = date;
+  qtys = {};
+  renderDays();
+  renderProducts();
+  document.getElementById('products-section').style.display = 'block';
+  document.getElementById('summary-section').style.display = 'block';
+  document.getElementById('details-section').style.display = 'block';
+  document.getElementById('pickup-section').style.display = 'block';
+  document.getElementById('notes-section').style.display = 'block';
+  document.getElementById('sub-btn').style.display = 'block';
+  updateSummary();
+}
+
+// ── products ──
+function dayMenu() {
+  const d = PROMO_DAYS.find(x => x.date === selectedDay);
+  return d ? d.menu : null;
+}
+
+function selectedCount() { return Object.values(qtys).filter(q => q > 0).length; }
+
+function renderProducts() {
+  const menu = dayMenu();
+  const list = PROMO_PRODUCTS.filter(p => p.menu === menu);
+  const c = document.getElementById('products-list');
+  const atLimit = selectedCount() >= 2;
+
+  c.innerHTML = list.map(p => {
+    const s = stockFor(selectedDay, p.id);
+    const soldOut = s && s.remaining <= 0;
+    const isSel = qtys[p.id] > 0;
+    const disableSelect = soldOut || (!isSel && atLimit);
+    return `<div class="pcard ${isSel?'sel':''} ${soldOut?'soldout':''}">
+      <div class="pmain">
+        <div class="pinfo">
+          <div class="pname">${p.en} <span class="pbadge">${p.badge}</span> ${soldOut?'<span class="soldout-tag">Sold Out</span>':''}</div>
+          <div class="pprice"><span class="now">$${p.price}</span> <span class="was">$${p.was}</span></div>
+          <div class="psub">${p.pitch}</div>
+        </div>
+        <button class="select-btn ${isSel?'act':''}" onclick="toggleProduct('${p.id}')" ${disableSelect?'disabled':''}>
+          ${isSel ? '✓ Selected' : 'Select'}
+        </button>
+      </div>
+      <div class="pdet">
+        <div class="ilbl">Ingredients</div>
+        ${p.ing}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleProduct(id) {
+  const isSel = qtys[id] > 0;
+  if (isSel) {
+    qtys[id] = 0;
+  } else {
+    if (selectedCount() >= 2) return;
+    qtys[id] = 1;
+  }
+  renderProducts();
+  updateSummary();
+}
+
+function getTotal() {
+  return PROMO_PRODUCTS.reduce((s, p) => s + (qtys[p.id] > 0 ? p.price : 0), 0);
+}
+
+function updateSummary() {
+  const box = document.getElementById('order-summary');
+  const sel = PROMO_PRODUCTS.filter(p => qtys[p.id] > 0);
+  const total = getTotal();
+  if (!sel.length) {
+    box.innerHTML = '<p class="sr empty">No products selected yet</p>';
+  } else {
+    box.innerHTML = sel.map(p =>
+      `<div class="sr"><span>${p.en.split('(')[0].trim()}</span><span>$${p.price}</span></div>`
+    ).join('') +
+    `<hr class="sdiv"><div class="sr"><span class="stot">Total</span><span class="stot">$${total}</span></div>`;
+  }
+  document.getElementById('sub-btn').disabled = sel.length === 0;
+}
+
+function showErr(msg) {
+  const box = document.getElementById('err-box');
+  box.textContent = msg;
+  box.classList.add('show');
+  window.scrollTo({ top: box.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+}
+function clearErr() {
+  document.getElementById('err-box').classList.remove('show');
+}
+
+const ERROR_MESSAGES = {
+  form_closed: 'The promo is closed for orders. Thanks for your interest!',
+  duplicate_order: 'An order for this promo was already received for this phone or email — one order per customer for the whole promo.',
+  sold_out: 'One of your selected products is sold out for that day. Try another product or day.',
+  too_many_products: 'You can select up to 2 different products per order.',
+  max_one_per_product: 'You can order up to 1 unit of each product.',
+  no_products: 'Please select at least one product.',
+  missing_day: 'Please select a day.',
+  invalid_day: 'The selected day is not valid.',
+};
+
+function validate() {
+  clearErr();
+  if (!selectedDay) { showErr('Please select a day.'); return false; }
+  if (selectedCount() === 0) { showErr('Please select at least one product.'); return false; }
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  if (!name) { showErr('Please enter your full name.'); document.getElementById('f-name').focus(); return false; }
+  if (!phone) { showErr('Please enter your phone number.'); document.getElementById('f-phone').focus(); return false; }
+  return true;
+}
+
+async function submitOrder() {
+  if (!validate()) return;
+  const name  = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
+  const sel   = PROMO_PRODUCTS.filter(p => qtys[p.id] > 0);
+  const total = getTotal();
+
+  const btn = document.getElementById('sub-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const params = new URLSearchParams({
+    name, phone, email, notes, total,
+    form: 'promo-en', lang: 'en',
+    promoDay: selectedDay,
+    delivery: 'Self Pickup',
+    source: promoSource || '',
+  });
+  PROMO_PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
+
+  try {
+    const res = await fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', redirect: 'follow' });
+    const data = await res.json();
+
+    if (data.success === true) {
+      showThankYou(name, sel, total, email);
+    } else {
+      showErr(ERROR_MESSAGES[data.error] || ('Oops, something went wrong. Please try again or contact us on WhatsApp.\n' + (data.error || '')));
+      btn.disabled = false;
+      btn.textContent = 'Place Order 🎉';
+    }
+  } catch(err) {
+    console.error('Promo order submit failed:', err);
+    showErr('We couldn\'t reach the server. Check your internet connection and try again, or contact us on WhatsApp.');
+    btn.disabled = false;
+    btn.textContent = 'Place Order 🎉';
+  }
+}
+
+function showThankYou(name, sel, total, email) {
+  document.getElementById('form-wrap').style.display = 'none';
+  const ty = document.getElementById('ty-screen');
+  ty.classList.add('show');
+  const d = PROMO_DAYS.find(x => x.date === selectedDay);
+  document.getElementById('ty-sub').textContent =
+    `${name}'s order has been received! Pickup on ${d ? d.label : ''}, 4:00–6:00 PM.${email ? ' A confirmation will be sent to your email.' : ''}`;
+  document.getElementById('ty-summary').innerHTML =
+    sel.map(p => `<div class="sr"><span>${p.en.split('(')[0].trim()}</span><span>$${p.price}</span></div>`).join('') +
+    `<hr class="sdiv"><div class="sr"><span class="stot">Total</span><span class="stot">$${total}</span></div>`;
+  window.scrollTo(0, 0);
+}
+
+function showZelle() {
+  alert('Pay via Zelle to:\n[Enter phone or email]\nAmount: $' + getTotal());
+}
+
+// INIT
+checkFormStatus();
+loadStock();
+</script>
+</body>
+</html>

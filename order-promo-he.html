@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לחמים מכפרי — שנה אחת ביחד 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFFBF2;--brown:#5C3D2E;--accent:#C17D3C;--accent-l:#E8C99A;
+  --accent-h:#A66828;--txt:#2C1A0E;--txt2:#7A5C44;--border:#E7D9BE;
+  --bg:#FFF;--warm:#FDF5E8;--green:#2E7D32;--green-bg:#E8F5E9;
+  --red:#C0392B;--red-bg:#FDEDEC;--gold:#C9971E;--gold-l:#F3E3B8;--plum:#4A2E3D;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:'Frank Ruhl Libre', serif;color:var(--txt);min-height:100vh;direction:rtl;}
+
+/* HEADER — festive */
+.header{
+  background:linear-gradient(135deg,#5C3D2E 0%,#4A2E3D 55%,#3A2230 100%);
+  color:#fff;text-align:center;padding:44px 20px 34px;position:relative;overflow:hidden;
+}
+.header::before{
+  content:'🎉 ✨ 🥖 🎊 ✨ 🎉 🥐 ✨';
+  position:absolute;top:8px;left:0;right:0;font-size:15px;opacity:.35;letter-spacing:14px;white-space:nowrap;
+}
+.ribbon{
+  display:inline-block;background:linear-gradient(135deg,var(--gold),#E8C860);color:#3A2A0A;
+  border-radius:20px;padding:6px 18px;font-size:13px;font-weight:700;margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(201,151,30,.4);
+}
+.header h1{font-size:26px;font-weight:900;margin-bottom:6px;}
+.header .sub{font-size:14px;opacity:.9;font-weight:300;line-height:1.6;max-width:440px;margin:0 auto;}
+.lang-link{display:inline-block;margin-top:14px;font-size:12px;color:rgba(255,255,255,.7);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);}
+.lang-link:hover{color:#fff;}
+
+.main{max-width:680px;margin:0 auto;padding:24px 16px 60px;}
+
+/* INTRO CARD */
+.intro-card{
+  background:var(--bg);border-radius:18px;border:2px solid var(--gold-l);padding:24px;margin-bottom:20px;
+  box-shadow:0 3px 14px rgba(201,151,30,.12);
+}
+.intro-card h2{font-size:18px;font-weight:900;color:var(--plum);margin-bottom:12px;}
+.intro-card p{font-size:14px;color:var(--txt2);line-height:1.75;margin-bottom:12px;}
+.intro-card p:last-child{margin-bottom:0;}
+.intro-sig{font-size:13px;color:var(--accent);font-weight:700;}
+
+.section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:22px;margin-bottom:18px;}
+.stitle{font-size:16px;font-weight:900;color:var(--plum);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gold-l);display:flex;align-items:center;gap:8px;}
+
+/* DAY PICKER */
+.day-grid{display:flex;flex-direction:column;gap:12px;}
+.day-card{
+  border:2px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.day-card:hover{border-color:var(--gold);background:var(--warm);}
+.day-card.sel{border-color:var(--gold);background:linear-gradient(135deg,var(--gold-l),#FBF0D4);box-shadow:0 2px 10px rgba(201,151,30,.25);}
+.day-card.disabled{opacity:.4;cursor:not-allowed;}
+.day-info .dlabel{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.day-info .dsub{font-size:12px;color:var(--txt2);}
+.day-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent;transition:all .2s;}
+.day-card.sel .day-check{background:var(--gold);border-color:var(--gold);color:#fff;}
+
+/* PRODUCT CARDS */
+.limit-note{font-size:12px;color:var(--accent-h);background:var(--warm);border:1px solid var(--accent-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;}
+.pcard{
+  border:2px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;transition:all .2s;
+}
+.pcard:last-child{margin-bottom:0;}
+.pcard.sel{border-color:var(--green);background:var(--green-bg);}
+.pcard.soldout{opacity:.45;}
+.pmain{display:flex;align-items:center;gap:10px;}
+.pinfo{flex:1;min-width:0;}
+.pname{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.pbadge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:9px;background:var(--warm);color:var(--accent);border:1px solid var(--accent-l);font-weight:600;margin-left:5px;}
+.soldout-tag{font-size:11px;color:var(--red);font-weight:700;}
+.pprice{font-size:13px;color:var(--txt2);margin-top:4px;}
+.pprice .now{font-size:16px;font-weight:900;color:var(--gold-l-txt,#B8860B);}
+.pprice .was{text-decoration:line-through;color:#B0A090;margin-left:5px;font-size:12px;}
+.psub{font-size:12px;color:var(--txt2);margin-top:4px;line-height:1.5;}
+.select-btn{
+  flex-shrink:0;padding:9px 18px;border-radius:22px;border:2px solid var(--gold);background:#fff;
+  color:var(--gold-h,#A67C1E);font-weight:700;font-size:13px;font-family:inherit;cursor:pointer;transition:all .2s;
+}
+.select-btn.act{background:var(--green);border-color:var(--green);color:#fff;}
+.select-btn:disabled{opacity:.4;cursor:not-allowed;}
+.pdet{font-size:12px;color:var(--txt2);line-height:1.5;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
+.ilbl{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+
+/* FIELDS */
+.fg{display:flex;flex-direction:column;gap:12px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:460px){.fr{grid-template-columns:1fr;}}
+.fi2{display:flex;flex-direction:column;gap:4px;}
+.fi2 label{font-size:12px;font-weight:600;color:var(--txt2);}
+.fi2 input,.fi2 textarea{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:9px;font-size:15px;font-family:inherit;color:var(--txt);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+.fi2 input:focus,.fi2 textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,151,30,.15);}
+.fi2 textarea{resize:vertical;min-height:60px;line-height:1.5;}
+
+.pickup-note{background:var(--warm);border:1px solid var(--accent-l);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--txt2);line-height:1.6;}
+.pickup-note b{color:var(--brown);}
+
+/* SUMMARY */
+.sumbox{background:var(--warm);border:1px solid var(--gold-l);border-radius:11px;padding:14px;margin-bottom:4px;}
+.sr{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:3px 0;}
+.sr.empty{color:var(--txt2);font-style:italic;font-size:13px;}
+.sdiv{border:none;border-top:1px solid var(--gold-l);margin:8px 0;}
+.stot{font-size:17px;font-weight:900;color:var(--plum);}
+
+/* SUBMIT */
+.subbtn{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#DDA82A);color:#3A2A0A;border:none;border-radius:12px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer;transition:all .2s;margin-top:6px;box-shadow:0 3px 12px rgba(201,151,30,.35);}
+.subbtn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(201,151,30,.45);}
+.subbtn:disabled{background:var(--border);cursor:not-allowed;color:var(--txt2);box-shadow:none;transform:none;}
+
+.err-box{display:none;background:var(--red-bg);border:1px solid #E6B0AA;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--red);margin-bottom:14px;line-height:1.5;}
+.err-box.show{display:block;}
+
+/* CLOSED / THANK YOU */
+.closed-screen{display:none;text-align:center;padding:60px 20px;max-width:480px;margin:0 auto;}
+.closed-screen.show{display:block;}
+.ty-screen{display:none;max-width:680px;margin:0 auto;padding:24px 16px 60px;}
+.ty-screen.show{display:block;}
+.ty-card{background:var(--bg);border-radius:18px;border:2px solid var(--gold-l);padding:30px;margin-bottom:18px;text-align:center;}
+.ty-icon{font-size:56px;margin-bottom:12px;}
+.ty-title{font-size:24px;font-weight:900;color:var(--plum);margin-bottom:8px;}
+.ty-sub{font-size:14px;color:var(--txt2);line-height:1.6;}
+.pay-section{background:var(--bg);border-radius:16px;border:1px solid var(--border);padding:22px;margin-bottom:18px;}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:420px){.pay-grid{grid-template-columns:1fr;}}
+.pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:11px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:15px;font-weight:700;color:var(--txt);text-decoration:none;transition:all .2s;}
+.pay-btn:hover{border-color:var(--gold);background:var(--warm);}
+.pay-icon{font-size:22px;}
+.pay-note{font-size:11px;color:var(--txt2);text-align:center;margin-top:8px;}
+.footer{text-align:center;font-size:12px;color:var(--txt2);padding:16px;opacity:.7;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="ribbon">🎉 שנה אחת של לחמים מכפרי</div>
+  <h1>מבצע יום הולדת — בואו לטעום</h1>
+  <p class="sub">שלושה ימי אפייה מיוחדים, במחירים שנועדו שכולם יוכלו לבוא ולטעום</p>
+  <br>
+  <a class="lang-link" href="order-promo-en.html">English →</a>
+</header>
+
+<!-- CLOSED SCREEN -->
+<div class="closed-screen" id="closed-screen">
+  <div style="font-size:52px;margin-bottom:14px;">🔒</div>
+  <h2 style="font-size:21px;font-weight:700;color:var(--brown);margin-bottom:10px;" id="closed-title">המבצע הסתיים או שההזמנות סגורות כרגע 🔒</h2>
+  <p style="font-size:14px;color:var(--txt2);line-height:1.6;" id="closed-msg">תודה על העניין! עקבו אחרינו לעדכונים על מבצעים הבאים.</p>
+</div>
+
+<!-- THANK YOU SCREEN -->
+<div class="ty-screen" id="ty-screen">
+  <div class="ty-card">
+    <div class="ty-icon">🎉</div>
+    <div class="ty-title" id="ty-title">תודה שבאתם לחגוג איתנו!</div>
+    <p class="ty-sub" id="ty-sub"></p>
+  </div>
+  <div class="section">
+    <div class="stitle">🧾 סיכום הזמנה</div>
+    <div id="ty-summary"></div>
+  </div>
+  <div class="pay-section">
+    <div class="stitle">💳 לתשלום</div>
+    <p style="font-size:13px;color:var(--txt2);margin-bottom:4px;">אנא שלם לאחר אישור ההזמנה מאיתנו:</p>
+    <div class="pay-grid">
+      <a class="pay-btn" href="https://venmo.com/code?user_id=4416788448151226881&created=1774894628" target="_blank">
+        <span class="pay-icon">💜</span> Venmo
+      </a>
+      <button class="pay-btn" onclick="showZelle()">
+        <span class="pay-icon">💙</span> Zelle
+      </button>
+    </div>
+    <p class="pay-note">* שלם רק לאחר קבלת אישור מאיתנו</p>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="form-wrap">
+<div class="main">
+
+  <div class="intro-card">
+    <h2>שנה אחת של לחמים מכפרי 🎉</h2>
+    <p>היי, אני ברק — הידיים שמאחורי כל כיכר בלחמים של כפרי. המסע שלי עם לחם התחיל לפני יותר מעשרים שנה, בהשראת האופים הביתיים שפגשתי בניו זילנד, והתעמק לכדי מלאכה של ממש בעשור האחרון, כשהתמקדתי כמעט לחלוטין במחמצת טבעית. את ההכשרה שלי רכשתי תוך כדי עבודה במאפיות וגם קורס אפיה מתקדם ב-San Francisco Baking Institute, ובדרך אפיתי בשביל משפחה, חברים ושכנים בתקופות שמחות וכאלה שפחות, בשנה האחרונה — בשביל הקהילה הנפלאה כאן בברגן קאונטי.</p>
+    <p>כל כיכר שאני אופה מתחילה במחמצת ובקמח אורגני, נטחן באבן בצורה ששומרת על כל הערך התזונתי והטעם של החיטה — כי אני מאמין שלחם צריך להיות טוב בשבילכם בדיוק כמו שהוא טעים. לחם הוא דבר פשוט ואין דבר שאני אוהב יותר מלדעת שכיכר שאפיתי עשתה טוב למישהו היום.</p>
+    <p>לכבוד שנה ראשונה ביחד, רציתי להגיד תודה בדרך הכי טובה שאני מכיר — עם לחם טרי, חלות ובבקות במחירים שיאפשרו לכולם לבוא ולטעום ממה שבנינו. ברוכים הבאים לחגיגה!</p>
+    <p class="intro-sig">— ברק, לחמים מכפרי</p>
+  </div>
+
+  <div class="section">
+    <div class="stitle">📅 בחרו יום</div>
+    <div class="day-grid" id="day-grid"></div>
+  </div>
+
+  <div class="section" id="products-section" style="display:none;">
+    <div class="stitle">🛒 בחירת מוצרים</div>
+    <div class="limit-note">✦ עד יחידה אחת מכל מוצר, ועד 2 מוצרים שונים בהזמנה</div>
+    <div id="products-list"></div>
+  </div>
+
+  <div class="section" id="summary-section" style="display:none;">
+    <div class="stitle">🧾 סיכום הזמנה</div>
+    <div class="sumbox" id="order-summary">
+      <p class="sr empty">לא נבחרו מוצרים עדיין</p>
+    </div>
+  </div>
+
+  <div class="section" id="details-section" style="display:none;">
+    <div class="stitle">👤 פרטים אישיים</div>
+    <div class="fg">
+      <div class="fr">
+        <div class="fi2"><label>שם מלא</label><input type="text" id="f-name" autocomplete="name"></div>
+        <div class="fi2"><label>טלפון</label><input type="tel" id="f-phone" autocomplete="tel"></div>
+      </div>
+      <div class="fi2"><label>אימייל (לאישור הזמנה)</label><input type="email" id="f-email" autocomplete="email"></div>
+    </div>
+  </div>
+
+  <div class="section" id="pickup-section" style="display:none;">
+    <div class="stitle">🏠 איסוף</div>
+    <div class="pickup-note">
+      המבצע זמין <b>לאיסוף עצמי בלבד</b> · 68 Cortlandt Pl, Tenafly, NJ · 16:00–18:00 ביום האפייה שנבחר.<br>
+      נא להחנות ברחוב.
+    </div>
+  </div>
+
+  <div class="section" id="notes-section" style="display:none;">
+    <div class="stitle">💬 הערות</div>
+    <div class="fi2"><textarea id="f-notes" placeholder="שאלות? בקשות מיוחדות?"></textarea></div>
+  </div>
+
+  <div class="err-box" id="err-box"></div>
+  <button class="subbtn" id="sub-btn" onclick="submitOrder()" disabled style="display:none;">שלח הזמנה 🎉</button>
+
+</div>
+</div>
+
+<div class="footer">לחמים מכפרי — ✉️ עם שאלות פנה בוואטסאפ</div>
+
+<script>
+const IS_HE = true;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzdF03GIEPXnSFvwKc5II8BhyXX4QUGljF9IRlkOvewwQh6X70_gsh7iogZbrBhB4vUg/exec';
+const FORM_KEY = 'lm_form_status_promo_he';
+
+const PROMO_DAYS = [
+  { date: '2026-09-14', label: 'יום שני, 14 בספטמבר', sub: 'יום אפיית לחם', menu: 'bread' },
+  { date: '2026-09-16', label: 'יום רביעי, 16 בספטמבר', sub: 'יום אפיית לחם', menu: 'bread' },
+  // יום שישי (חלות ובבקות) מוסתר בכוונה בשלב זה — לא נמחק, רק לא מוצג ללקוחות.
+  // כדי להחזיר אותו: הסר את שני קווי ה-// מהשורה שלמטה.
+  // { date: '2026-09-18', label: 'יום שישי, 18 בספטמבר', sub: 'חלות ובבקות מיוחדות', menu: 'friday' },
+];
+
+const PROMO_PRODUCTS = [
+  { id: 'spelt', menu: 'bread', he: 'לחם כוסמין', badge: 'פרווה', price: 6, was: 12,
+    ing: 'קמח לחם, קמח כוסמין מלא, מים, מחמצת טבעית, מלח',
+    pitch: '75% קמח כוסמין מלא עם מחמצת טבעית – עשיר בסיבים, מינרלים וחלבון.' },
+  { id: 'olives', menu: 'bread', he: 'לחם זיתים', badge: 'פרווה', price: 6, was: 10,
+    ing: 'קמח מלא, קמח לחם, מים, מחמצת טבעית, זיתים, מלח',
+    pitch: 'מחמצת קמח מלא עם זיתים – שומן חד-בלתי-רווי לבריאות הלב, עשיר בטעם ים תיכוני.' },
+  { id: 'nuts', menu: 'bread', he: 'לחם אגוזים', badge: 'פרווה', price: 6, was: 10,
+    ing: 'קמח מלא, קמח לחם, מים, מחמצת טבעית, אגוזי מלך, מלח',
+    pitch: 'מחמצת קמח מלא עם אגוזי מלך – מקור מצוין לאומגה 3, נוגדי חמצון וסיבים.' },
+  { id: 'shiur', menu: 'bread', he: 'לחם שיאור', badge: 'פרווה', price: 6, was: 10,
+    ing: 'קמח לחם, קמח מלא, מים, מחמצת טבעית, מלח',
+    pitch: 'ארבעה מרכיבים בלבד. נקי, פשוט ומזין.' },
+  { id: 'bagel-white', menu: 'bread', he: 'בייגל ירושלמי לבן (3 במנה)', badge: 'פרווה', price: 6, was: 10,
+    ing: 'קמח לחם, מים, שמן זית, סוכר, מלח, שמרים יבשים, שומשום לבן',
+    pitch: 'ישר מרחובות ירושלים. פריך מבחוץ, רך מבפנים.' },
+  { id: 'challah-spelt', menu: 'friday', he: 'חלת כוסמין', badge: 'חלבית', price: 7, was: 12,
+    ing: 'קמח כוסמין לבן, מים, ביצים, אבקת חלב, שמרים יבשים, סוכר, חמאה, מלח',
+    pitch: 'חלה קלועה עגולה מקמח כוסמין לבן — רכה, זהובה ומלאת טעם.' },
+  { id: 'challah-shabbat', menu: 'friday', he: 'חלת שבת - פרווה', badge: 'פרווה', price: 7, was: 12,
+    ing: 'קמח, מים, ביצים, חלמון ביצה, דבש, שמן חמניות, שמרים יבשים, תמצית וניל, קינמון, מלח',
+    pitch: 'חלה פרווה בשיטת טנגז\'ונג — מרקם רך ואוורירי, מתיקות עדינה מדבש איכותי.' },
+  { id: 'babka-cinnamon-whole', menu: 'friday', he: 'בבקת קינמון שלמה', badge: 'עוגה שלמה', price: 10, was: 17,
+    ing: 'חמאה, חלב מלא, ביצים, קמח לחם, שמרים טריים, סוכר, מלח + מילוי קינמון',
+    pitch: 'צמת מרשימה עם שכבות קינמון וסוכר חום. ריח בית אמיתי.' },
+  { id: 'babka-choco-whole', menu: 'friday', he: 'בבקת שוקולד שלמה', badge: 'עוגה שלמה', price: 10, was: 17,
+    ing: 'חמאה, חלב מלא, ביצים, קמח לחם, שמרים טריים, סוכר, מלח + מילוי שוקולד',
+    pitch: 'צמת מרשימה עם שכבות שוקולד עשיר. מושלמת לחגוג.' },
+];
+
+let selectedDay = null;
+let qtys = {};
+let stockData = {};
+let promoSource = '';
+
+// ── מקור הזמנה (?src=) ──
+(function initSource() {
+  const urlSrc = new URLSearchParams(window.location.search).get('src');
+  if (urlSrc) {
+    try { sessionStorage.setItem('lm_promo_src', urlSrc); } catch(e) {}
+  }
+  try { promoSource = sessionStorage.getItem('lm_promo_src') || urlSrc || ''; } catch(e) { promoSource = urlSrc || ''; }
+})();
+
+// ── סטטוס טופס ──
+async function checkFormStatus() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=status&form=promo-he');
+    const data = await res.json();
+    if (data.closed) {
+      document.getElementById('form-wrap').style.display = 'none';
+      const cs = document.getElementById('closed-screen');
+      cs.classList.add('show');
+      if (data.msgHe) document.getElementById('closed-msg').textContent = data.msgHe;
+    }
+  } catch(e) { console.warn('Form status check failed:', e); }
+}
+
+// ── מלאי ──
+async function loadStock() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=stock&form=promo-he');
+    const data = await res.json();
+    if (data.success && data.stock) stockData = data.stock;
+  } catch(e) { console.warn('Stock load failed:', e); }
+  renderDays();
+}
+
+function stockFor(date, id) {
+  return stockData[date + '|' + id];
+}
+
+// ── בחירת יום ──
+function renderDays() {
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = PROMO_DAYS.map(d => {
+    const sel = selectedDay === d.date;
+    return `<div class="day-card ${sel?'sel':''}" onclick="selectDay('${d.date}')">
+      <div class="day-info">
+        <div class="dlabel">${d.label}</div>
+        <div class="dsub">${d.sub}</div>
+      </div>
+      <div class="day-check">✓</div>
+    </div>`;
+  }).join('');
+}
+
+function selectDay(date) {
+  if (selectedDay === date) return;
+  selectedDay = date;
+  qtys = {};
+  renderDays();
+  renderProducts();
+  document.getElementById('products-section').style.display = 'block';
+  document.getElementById('summary-section').style.display = 'block';
+  document.getElementById('details-section').style.display = 'block';
+  document.getElementById('pickup-section').style.display = 'block';
+  document.getElementById('notes-section').style.display = 'block';
+  document.getElementById('sub-btn').style.display = 'block';
+  updateSummary();
+}
+
+// ── מוצרים ──
+function dayMenu() {
+  const d = PROMO_DAYS.find(x => x.date === selectedDay);
+  return d ? d.menu : null;
+}
+
+function selectedCount() { return Object.values(qtys).filter(q => q > 0).length; }
+
+function renderProducts() {
+  const menu = dayMenu();
+  const list = PROMO_PRODUCTS.filter(p => p.menu === menu);
+  const c = document.getElementById('products-list');
+  const atLimit = selectedCount() >= 2;
+
+  c.innerHTML = list.map(p => {
+    const s = stockFor(selectedDay, p.id);
+    const soldOut = s && s.remaining <= 0;
+    const isSel = qtys[p.id] > 0;
+    const disableSelect = soldOut || (!isSel && atLimit);
+    return `<div class="pcard ${isSel?'sel':''} ${soldOut?'soldout':''}">
+      <div class="pmain">
+        <div class="pinfo">
+          <div class="pname">${p.he} <span class="pbadge">${p.badge}</span> ${soldOut?'<span class="soldout-tag">אזל</span>':''}</div>
+          <div class="pprice"><span class="now">$${p.price}</span> <span class="was">$${p.was}</span></div>
+          <div class="psub">${p.pitch}</div>
+        </div>
+        <button class="select-btn ${isSel?'act':''}" onclick="toggleProduct('${p.id}')" ${disableSelect?'disabled':''}>
+          ${isSel ? '✓ נבחר' : 'בחר'}
+        </button>
+      </div>
+      <div class="pdet">
+        <div class="ilbl">מרכיבים</div>
+        ${p.ing}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleProduct(id) {
+  const isSel = qtys[id] > 0;
+  if (isSel) {
+    qtys[id] = 0;
+  } else {
+    if (selectedCount() >= 2) return;
+    qtys[id] = 1;
+  }
+  renderProducts();
+  updateSummary();
+}
+
+function getTotal() {
+  return PROMO_PRODUCTS.reduce((s, p) => s + (qtys[p.id] > 0 ? p.price : 0), 0);
+}
+
+function updateSummary() {
+  const box = document.getElementById('order-summary');
+  const sel = PROMO_PRODUCTS.filter(p => qtys[p.id] > 0);
+  const total = getTotal();
+  if (!sel.length) {
+    box.innerHTML = '<p class="sr empty">לא נבחרו מוצרים עדיין</p>';
+  } else {
+    box.innerHTML = sel.map(p =>
+      `<div class="sr"><span>${p.he.split('(')[0].trim()}</span><span>$${p.price}</span></div>`
+    ).join('') +
+    `<hr class="sdiv"><div class="sr"><span class="stot">סה"כ</span><span class="stot">$${total}</span></div>`;
+  }
+  document.getElementById('sub-btn').disabled = sel.length === 0;
+}
+
+function showErr(msg) {
+  const box = document.getElementById('err-box');
+  box.textContent = msg;
+  box.classList.add('show');
+  window.scrollTo({ top: box.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+}
+function clearErr() {
+  document.getElementById('err-box').classList.remove('show');
+}
+
+const ERROR_MESSAGES = {
+  form_closed: 'המבצע נסגר להזמנות. תודה על העניין!',
+  duplicate_order: 'כבר נקלטה הזמנה במבצע עבור הטלפון או האימייל שהזנת — הזמנה אחת ללקוח למבצע כולו.',
+  sold_out: 'אחד המוצרים שבחרת אזל ליום הזה. נסה מוצר אחר או יום אחר.',
+  too_many_products: 'ניתן לבחור עד 2 מוצרים שונים בהזמנה.',
+  max_one_per_product: 'ניתן להזמין עד יחידה אחת מכל מוצר.',
+  no_products: 'אנא בחר לפחות מוצר אחד.',
+  missing_day: 'אנא בחר יום.',
+  invalid_day: 'היום שנבחר אינו תקין.',
+};
+
+function validate() {
+  clearErr();
+  if (!selectedDay) { showErr('אנא בחר יום.'); return false; }
+  if (selectedCount() === 0) { showErr('אנא בחר לפחות מוצר אחד.'); return false; }
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  if (!name) { showErr('אנא הכנס שם מלא.'); document.getElementById('f-name').focus(); return false; }
+  if (!phone) { showErr('אנא הכנס מספר טלפון.'); document.getElementById('f-phone').focus(); return false; }
+  return true;
+}
+
+async function submitOrder() {
+  if (!validate()) return;
+  const name  = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
+  const sel   = PROMO_PRODUCTS.filter(p => qtys[p.id] > 0);
+  const total = getTotal();
+
+  const btn = document.getElementById('sub-btn');
+  btn.disabled = true;
+  btn.textContent = 'שולח...';
+
+  const params = new URLSearchParams({
+    name, phone, email, notes, total,
+    form: 'promo-he', lang: 'he',
+    promoDay: selectedDay,
+    delivery: 'איסוף עצמי',
+    source: promoSource || '',
+  });
+  PROMO_PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
+
+  try {
+    const res = await fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', redirect: 'follow' });
+    const data = await res.json();
+
+    if (data.success === true) {
+      showThankYou(name, sel, total, email);
+    } else {
+      showErr(ERROR_MESSAGES[data.error] || ('אופס, משהו השתבש. נסה שוב או פנה בוואטסאפ.\n' + (data.error || '')));
+      btn.disabled = false;
+      btn.textContent = 'שלח הזמנה 🎉';
+    }
+  } catch(err) {
+    console.error('Promo order submit failed:', err);
+    showErr('לא הצלחנו להגיע לשרת. בדוק חיבור אינטרנט ונסה שוב, או פנה בוואטסאפ.');
+    btn.disabled = false;
+    btn.textContent = 'שלח הזמנה 🎉';
+  }
+}
+
+function showThankYou(name, sel, total, email) {
+  document.getElementById('form-wrap').style.display = 'none';
+  const ty = document.getElementById('ty-screen');
+  ty.classList.add('show');
+  const d = PROMO_DAYS.find(x => x.date === selectedDay);
+  document.getElementById('ty-sub').textContent =
+    `ההזמנה של ${name} התקבלה! איסוף ב-${d ? d.label : ''}, 16:00–18:00.${email ? ' אישור ישלח למייל שלך.' : ''}`;
+  document.getElementById('ty-summary').innerHTML =
+    sel.map(p => `<div class="sr"><span>${p.he.split('(')[0].trim()}</span><span>$${p.price}</span></div>`).join('') +
+    `<hr class="sdiv"><div class="sr"><span class="stot">סה"כ</span><span class="stot">$${total}</span></div>`;
+  window.scrollTo(0, 0);
+}
+
+function showZelle() {
+  alert('שלם דרך Zelle ל:\n[הכנס מספר טלפון או אימייל]\nסכום: $' + getTotal());
+}
+
+// INIT
+checkFormStatus();
+loadStock();
+</script>
+</body>
+</html>
