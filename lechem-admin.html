@@ -51,8 +51,7 @@ body{background:var(--cream);font-family:var(--font);color:var(--txt);min-height
 .section-title{font-size:14px;font-weight:900;color:var(--brown);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.5px;}
 
 /* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
-@media(max-width:600px){.stats-grid{grid-template-columns:repeat(3,1fr);}}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:340px;}
 .stat-card{background:var(--warm);border:1px solid var(--accent-l);border-radius:12px;padding:14px 12px;text-align:center;}
 .stat-value{font-size:26px;font-weight:900;color:var(--brown);display:block;}
 .stat-label{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
@@ -74,7 +73,7 @@ body{background:var(--cream);font-family:var(--font);color:var(--txt);min-height
 .field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,125,60,.12);}
 .fresh-preview{margin-top:14px;padding:12px 16px;background:var(--warm);border:1px solid var(--accent-l);border-radius:10px;font-size:13px;color:var(--brown);font-weight:700;}
 
-/* PRODUCT TABLE */
+/* PRODUCT TABLE (Hala tab — decorative, localStorage-only, unchanged for now) */
 .prod-header,.prod-row{display:grid;grid-template-columns:1fr 80px 80px 70px 70px 80px;gap:10px;align-items:center;}
 .prod-header{padding-bottom:10px;border-bottom:2px solid var(--border);margin-bottom:4px;}
 .prod-row{padding:11px 0;border-bottom:1px solid var(--border);}
@@ -96,6 +95,14 @@ body{background:var(--cream);font-family:var(--font);color:var(--txt);min-height
 .prod-row.hidden-row{opacity:.4;}
 .prod-row.soldout-row .pname{text-decoration:line-through;color:#999;}
 .status-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;display:inline-block;text-align:center;}
+
+/* BREAD AVAILABILITY TABLE (live, server-backed — Feature 1) */
+.avail-header,.avail-row{display:grid;grid-template-columns:1fr 120px 100px 110px;gap:10px;align-items:center;}
+.avail-header{padding-bottom:10px;border-bottom:2px solid var(--border);margin-bottom:4px;}
+.avail-row{padding:11px 0;border-bottom:1px solid var(--border);}
+.avail-row:last-child{border-bottom:none;}
+@media(max-width:560px){.avail-header,.avail-row{grid-template-columns:1fr;gap:8px;}.avail-header{display:none;}.avail-row{padding:16px 0;}}
+.avail-row .pname{font-size:14px;font-weight:700;color:var(--txt);}
 
 /* FORM STATUS */
 .form-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap;}
@@ -170,9 +177,6 @@ body{background:var(--cream);font-family:var(--font);color:var(--txt);min-height
 
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card"><span class="stat-value" id="stat-active">—</span><span class="stat-label">Active</span></div>
-      <div class="stat-card"><span class="stat-value" id="stat-soldout">—</span><span class="stat-label">Sold Out</span></div>
-      <div class="stat-card"><span class="stat-value" id="stat-hidden">—</span><span class="stat-label">Hidden</span></div>
       <div class="stat-card"><span class="stat-value" id="stat-open">—</span><span class="stat-label">Forms Open</span></div>
       <div class="stat-card"><span class="stat-value" id="stat-closed">—</span><span class="stat-label">Forms Closed</span></div>
     </div>
@@ -187,35 +191,24 @@ body{background:var(--cream);font-family:var(--font);color:var(--txt);min-height
     <!-- TAB: BREAD -->
     <div class="tab-panel active" id="tab-bread">
       <div class="section">
-        <div class="section-title">📅 Baking & Delivery Schedule</div>
-        <div class="date-grid">
-          <div class="field"><label>Baking Date</label><input type="date" id="baking-date" onchange="updatePreview()"></div>
-          <div class="field"><label>Delivery / Pickup Day</label><input type="date" id="delivery-date" onchange="updatePreview()"></div>
-          <div class="field"><label>Delivery Time Window</label><input type="text" id="delivery-time" placeholder="e.g. 3:00–6:00 PM" onchange="updatePreview()"></div>
-          <div class="field"><label>Order Cutoff</label><input type="text" id="order-cutoff" placeholder="e.g. Thursday midnight" onchange="updatePreview()"></div>
+        <div class="section-title">📦 זמינות לחמים ליום אפייה</div>
+        <div class="server-note">✓ נשלף בזמן אמת מגיליון המלאי (stock) — חסימה כאן משפיעה מיידית על טופס ההזמנה, אבל המוצר נשאר גלוי ללקוחות (רק לא ניתן להזמנה)</div>
+        <div class="avail-header">
+          <div class="col-h">מוצר</div>
+          <div class="col-h" style="text-align:center">תאריך אפייה</div>
+          <div class="col-h" style="text-align:center">נותר / מקסימום</div>
+          <div class="col-h" style="text-align:center">ניתן להזמנה</div>
         </div>
-        <div class="fresh-preview" id="fresh-preview">🌟 Preview will appear here after you fill in the dates</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">🛒 Bread Products</div>
-        <div class="prod-header">
-          <div class="col-h">Product</div>
-          <div class="col-h" style="text-align:center">Price ($)</div>
-          <div class="col-h" style="text-align:center">Max Stock</div>
-          <div class="col-h" style="text-align:center">Sold Out</div>
-          <div class="col-h" style="text-align:center">Visible</div>
-          <div class="col-h" style="text-align:center">Status</div>
+        <div id="bread-availability-rows">
+          <div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px;">טוען מהשרת...</div>
         </div>
-        <div id="bread-product-rows"></div>
       </div>
 
       <div class="section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <span style="font-size:13px;color:var(--txt2);">Changes saved to this browser & reflected in order forms.</span>
+        <span style="font-size:13px;color:var(--txt2);">מחירים, שמות ותמונות מנוהלים בקוד הטופס ובגיליון Google Sheets. הבקרה כאן היא רק זמינות להזמנה ליום אפייה ספציפי.</span>
         <div class="links-row">
           <a class="preview-link" href="order-he.html" target="_blank">↗ טופס עברית</a>
           <a class="preview-link" href="order-en.html" target="_blank">↗ English Form</a>
-          <a class="preview-link" href="order-pesach.html" target="_blank">↗ טופס פסח</a>
         </div>
       </div>
     </div>
@@ -283,17 +276,6 @@ const ADMIN_PASSWORD = 'lechem2024';
 const SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbzzdF03GIEPXnSFvwKc5II8BhyXX4QUGljF9IRlkOvewwQh6X70_gsh7iogZbrBhB4vUg/exec';
 const STORAGE_KEY    = 'lm_admin_settings';
 
-const BREAD_PRODUCTS = [
-  { id:'spelt',       name:'Whole Spelt Sourdough',             badge:'Parve',      defaultPrice:10 },
-  { id:'nuts',        name:'Walnut Sourdough',                  badge:'Parve',      defaultPrice:10 },
-  { id:'olives',      name:'Olive Sourdough',                   badge:'Parve',      defaultPrice:10 },
-  { id:'shiur',       name:'Pure Sourdough (Shiur)',            badge:'Parve',      defaultPrice:10 },
-  { id:'kasten',      name:'Kasten Health Loaf',                badge:'Parve ⭐',   defaultPrice:10 },
-  { id:'bagel-white', name:'Jerusalem Bagels – White (3 pack)', badge:'Parve',      defaultPrice:10 },
-  { id:'bagel-black', name:'Jerusalem Bagels – Black (3 pack)', badge:'Parve',      defaultPrice:10 },
-  { id:'health',      name:'Health Loaf',                       badge:'Low Gluten', defaultPrice:12 },
-];
-
 const HALA_PRODUCTS = [
   { id:'challah-spelt',        name:'Spelt Challah',             badge:'Spelt',        defaultPrice:12 },
   { id:'challah-whole',        name:'Whole Wheat Challah',       badge:'Whole W. · Parve', defaultPrice:12 },
@@ -308,8 +290,6 @@ const HALA_PRODUCTS = [
 const FORM_DEFS = [
   { key:'bread-he', name:'🇮🇱 טופס לחמים – עברית',   url:'order-he.html'      },
   { key:'bread-en', name:'🇺🇸 Bread Form – English',  url:'order-en.html'      },
-  { key:'gf-he',    name:'🌾 טופס לחם ללא גלוטן – עברית', url:'order-gf-he.html' },
-  { key:'gf-en',    name:'🌾 GF Bread Form – English',     url:'order-gf-en.html' },
   { key:'pesach',   name:'🍷 טופס פסח – ללא גלוטן',   url:'order-pesach.html'  },
   { key:'hala-he',  name:'🕯️ טופס חלות – עברית',     url:'order-hala-he.html' },
   { key:'hala-en',  name:'🕯️ Hala Form – English',   url:'order-hala-en.html' },
@@ -326,9 +306,9 @@ function login() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-app').classList.add('show');
     loadSettings();
-    renderBreadProducts();
     renderHalaProducts();
     loadFormStatuses();
+    loadBreadAvailability();
   } else {
     document.getElementById('login-error').textContent = 'Incorrect password.';
     document.getElementById('password-input').value = '';
@@ -351,52 +331,31 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-// ── SETTINGS ──
+// ── SETTINGS (Hala tab only — decorative localStorage settings, unchanged for now) ──
 function loadSettings() {
   try { settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { settings = {}; }
 
-  document.getElementById('baking-date').value    = settings.bakingDate    || '';
-  document.getElementById('delivery-date').value  = settings.deliveryDate  || '';
-  document.getElementById('delivery-time').value  = settings.deliveryTime  || '';
-  document.getElementById('order-cutoff').value   = settings.orderCutoff   || '';
   document.getElementById('hala-baking-date').value   = settings.halaBakingDate   || '';
   document.getElementById('hala-delivery-date').value = settings.halaDeliveryDate || '';
   document.getElementById('hala-delivery-time').value = settings.halaDeliveryTime || '';
   document.getElementById('hala-order-cutoff').value  = settings.halaOrderCutoff  || '';
 
-  if (!settings.products)     settings.products = {};
   if (!settings.halaProducts) settings.halaProducts = {};
 
-  BREAD_PRODUCTS.forEach(p => {
-    if (!settings.products[p.id])
-      settings.products[p.id] = { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
-  });
   HALA_PRODUCTS.forEach(p => {
     if (!settings.halaProducts[p.id])
       settings.halaProducts[p.id] = { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
   });
 
-  updatePreview(); updateHalaPreview(); setSaveStatus(true);
+  updateHalaPreview(); setSaveStatus(true);
 }
 
 function saveAll() {
-  settings.bakingDate   = document.getElementById('baking-date').value;
-  settings.deliveryDate = document.getElementById('delivery-date').value;
-  settings.deliveryTime = document.getElementById('delivery-time').value;
-  settings.orderCutoff  = document.getElementById('order-cutoff').value;
   settings.halaBakingDate   = document.getElementById('hala-baking-date').value;
   settings.halaDeliveryDate = document.getElementById('hala-delivery-date').value;
   settings.halaDeliveryTime = document.getElementById('hala-delivery-time').value;
   settings.halaOrderCutoff  = document.getElementById('hala-order-cutoff').value;
 
-  BREAD_PRODUCTS.forEach(p => {
-    settings.products[p.id] = {
-      price:   parseFloat(document.getElementById('price-' + p.id)?.value) || p.defaultPrice,
-      stock:   document.getElementById('stock-' + p.id)?.value || '',
-      soldOut: document.getElementById('soldout-' + p.id)?.checked || false,
-      visible: document.getElementById('visible-' + p.id)?.checked !== false,
-    };
-  });
   HALA_PRODUCTS.forEach(p => {
     settings.halaProducts[p.id] = {
       price:   parseFloat(document.getElementById('hprice-' + p.id)?.value) || p.defaultPrice,
@@ -408,7 +367,6 @@ function saveAll() {
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   setSaveStatus(true);
-  updateStats();
   showToast('✓ Saved! Order forms updated.');
 }
 
@@ -419,20 +377,7 @@ function setSaveStatus(saved) {
 }
 function markUnsaved() { setSaveStatus(false); }
 
-// ── PREVIEW ──
-function updatePreview() {
-  const baking   = document.getElementById('baking-date').value;
-  const delivery = document.getElementById('delivery-date').value;
-  const time     = document.getElementById('delivery-time').value;
-  const cutoff   = document.getElementById('order-cutoff').value;
-  let p = '🌟 ';
-  if (baking)   p += `Baked: ${fmt(baking)}. `;
-  if (delivery) p += `Pickup/Delivery: ${fmt(delivery)}${time ? ' · ' + time : ''}. `;
-  if (cutoff)   p += `Order by: ${cutoff}.`;
-  if (!baking && !delivery) p = '🌟 Preview will appear here after you fill in the dates';
-  document.getElementById('fresh-preview').textContent = p;
-  markUnsaved();
-}
+// ── PREVIEW (Hala) ──
 function updateHalaPreview() {
   const baking   = document.getElementById('hala-baking-date').value;
   const delivery = document.getElementById('hala-delivery-date').value;
@@ -451,7 +396,7 @@ function fmt(dateStr) {
   return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
 }
 
-// ── RENDER PRODUCTS ──
+// ── RENDER PRODUCTS (Hala tab — decorative, unchanged for now) ──
 function renderProductRows(container, products, settingsKey, prefix) {
   container.innerHTML = products.map(p => {
     const s = settings[settingsKey]?.[p.id] || { price: p.defaultPrice, stock: '', soldOut: false, visible: true };
@@ -485,9 +430,6 @@ function renderProductRows(container, products, settingsKey, prefix) {
   }).join('');
 }
 
-function renderBreadProducts() {
-  renderProductRows(document.getElementById('bread-product-rows'), BREAD_PRODUCTS, 'products', '');
-}
 function renderHalaProducts() {
   renderProductRows(document.getElementById('hala-product-rows'), HALA_PRODUCTS, 'halaProducts', 'h');
 }
@@ -508,21 +450,72 @@ function updateRowStyle(id, prefix) {
   else               { status.textContent='Active';   status.style.background='#e8f5e9'; status.style.color='#2e7d32'; }
 }
 
+// ── BREAD AVAILABILITY — LIVE, SERVER-BACKED (Feature 1) ──
+async function loadBreadAvailability() {
+  const container = document.getElementById('bread-availability-rows');
+  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px;">טוען מהשרת...</div>';
+  try {
+    const res  = await fetch(SCRIPT_URL + '?action=adminStock&sheet=stock');
+    const data = await res.json();
+    if (data.success) {
+      renderBreadAvailability(data.rows || []);
+    } else {
+      container.innerHTML = '<div style="color:var(--red);padding:16px;">שגיאה בטעינת נתוני מלאי: ' + (data.error||'') + '</div>';
+    }
+  } catch(e) {
+    container.innerHTML = '<div style="color:var(--red);padding:16px;">שגיאת רשת בטעינת מלאי. בדוק חיבור ונסה לרענן.</div>';
+  }
+}
+
+function renderBreadAvailability(rows) {
+  const container = document.getElementById('bread-availability-rows');
+  if (!rows.length) {
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px;">אין ימי אפייה עתידיים בגיליון המלאי (stock).</div>';
+    return;
+  }
+  const sorted = rows.slice().sort((a,b) => a.date === b.date ? a.nameHe.localeCompare(b.nameHe) : a.date.localeCompare(b.date));
+  container.innerHTML = sorted.map(r => {
+    const rowId       = (r.product_id + '__' + r.date).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const isAvailable = !r.blocked;
+    return `
+    <div class="avail-row" id="arow-${rowId}">
+      <div class="pname">${r.nameHe}</div>
+      <div style="text-align:center;font-size:13px;color:var(--txt2);">${fmtShort(r.date)}</div>
+      <div style="text-align:center;font-size:13px;">${r.remaining} / ${r.max}</div>
+      <div class="toggle-wrap"><label class="toggle">
+        <input type="checkbox" id="atoggle-${rowId}" ${isAvailable?'checked':''}
+          onchange="toggleBreadBlock('${r.product_id}','${r.date}', this.checked, '${rowId}')">
+        <div class="toggle-track"></div><div class="toggle-thumb"></div>
+      </label></div>
+    </div>`;
+  }).join('');
+}
+
+async function toggleBreadBlock(productId, date, isAvailable, rowId) {
+  const toggle = document.getElementById('atoggle-' + rowId);
+  try {
+    const params = new URLSearchParams({ action:'setBlocked', sheet:'stock', product_id: productId, date, blocked: String(!isAvailable) });
+    const res  = await fetch(SCRIPT_URL + '?' + params.toString());
+    const data = await res.json();
+    if (data.success) {
+      showToast(isAvailable ? '✓ המוצר זמין להזמנה' : '🔒 המוצר חסום להזמנה (נשאר גלוי ללקוחות)');
+    } else {
+      showToast('שגיאה: ' + (data.error||'unknown'), true);
+      if (toggle) toggle.checked = !isAvailable; // revert on failure
+    }
+  } catch(e) {
+    showToast('שגיאת רשת — בדוק חיבור', true);
+    if (toggle) toggle.checked = !isAvailable; // revert on failure
+  }
+}
+
+function fmtShort(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('he-IL', { weekday:'short', day:'numeric', month:'numeric' });
+}
+
 // ── STATS ──
 function updateStats() {
-  let active=0, soldOut=0, hidden=0;
-  [...BREAD_PRODUCTS, ...HALA_PRODUCTS].forEach(p => {
-    const key  = BREAD_PRODUCTS.includes(p) ? 'products' : 'halaProducts';
-    const s    = settings[key]?.[p.id];
-    if (!s || s.visible === undefined) { active++; return; }
-    if (!s.visible) hidden++;
-    else if (s.soldOut) soldOut++;
-    else active++;
-  });
-  document.getElementById('stat-active').textContent  = active;
-  document.getElementById('stat-soldout').textContent = soldOut;
-  document.getElementById('stat-hidden').textContent  = hidden;
-
   const open   = Object.values(formStatuses).filter(s => !s.closed).length;
   const closed = Object.values(formStatuses).filter(s => s.closed).length;
   document.getElementById('stat-open').textContent   = open   + '/' + FORM_DEFS.length;
