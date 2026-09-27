@@ -80,6 +80,17 @@ body{background:var(--cream);font-family:'Frank Ruhl Libre', serif;color:var(--t
 .sr.empty{color:var(--txt2);font-style:italic;font-size:13px;}
 .sdiv{border:none;border-top:1px solid var(--accent-l);margin:8px 0;}
 .stot{font-size:17px;font-weight:700;color:var(--brown);}
+/* COUPON */
+.coupon-box{margin-top:10px;}
+.coupon-row{display:flex;gap:8px;}
+.coupon-row input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:14px;font-family:inherit;color:var(--txt);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;}
+.coupon-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,125,60,.12);}
+.coupon-btn{padding:9px 16px;border-radius:9px;border:1px solid var(--accent);background:#fff;color:var(--accent);font-weight:700;font-size:13px;font-family:inherit;cursor:pointer;transition:all .2s;}
+.coupon-btn:hover{background:var(--warm);}
+.coupon-msg{font-size:12px;margin-top:6px;min-height:14px;color:var(--txt2);}
+.coupon-msg.err{color:var(--red);}
+.coupon-applied{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--green-bg);border:1px solid #A5D6A7;border-radius:9px;padding:9px 12px;font-size:13px;color:var(--green);font-weight:700;}
+.coupon-applied button{background:none;border:none;color:var(--green);text-decoration:underline;cursor:pointer;font-size:12px;font-family:inherit;font-weight:400;}
 /* SUBMIT */
 .subbtn{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:11px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s;margin-top:14px;}
 .subbtn:hover{background:var(--accent-h);}
@@ -174,6 +185,7 @@ body{background:var(--cream);font-family:'Frank Ruhl Libre', serif;color:var(--t
     <div class="sumbox" id="order-summary">
       <p class="sr empty">לא נבחרו מוצרים עדיין</p>
     </div>
+    <div class="coupon-box" id="coupon-box"></div>
   </div>
 
   <div class="section">
@@ -236,6 +248,7 @@ const IS_HE = true;
 let qtys = {};
 let deliveryMode = 'pickup';
 let sliceMode = 'whole';
+let appliedCoupon = null; // { code, discount, minOrder, label }
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
 // ADMIN SETTINGS
@@ -339,7 +352,10 @@ function renderProducts() {
     const name    = IS_HE ? p.he : p.en;
     const pitch   = IS_HE ? p.pitch_he : p.pitch_en;
     const ing     = IS_HE ? p.ing_he : p.ing_en;
-    const soldOut = p.soldOut ? `<span style="font-size:11px;color:var(--red);font-weight:700;margin-right:4px;">${IS_HE?'אזל':'Sold Out'}</span>` : '';
+    // תג "לא זמין" — שני מקורות אפשריים: המלאי נגמר, או שהמנהל חסם ידנית את המוצר ליום הזה (Feature 1)
+    const unavailTag = p.blockedManually
+      ? `<span style="font-size:11px;color:var(--red);font-weight:700;margin-right:4px;">${IS_HE?'לא זמין להזמנה':'Currently Unavailable'}</span>`
+      : (p.soldOut ? `<span style="font-size:11px;color:var(--red);font-weight:700;margin-right:4px;">${IS_HE?'אזל':'Sold Out'}</span>` : '');
 
     // ── לחם האופה — עיצוב מיוחד ──
     if (p.isBakerSpecial) {
@@ -350,7 +366,7 @@ function renderProducts() {
             <div class="pname" style="${p.soldOut?'opacity:.45;text-decoration:line-through':''}">${name}</div>
             <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:3px;">
               <span class="pbadge" style="background:var(--accent);color:white;border-color:var(--accent);">${badge}</span>
-              ${soldOut}
+              ${unavailTag}
             </div>
             ${pitch ? `<div style="font-size:12px;color:var(--txt2);line-height:1.5;margin-top:6px;font-style:italic;">${pitch}</div>` : ''}
             <div style="font-size:11px;color:var(--txt2);margin-top:4px;">${IS_HE ? `נותרו: ${p.remaining}` : `Remaining: ${p.remaining}`}</div>
@@ -372,7 +388,7 @@ function renderProducts() {
           <div class="pname" style="${p.soldOut?'opacity:.45;text-decoration:line-through':''}">${name}</div>
           <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:3px;">
             <span class="pbadge">${badge}</span>
-            ${soldOut}
+            ${unavailTag}
             <button class="pinfo-btn" onclick="togDet('${p.id}',this)">${IS_HE?'פרטים תזונתיים':'Nutrition info'} <i class="arr">▾</i></button>
           </div>
           <div style="font-size:12px;color:var(--txt2);line-height:1.5;margin-top:5px;">${pitch}</div>
@@ -418,6 +434,9 @@ async function loadStock() {
       p.remaining = s.remaining;
       p.maxStock  = s.max;
       if (s.remaining <= 0) p.soldOut = true;
+      // חסימה ידנית מהדשבורד (Feature 1) — נשאר גלוי, אבל לא ניתן להזמנה
+      p.blockedManually = !!s.blocked;
+      if (s.blocked) p.soldOut = true;
     });
 
     // לחם האופה — דינמי מהגיליון
@@ -461,28 +480,114 @@ function chQty(id, delta) {
   updateSubmit();
 }
 
+function getSubtotal() { return PRODUCTS.reduce((s, p) => s + p.price * qtys[p.id], 0); }
+
 function updateSummary() {
   const box = document.getElementById('order-summary');
   const sel = PRODUCTS.filter(p => qtys[p.id] > 0);
-  const total = sel.reduce((s, p) => s + p.price * qtys[p.id], 0);
+  const subtotal = getSubtotal();
+
+  // אם ההזמנה ירדה מתחת לסכום המינימום של הקופון שהוחל — מסירים אותו אוטומטית
+  if (appliedCoupon && subtotal < appliedCoupon.minOrder) {
+    appliedCoupon = null;
+    renderCouponWidget(IS_HE ? 'ההזמנה ירדה מתחת לסכום המינימום — הקופון הוסר.' : 'Order dropped below the coupon minimum — coupon removed.', true);
+  }
+
+  const discount = appliedCoupon ? Math.min(appliedCoupon.discount, subtotal) : 0;
+  const total = subtotal - discount;
+
   if (!sel.length) {
     box.innerHTML = `<p class="sr empty">${IS_HE ? 'לא נבחרו מוצרים עדיין' : 'No products selected yet'}</p>`;
-    return;
-  }
-  box.innerHTML = sel.map(p => `
-    <div class="sr">
-      <span>${IS_HE ? p.he.split('(')[0].trim() : p.en.split('(')[0].trim()} × ${qtys[p.id]}</span>
-      <span>$${p.price * qtys[p.id]}</span>
-    </div>`).join('') +
-    `<hr class="sdiv">
+  } else {
+    let html = sel.map(p => `
+      <div class="sr">
+        <span>${IS_HE ? p.he.split('(')[0].trim() : p.en.split('(')[0].trim()} × ${qtys[p.id]}</span>
+        <span>$${p.price * qtys[p.id]}</span>
+      </div>`).join('');
+    if (discount > 0) {
+      html += `<div class="sr" style="color:var(--green);">
+        <span>${IS_HE ? 'הנחת קופון' : 'Coupon discount'} (${appliedCoupon.code})</span>
+        <span>−$${discount}</span>
+      </div>`;
+    }
+    html += `<hr class="sdiv">
     <div class="sr stot">
       <span>${IS_HE ? 'סה\"כ' : 'Total'}</span>
       <span>$${total}</span>
     </div>`;
+    box.innerHTML = html;
+  }
 }
 
-function getTotal() { return PRODUCTS.reduce((s, p) => s + p.price * qtys[p.id], 0); }
+function getTotal() {
+  const subtotal = getSubtotal();
+  if (appliedCoupon) return Math.max(0, subtotal - appliedCoupon.discount);
+  return subtotal;
+}
 function updateSubmit() { document.getElementById('sub-btn').disabled = !PRODUCTS.some(p => qtys[p.id] > 0); }
+
+// ── קופון (Feature 2) ──
+function buildQtyParams() {
+  const params = new URLSearchParams();
+  PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
+  return params;
+}
+
+function renderCouponWidget(message, isError) {
+  const box = document.getElementById('coupon-box');
+  if (!box) return;
+  if (appliedCoupon) {
+    box.innerHTML = `<div class="coupon-applied">
+      <span>🎟️ ${appliedCoupon.code} — $${appliedCoupon.discount} ${IS_HE?'הנחה':'off'}</span>
+      <button type="button" onclick="removeCoupon()">${IS_HE?'הסר':'Remove'}</button>
+    </div>`;
+  } else {
+    box.innerHTML = `<div class="coupon-row">
+      <input type="text" id="f-coupon" placeholder="${IS_HE?'קוד קופון (אופציונלי)':'Coupon code (optional)'}">
+      <button type="button" class="coupon-btn" onclick="applyCoupon()">${IS_HE?'החל':'Apply'}</button>
+    </div>
+    <p class="coupon-msg${isError?' err':''}" id="coupon-msg">${message||''}</p>`;
+  }
+}
+
+async function applyCoupon() {
+  const codeInput = document.getElementById('f-coupon');
+  const code = codeInput ? codeInput.value.trim() : '';
+  if (!code) { renderCouponWidget(IS_HE?'הכנס קוד קופון.':'Enter a coupon code.', true); return; }
+  renderCouponWidget(IS_HE?'בודק...':'Checking...', false);
+  try {
+    const params = buildQtyParams();
+    params.set('action', 'checkCoupon');
+    params.set('form', IS_HE ? 'bread-he' : 'bread-en');
+    params.set('code', code);
+    const res = await fetch(SCRIPT_URL + '?' + params.toString());
+    const data = await res.json();
+
+    if (data.success && data.valid) {
+      appliedCoupon = { code: code.trim().toUpperCase(), discount: data.discount, minOrder: data.minOrder, label: data.label };
+      renderCouponWidget();
+      updateSummary();
+    } else {
+      const reasons = {
+        not_found:     IS_HE ? 'קוד קופון לא נמצא.' : 'Coupon code not found.',
+        inactive:      IS_HE ? 'קופון זה לא פעיל.' : 'This coupon is not active.',
+        wrong_form:    IS_HE ? 'קופון זה לא רלוונטי לטופס הזה.' : 'This coupon does not apply to this form.',
+        below_minimum: IS_HE ? `ההזמנה מתחת לסכום המינימום לקופון ($${data.minOrder||0}).` : `Order is below the coupon minimum ($${data.minOrder||0}).`,
+        missing_code:  IS_HE ? 'הכנס קוד קופון.' : 'Enter a coupon code.',
+      };
+      const reason = data.success ? (reasons[data.reason] || (IS_HE?'קוד לא תקף.':'Invalid code.')) : (IS_HE?'שגיאה בבדיקת הקופון.':'Error checking coupon.');
+      renderCouponWidget(reason, true);
+    }
+  } catch(e) {
+    renderCouponWidget(IS_HE?'שגיאת רשת — נסה שוב.':'Network error — try again.', true);
+  }
+}
+
+function removeCoupon() {
+  appliedCoupon = null;
+  renderCouponWidget();
+  updateSummary();
+}
 
 function selDelivery(el, mode) {
   deliveryMode = mode;
@@ -529,6 +634,7 @@ async function submitOrder() {
     slicing: sliceMode === 'sliced' ? (IS_HE ? 'פרוס' : 'Pre-sliced') : (IS_HE ? 'שלם' : 'Whole'),
     products: sel.map(p => (IS_HE ? p.he : p.en).split('(')[0].trim() + ' x ' + qtys[p.id]).join('|')
   });
+  if (appliedCoupon) params.set('coupon', appliedCoupon.code);
   PRODUCTS.forEach(p => params.append('qty_' + p.id, qtys[p.id] || 0));
 
   // שולחים בקשה לסקריפט וקוראים את התשובה
@@ -547,6 +653,12 @@ async function submitOrder() {
       document.getElementById('form-wrap').style.display = 'none';
       document.getElementById('closed-screen').classList.add('show');
       window.scrollTo(0, 0);
+    } else if (data.error === 'invalid_coupon') {
+      alert(IS_HE
+        ? 'הקופון שהוחל אינו תקף יותר להזמנה זו (ייתכן שהמלאי/הזמינות השתנו). אנא הסר את הקופון ונסה לשלוח שוב.'
+        : 'The applied coupon is no longer valid for this order. Please remove it and try again.');
+      btn.disabled = false;
+      btn.textContent = IS_HE ? 'שלח הזמנה' : 'Place Order';
     } else {
       // שגיאה אחרת — מודיעים ללקוח
       alert(IS_HE
@@ -587,6 +699,8 @@ function showZelle() {
 function resetForm() {
   PRODUCTS.forEach(p => qtys[p.id] = 0);
   deliveryMode = 'pickup'; sliceMode = 'whole';
+  appliedCoupon = null;
+  renderCouponWidget();
   ['f-name','f-phone','f-email','f-addr','f-notes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('ty-screen').classList.remove('show');
   document.getElementById('form-wrap').style.display = 'block';
@@ -630,6 +744,7 @@ loadAdminSettings();
 checkFormStatus();
 renderProducts();
 updateSummary();
+renderCouponWidget();
 loadSaved();
 loadStock();
 </script>
