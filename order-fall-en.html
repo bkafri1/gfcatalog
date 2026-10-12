@@ -364,7 +364,7 @@ function renderProducts() {
 // ── מלאי מהשרת ──
 async function loadStock() {
   try {
-    const res = await fetch(SCRIPT_URL + '?action=stock&form=' + FORM_NAME);
+    const res = await fetch(SCRIPT_URL + '?action=stock&form=' + FORM_NAME + '&date=' + BAKE_ISO);
     const data = await res.json();
     if (!data.success || !data.stock) return;
     PRODUCTS.forEach(p => {
@@ -521,7 +521,13 @@ async function submitOrder() {
       showThankYou(name, sel, total, email);
     } else if (data.error === 'form_closed') {
       showClosedScreen(); window.scrollTo(0,0);
-    } else if (data.error === 'invalid_coupon') {
+    } else if (data.error === 'sold_out') {
+      alert('One of the items just sold out. Please refresh the page to see current availability.'); resetBtn();
+      } else if (data.error === 'delivery_minimum') {
+      alert('Delivery is available for orders of $30 or more. Please choose self pickup or add more items.'); resetBtn();
+      } else if (data.error === 'bake_date_changed') {
+      alert('The baking date has been updated. Please refresh the page and submit again.'); resetBtn();
+      } else if (data.error === 'invalid_coupon') {
       alert('The applied coupon is no longer valid for this order. Please remove it and try again.'); resetBtn();
     } else {
       alert('Oops, something went wrong sending your order. Please try again in a moment or contact us on WhatsApp.\n\n' + (data.error || '')); resetBtn();

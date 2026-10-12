@@ -364,7 +364,7 @@ function renderProducts() {
 // ── מלאי מהשרת ──
 async function loadStock() {
   try {
-    const res = await fetch(SCRIPT_URL + '?action=stock&form=' + FORM_NAME);
+    const res = await fetch(SCRIPT_URL + '?action=stock&form=' + FORM_NAME + '&date=' + BAKE_ISO);
     const data = await res.json();
     if (!data.success || !data.stock) return;
     PRODUCTS.forEach(p => {
@@ -521,7 +521,13 @@ async function submitOrder() {
       showThankYou(name, sel, total, email);
     } else if (data.error === 'form_closed') {
       showClosedScreen(); window.scrollTo(0,0);
-    } else if (data.error === 'invalid_coupon') {
+    } else if (data.error === 'sold_out') {
+      alert('אחד המוצרים אזל בינתיים. רענן את הדף כדי לראות את המלאי המעודכן.'); resetBtn();
+      } else if (data.error === 'delivery_minimum') {
+      alert('משלוח זמין רק להזמנות מ-$30 ומעלה. נא לבחור באיסוף עצמי או להוסיף מוצרים.'); resetBtn();
+      } else if (data.error === 'bake_date_changed') {
+      alert('תאריך האפייה התעדכן. רענן את הדף ושלח שוב.'); resetBtn();
+      } else if (data.error === 'invalid_coupon') {
       alert('הקופון שהוחל אינו תקף יותר להזמנה זו. אנא הסר את הקופון ונסה לשלוח שוב.'); resetBtn();
     } else {
       alert('אופס, משהו השתבש בשליחת ההזמנה. נסה שוב בעוד רגע או פנה בוואטסאפ.\n\n' + (data.error || '')); resetBtn();
